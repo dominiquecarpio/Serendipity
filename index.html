@@ -1,0 +1,2442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serendipity Yacht Charter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #080f1e;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            display: block;
+        }
+
+        button {
+            font-family: 'Manrope', sans-serif;
+            cursor: pointer;
+        }
+
+        /* ===== NAVBAR ===== */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 22px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background .5s, padding .5s, box-shadow .5s;
+        }
+
+        #navbar.scrolled {
+            background: rgba(8, 15, 30, .93);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            padding: 14px 60px;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, .05);
+        }
+
+       .nav-logo img {
+    height: 60px;
+    object-fit: contain;
+    width: 100px;
+}
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-links a {
+            position: relative;
+            padding: 9px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .78);
+            border-radius: 30px;
+            transition: color .3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1.5px;
+            background: #c9a227;
+            border-radius: 2px;
+            transition: width .35s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a:hover::after {
+            width: 55%;
+        }
+
+        .nav-cta {
+            padding: 11px 28px;
+            border-radius: 30px;
+            background: #c9a227;
+            color: #080f1e;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: .2px;
+            transition: all .3s;
+            box-shadow: 0 4px 22px rgba(201, 162, 39, .28);
+        }
+
+        .nav-cta:hover {
+            background: #e2b930;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201, 162, 39, .4);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+            transition: all .3s;
+        }
+
+        #mobileMenu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(8, 15, 30, .97);
+            backdrop-filter: blur(20px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+        }
+
+        #mobileMenu.open {
+            display: flex;
+        }
+
+        #mobileMenu a {
+            font-size: 26px;
+            font-family: 'Playfair Display', serif;
+            color: rgba(255, 255, 255, .85);
+            transition: color .3s;
+        }
+
+        #mobileMenu a:hover {
+            color: #c9a227;
+        }
+
+        #mobileMenu .m-close {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, .6);
+            font-size: 30px;
+            cursor: pointer;
+            transition: color .3s;
+        }
+
+        #mobileMenu .m-close:hover {
+            color: #fff;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        .hero-slides {
+            display: flex;
+            height: 100%;
+            transition: transform .95s cubic-bezier(.77, 0, .18, 1);
+        }
+
+        .hero-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(8, 15, 30, .55) 0%, rgba(8, 15, 30, .15) 45%, rgba(8, 15, 30, .88) 100%);
+        }
+
+        .hero-slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(8, 15, 30, .72) 0%, transparent 55%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 100px;
+            left: 70px;
+            max-width: 520px;
+            z-index: 10;
+        }
+
+        .hero-tag {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 40px;
+            height: 1.5px;
+            background: #c9a227;
+        }
+
+        .hero-tag span {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #c9a227;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 62px;
+            font-weight: 500;
+            line-height: 1.08;
+            letter-spacing: -1.8px;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .hero-content h1 em {
+            font-style: italic;
+            color: #c9a227;
+        }
+
+        .hero-content p {
+            font-size: 17px;
+            color: rgba(255, 255, 255, .75);
+            line-height: 1.7;
+            margin-bottom: 34px;
+        }
+
+        .hero-btns {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 14px 30px;
+            border-radius: 40px;
+            background: #c9a227;
+            color: #080f1e;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all .3s;
+            box-shadow: 0 6px 24px rgba(201, 162, 39, .32);
+        }
+
+        .btn-primary:hover {
+            background: #e2b930;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(201, 162, 39, .4);
+        }
+
+        .btn-primary svg {
+            width: 16px;
+            height: 16px;
+            transition: transform .3s;
+        }
+
+        .btn-primary:hover svg {
+            transform: translate(2px, -2px);
+        }
+
+        .btn-outline {
+            padding: 13px 28px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, .22);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all .3s;
+        }
+
+        .btn-outline:hover {
+            border-color: #c9a227;
+            color: #c9a227;
+            background: rgba(201, 162, 39, .07);
+        }
+
+        .island-card {
+            position: absolute;
+            top: 110px;
+            right: 60px;
+            width: 248px;
+            z-index: 20;
+            border-radius: 22px;
+            overflow: hidden;
+            background: rgba(8, 18, 40, .42);
+            border: 1px solid rgba(255, 255, 255, .1);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+            animation: floatY 5s ease-in-out infinite;
+        }
+
+        @keyframes floatY {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .island-card img {
+            width: 100%;
+            height: 136px;
+            object-fit: cover;
+        }
+
+        .island-card-body {
+            padding: 14px 16px;
+        }
+
+        .island-card-body .tag {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #c9a227;
+            margin-bottom: 5px;
+        }
+
+        .island-card-body h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .island-card-body p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .55);
+            line-height: 1.55;
+        }
+
+        .hero-nav {
+            position: absolute;
+            right: 28px;
+            bottom: 100px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hero-nav button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 255, 255, .35);
+            background: transparent;
+            cursor: pointer;
+            transition: all .4s ease;
+            padding: 0;
+        }
+
+        .hero-nav button.active {
+            height: 34px;
+            border-radius: 6px;
+            background: #c9a227;
+            border-color: #c9a227;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 34px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, .4);
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollBounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(9px);
+            }
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===== SHARED ===== */
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .s-tag {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .s-tag::before {
+            content: '';
+            width: 44px;
+            height: 1.5px;
+            background: #c9a227;
+        }
+
+        .s-tag span {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #c9a227;
+        }
+
+        .s-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 54px;
+            font-weight: 500;
+            line-height: 1.08;
+            letter-spacing: -1.2px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .s-title span {
+            background: linear-gradient(135deg, #c9a227 0%, #7ec8e3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .s-sub {
+            color: rgba(255, 255, 255, .55);
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 520px;
+        }
+
+        /* ===== ABOUT ===== */
+        #vessel {
+            background: #0c1424;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 90px;
+            align-items: center;
+        }
+
+        .about-img-wrap {
+            position: relative;
+        }
+
+        .about-img-wrap>img {
+            width: 100%;
+            border-radius: 26px;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .spin-ring {
+            position: absolute;
+            top: -32px;
+            left: -32px;
+            width: 110px;
+            height: 110px;
+            border: 1px solid rgba(201, 162, 39, .18);
+            border-radius: 50%;
+            animation: spinRing 22s linear infinite;
+        }
+
+        @keyframes spinRing {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .about-badge {
+            position: absolute;
+            bottom: -22px;
+            right: 22px;
+            background: rgba(8, 15, 30, .9);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(201, 162, 39, .2);
+            border-radius: 18px;
+            padding: 16px 22px;
+        }
+
+        .about-badge .bn {
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: #c9a227;
+            line-height: 1;
+        }
+
+        .about-badge .bl {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .5);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .about-text p {
+            color: rgba(255, 255, 255, .62);
+            font-size: 16px;
+            line-height: 1.82;
+            margin-bottom: 18px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 38px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .034);
+            border: 1px solid rgba(255, 255, 255, .07);
+            transition: all .45s ease;
+            cursor: default;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(201, 162, 39, .3);
+            background: rgba(201, 162, 39, .05);
+            transform: translateY(-5px);
+        }
+
+        .stat-card .sv {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 700;
+            color: #c9a227;
+            line-height: 1;
+        }
+
+        .stat-card .sk {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .45);
+            margin-top: 5px;
+        }
+
+        .stat-card svg {
+            width: 20px;
+            height: 20px;
+            stroke: #c9a227;
+            fill: none;
+            stroke-width: 1.5;
+            margin-bottom: 10px;
+        }
+
+        /* ===== EXPERIENCES ===== */
+        #experiences {
+            background: #080f1e;
+        }
+
+        .exp-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 52px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .arrow-pair {
+            display: flex;
+            gap: 10px;
+        }
+
+        .arr-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .14);
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s;
+        }
+
+        .arr-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .arr-btn:hover {
+            border-color: #c9a227;
+            background: rgba(201, 162, 39, .1);
+            color: #c9a227;
+        }
+
+        .exp-wrap {
+            overflow: hidden;
+        }
+
+        .exp-track {
+            display: flex;
+            gap: 22px;
+            transition: transform .65s cubic-bezier(.77, 0, .18, 1);
+        }
+
+        .exp-card {
+            flex-shrink: 0;
+            width: 285px;
+            border-radius: 26px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .exp-card img {
+            width: 100%;
+            height: 370px;
+            object-fit: cover;
+            transition: transform .7s ease;
+            display: block;
+        }
+
+        .exp-card:hover img {
+            transform: scale(1.09);
+        }
+
+        .exp-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0, 0, 0, .82) 0%, rgba(0, 0, 0, .08) 55%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+        }
+
+        .exp-overlay h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 1.3;
+            color: #fff;
+            transition: color .3s;
+        }
+
+        .exp-card:hover .exp-overlay h3 {
+            color: #c9a227;
+        }
+
+        .exp-book {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #c9a227;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all .4s ease;
+        }
+
+        .exp-card:hover .exp-book {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .exp-book svg {
+            width: 13px;
+            height: 13px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .exp-corner {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, .18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all .45s;
+        }
+
+        .exp-corner svg {
+            width: 14px;
+            height: 14px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .exp-card:hover .exp-corner {
+            opacity: 1;
+            transform: rotate(12deg);
+        }
+
+        .exp-foot {
+            margin-top: 52px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .exp-foot p {
+            color: rgba(255, 255, 255, .52);
+            font-size: 15px;
+            line-height: 1.75;
+            max-width: 480px;
+        }
+
+        .link-g {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #c9a227;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: gap .3s;
+        }
+
+        .link-g:hover {
+            gap: 12px;
+        }
+
+        .link-g svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* ===== ACCOMMODATIONS ===== */
+        #accommodations {
+            background: #0c1424;
+        }
+
+        .accom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+            margin-top: 64px;
+        }
+
+        .accom-img {
+            position: relative;
+            border-radius: 26px;
+            overflow: hidden;
+        }
+
+        .accom-img img {
+            width: 100%;
+            display: block;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            transition: transform .7s;
+        }
+
+        .accom-img:hover img {
+            transform: scale(1.04);
+        }
+
+        .accom-badge {
+            position: absolute;
+            bottom: 22px;
+            left: 22px;
+            background: rgba(8, 15, 30, .88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(201, 162, 39, .22);
+            border-radius: 16px;
+            padding: 14px 20px;
+        }
+
+        .accom-badge .an {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #c9a227;
+            font-weight: 700;
+        }
+
+        .accom-badge .al {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .5);
+            margin-top: 3px;
+        }
+
+        .room-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .room-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 17px 20px;
+            border-radius: 17px;
+            background: rgba(255, 255, 255, .035);
+            border: 1px solid rgba(255, 255, 255, .07);
+            transition: all .4s;
+            cursor: default;
+        }
+
+        .room-row:hover {
+            border-color: rgba(201, 162, 39, .28);
+            background: rgba(201, 162, 39, .042);
+            transform: translateX(7px);
+        }
+
+        .room-row h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 500;
+            transition: color .3s;
+        }
+
+        .room-row:hover h4 {
+            color: #c9a227;
+        }
+
+        .room-row p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .45);
+            margin-top: 3px;
+        }
+
+        .room-row .rarr {
+            color: rgba(255, 255, 255, .28);
+            transition: all .4s;
+        }
+
+        .room-row:hover .rarr {
+            color: #c9a227;
+            transform: rotate(12deg);
+        }
+
+        .rarr svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .amenities-box {
+            padding: 30px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(201, 162, 39, .07), rgba(126, 200, 227, .05));
+            border: 1px solid rgba(255, 255, 255, .07);
+        }
+
+        .amenities-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .amenity-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 13px;
+        }
+
+        .amenity-dot {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: rgba(201, 162, 39, .11);
+            border: 1px solid rgba(201, 162, 39, .28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .amenity-dot svg {
+            width: 11px;
+            height: 11px;
+            stroke: #c9a227;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        .amenity-row span {
+            font-size: 14px;
+            color: rgba(255, 255, 255, .65);
+        }
+
+        /* ===== FLEET ===== */
+        #fleet {
+            background: #080f1e;
+        }
+
+        .fleet-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            margin-bottom: 56px;
+        }
+
+        .fleet-top p {
+            color: rgba(255, 255, 255, .58);
+            font-size: 16px;
+            line-height: 1.82;
+        }
+
+        .fleet-wrap {
+            overflow: hidden;
+        }
+
+        .fleet-track {
+            display: flex;
+            gap: 20px;
+            transition: transform .65s cubic-bezier(.77, 0, .18, 1);
+        }
+
+        .fleet-card {
+            flex-shrink: 0;
+            border-radius: 22px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .fleet-card img {
+            width: 100%;
+            height: 290px;
+            object-fit: cover;
+            transition: transform .65s;
+            display: block;
+        }
+
+        .fleet-card:hover img {
+            transform: scale(1.07);
+        }
+
+        .fleet-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 18px;
+            background: linear-gradient(0deg, rgba(0, 0, 0, .82) 0%, transparent 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .fleet-label p {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .fleet-label a {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 255, 255, .45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s;
+            font-size: 14px;
+        }
+
+        .fleet-label a:hover {
+            background: #c9a227;
+            border-color: #c9a227;
+        }
+
+        .fleet-arrows {
+            display: flex;
+            gap: 10px;
+            margin-top: 26px;
+            justify-content: flex-end;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        #testimonials {
+            background: #0c1424;
+        }
+
+        .test-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.9fr;
+            gap: 80px;
+        }
+
+        .test-left p {
+            color: rgba(255, 255, 255, .52);
+            line-height: 1.8;
+            margin-top: 18px;
+            font-size: 15px;
+        }
+
+        .stars-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 26px;
+        }
+
+        .stars-row svg {
+            width: 20px;
+            height: 20px;
+            fill: #c9a227;
+        }
+
+        .stars-row span {
+            margin-left: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, .42);
+        }
+
+        .test-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .test-card {
+            padding: 28px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, .06);
+            background: rgba(255, 255, 255, .02);
+            position: relative;
+            transition: all .5s;
+            cursor: default;
+        }
+
+        .test-card:hover {
+            border-color: rgba(201, 162, 39, .22);
+            transform: translateY(-9px);
+            box-shadow: 0 22px 55px rgba(0, 0, 0, .45);
+        }
+
+        .test-card.full {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(201, 162, 39, .06), rgba(8, 15, 30, .85));
+        }
+
+        .q-icon {
+            width: 34px;
+            height: 34px;
+            color: rgba(201, 162, 39, .22);
+            margin-bottom: 16px;
+        }
+
+        .t-stars {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 16px;
+        }
+
+        .t-stars svg {
+            width: 13px;
+            height: 13px;
+            fill: #c9a227;
+        }
+
+        .t-text {
+            color: rgba(255, 255, 255, .8);
+            font-size: 15px;
+            line-height: 1.78;
+            margin-bottom: 22px;
+        }
+
+        .t-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .t-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #c9a227, #7ec8e3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #080f1e;
+        }
+
+        .t-author h5 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .t-author p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .42);
+            margin-top: 2px;
+        }
+
+        /* ===== BOOKING ===== */
+        #booking {
+            background: #0c1424;
+            padding: 130px 0;
+        }
+
+        .cta-bg-img {
+            position: absolute;
+            inset: 0;
+            background: url('https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp') center/cover no-repeat;
+            opacity: .1;
+        }
+
+        .cta-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 90px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-left p {
+            color: rgba(255, 255, 255, .58);
+            font-size: 17px;
+            line-height: 1.82;
+            margin-bottom: 36px;
+            max-width: 400px;
+        }
+
+        .cta-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .c-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .c-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s;
+        }
+
+        .c-item:hover .c-icon {
+            border-color: rgba(201, 162, 39, .28);
+            background: rgba(201, 162, 39, .07);
+        }
+
+        .c-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: #c9a227;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .c-item span {
+            font-size: 15px;
+            color: rgba(255, 255, 255, .72);
+        }
+
+        .form-card {
+            padding: 44px;
+            border-radius: 30px;
+            background: rgba(12, 20, 36, .9);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, .07);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, .55);
+        }
+
+        .form-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 7px;
+        }
+
+        .form-card .fc-sub {
+            color: rgba(255, 255, 255, .4);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .f-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .f-group {
+            margin-bottom: 16px;
+        }
+
+        .f-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .35);
+            margin-bottom: 7px;
+        }
+
+        .f-group input,
+        .f-group select,
+        .f-group textarea {
+            width: 100%;
+            padding: 13px 17px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, .045);
+            border: 1px solid rgba(255, 255, 255, .08);
+            color: #fff;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .3s;
+        }
+
+        .f-group input::placeholder,
+        .f-group textarea::placeholder {
+            color: rgba(255, 255, 255, .22);
+        }
+
+        .f-group input:focus,
+        .f-group select:focus,
+        .f-group textarea:focus {
+            border-color: rgba(201, 162, 39, .42);
+        }
+
+        .f-group select option {
+            background: #0c1424;
+            color: #fff;
+        }
+
+        .f-group textarea {
+            resize: none;
+        }
+
+        .f-submit {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            margin-top: 6px;
+            background: linear-gradient(135deg, #c9a227, #a87d18);
+            color: #080f1e;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all .3s;
+            font-family: 'Manrope', sans-serif;
+            letter-spacing: .2px;
+        }
+
+        .f-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 38px rgba(201, 162, 39, .38);
+        }
+
+        .f-submit svg {
+            width: 17px;
+            height: 17px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            transition: transform .3s;
+        }
+
+        .f-submit:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #060c18;
+            padding: 76px 0 32px;
+        }
+
+        .foot-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .foot-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .foot-logo img {
+            height: 42px;
+            filter: brightness(1.1);
+        }
+
+        .foot-brand p {
+            color: rgba(255, 255, 255, .42);
+            font-size: 14px;
+            line-height: 1.82;
+            max-width: 300px;
+            margin-bottom: 22px;
+        }
+
+        .foot-socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .foot-social {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .09);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .45);
+            transition: all .3s;
+        }
+
+        .foot-social:hover {
+            border-color: #c9a227;
+            color: #c9a227;
+            background: rgba(201, 162, 39, .07);
+        }
+
+        .foot-col h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            margin-bottom: 18px;
+        }
+
+        .foot-col a {
+            display: block;
+            color: rgba(255, 255, 255, .42);
+            font-size: 14px;
+            margin-bottom: 11px;
+            transition: color .3s;
+        }
+
+        .foot-col a:hover {
+            color: #c9a227;
+        }
+
+        .foot-bottom {
+            padding-top: 26px;
+            border-top: 1px solid rgba(255, 255, 255, .055);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .foot-bottom p {
+            color: rgba(255, 255, 255, .22);
+            font-size: 13px;
+        }
+
+        .foot-legal {
+            display: flex;
+            gap: 22px;
+        }
+
+        .foot-legal a {
+            color: rgba(255, 255, 255, .22);
+            font-size: 13px;
+            transition: color .3s;
+        }
+
+        .foot-legal a:hover {
+            color: #c9a227;
+        }
+
+        /* ===== SCROLL ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(44px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        .reveal.from-left {
+            transform: translateX(-54px);
+        }
+
+        .reveal.from-right {
+            transform: translateX(54px);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translate(0);
+        }
+
+        .d1 {
+            transition-delay: .1s;
+        }
+
+        .d2 {
+            transition-delay: .2s;
+        }
+
+        .d3 {
+            transition-delay: .3s;
+        }
+
+        .d4 {
+            transition-delay: .4s;
+        }
+
+        .d5 {
+            transition-delay: .5s;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:1024px) {
+
+            .about-grid,
+            .accom-grid,
+            .fleet-top,
+            .cta-layout,
+            .test-layout {
+                grid-template-columns: 1fr;
+                gap: 44px;
+            }
+
+            .foot-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 34px;
+            }
+
+            .exp-card {
+                width: 260px;
+            }
+        }
+
+        @media(max-width:900px) {
+
+            .nav-links,
+            .nav-cta {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            #navbar {
+                padding: 18px 24px;
+            }
+
+            #navbar.scrolled {
+                padding: 12px 24px;
+            }
+
+            .hero-content {
+                left: 28px;
+                bottom: 80px;
+                right: 28px;
+            }
+
+            .hero-content h1 {
+                font-size: 40px;
+            }
+
+            .island-card {
+                display: none;
+            }
+
+            .hero-nav {
+                right: 16px;
+                bottom: 80px;
+            }
+
+            .s-title {
+                font-size: 38px;
+            }
+
+            .container {
+                padding: 0 28px;
+            }
+
+            section {
+                padding: 88px 0;
+            }
+
+            .test-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .test-card.full {
+                grid-column: span 1;
+            }
+
+            .exp-card {
+                width: 230px;
+            }
+        }
+
+        @media(max-width:600px) {
+            .s-title {
+                font-size: 32px;
+            }
+
+            .hero-content h1 {
+                font-size: 34px;
+            }
+
+            .f-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-card {
+                padding: 28px;
+            }
+
+            .foot-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 72px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <a href="#" class="nav-logo">
+            <img src="logo.png"
+                alt="Serendipity Yacht Charter">
+        </a>
+        <div class="nav-links">
+            <a href="#vessel">Vessel</a>
+            <a href="#experiences">Experiences</a>
+            <a href="#accommodations">Accommodations</a>
+            <a href="#fleet">Fleet</a>
+            <a href="#testimonials">Reviews</a>
+            <a href="#booking">Contact</a>
+        </div>
+        <a href="#booking" class="nav-cta">Book Now</a>
+        <button class="hamburger" id="menuBtn" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu">
+        <button class="m-close" id="menuClose">&#x2715;</button>
+        <a href="#vessel" class="m-link">Vessel</a>
+        <a href="#experiences" class="m-link">Experiences</a>
+        <a href="#accommodations" class="m-link">Accommodations</a>
+        <a href="#fleet" class="m-link">Fleet</a>
+        <a href="#testimonials" class="m-link">Reviews</a>
+        <a href="#booking" class="m-link">Contact</a>
+        <a href="#booking" style="color:#c9a227;margin-top:6px;">Book Now</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="island-card">
+            <img src="floating_image.webp"
+                alt="Island Hopping">
+            <div class="island-card-body">
+                <div class="tag">Popular Route</div>
+                <h4>Island Hopping</h4>
+                <p>Exclusive inlets &amp; hidden sandbars</p>
+            </div>
+        </div>
+        <div class="hero-slides" id="heroSlides">
+            <div class="hero-slide">
+                <picture>
+                    <source media="(max-width:767px)"
+                        srcset="hero_image1.webp">
+                    <source media="(max-width:1024px)"  
+                        srcset="hero_image1.webp">
+                    <img src="hero_image1.webp"
+                        alt="Gulf Coast Yacht Charter">
+                </picture>
+                <div class="hero-content">
+                    <div class="hero-tag"><span>Saint Petersburg, FL</span></div>
+                    <h1>Your Gulf Coast<br><em>Escape Awaits</em></h1>
+                    <p>Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.</p>
+                    <div class="hero-btns">
+                        <a href="#booking" class="btn-primary">Reserve Now <svg
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></a>
+                        <a href="#vessel" class="btn-outline">Explore Vessel</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <picture>
+                    <source media="(max-width:767px)"
+                        srcset="hero_image1.webp">
+                    <source media="(max-width:1024px)"
+                        srcset="https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner-iPad-1024.webp">
+                    <img src="https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp"
+                        alt="Night Charter Luxury">
+                </picture>
+                <div class="hero-content">
+                    <div class="hero-tag"><span>Tampa Bay, FL</span></div>
+                    <h1>Experience<br><em>Pure Luxury</em></h1>
+                    <p>Discover breathtaking views and world-class comfort on Florida's Gulf Coast.</p>
+                    <div class="hero-btns">
+                        <a href="#booking" class="btn-primary">Book Today <svg
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></a>
+                        <a href="#experiences" class="btn-outline">View Experiences</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <picture>
+                    <source media="(max-width:767px)"
+                        srcset="https://serendipityyachtcharter.com/wp-content/uploads/2026/01/Hero-Header-Bannern2.1-mobile.webp">
+                    <source media="(max-width:1024px)"
+                        srcset="https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-Bannern2-iPad-1024.webp">
+                    <img src="https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-Bannern2.webp"
+                        alt="Make Memories at Sea">
+                </picture>
+                <div class="hero-content">
+                    <div class="hero-tag"><span>Gulf Coast, FL</span></div>
+                    <h1>Make Memories<br><em>at Sea</em></h1>
+                    <p>Unforgettable moments aboard our expertly remodeled luxury yacht.</p>
+                    <div class="hero-btns">
+                        <a href="#booking" class="btn-primary">Start Now <svg
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></a>
+                        <a href="#accommodations" class="btn-outline">Accommodations</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-nav" id="heroNav">
+            <button class="active" data-idx="0"></button>
+            <button data-idx="1"></button>
+            <button data-idx="2"></button>
+        </div>
+        <div class="scroll-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
+            <span>Scroll</span>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="vessel">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-img-wrap reveal from-left">
+                    <div class="spin-ring"></div>
+                    <img src="image1.webp"
+                        alt="Serendipity Yacht">
+                    <div class="about-badge">
+                        <div class="bn">94'</div>
+                        <div class="bl">Lazzara Hardtop<br>Motor Yacht</div>
+                    </div>
+                </div>
+                <div class="about-text reveal from-right">
+                    <div class="s-tag"><span>About Serendipity</span></div>
+                    <h2 class="s-title">Experience the Ocean<br><span>Like Never Before</span></h2>
+                    <p>Welcome aboard Serendipity, an extraordinary charter experience. Based in Saint Petersburg,
+                        Florida, Serendipity is an expertly remodeled, stunning 94' Lazzara Hardtop motor yacht.</p>
+                    <p>Located between Tampa and Sarasota on Florida's Gulf Coast, Serendipity offers rare access to the
+                        Intercoastal Waterway, opening up hidden islands, exclusive inlets, lively sandbars, and calm
+                        anchorages that few yachts of this size can reach.</p>
+                    <p>Whether you're celebrating a milestone or simply seeking peace on the water, Serendipity brings
+                        refined luxury, privacy, and adventure together in one unforgettable experience.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card reveal d1"><svg viewBox="0 0 24 24">
+                                <path d="M3 18s1-1 4-1 5 2 8 2 4-1 4-1V4s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                                <line x1="3" y1="22" x2="3" y2="4" />
+                            </svg>
+                            <div class="sv">94 ft</div>
+                            <div class="sk">Yacht Length</div>
+                        </div>
+                        <div class="stat-card reveal d2"><svg viewBox="0 0 24 24">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                            <div class="sv">12</div>
+                            <div class="sk">Max Guests</div>
+                        </div>
+                        <div class="stat-card reveal d3"><svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="2" y1="12" x2="22" y2="12" />
+                                <path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                            </svg>
+                            <div class="sv">20+</div>
+                            <div class="sk">Destinations</div>
+                        </div>
+                        <div class="stat-card reveal d4"><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                            <div class="sv">5.0 ★</div>
+                            <div class="sk">Guest Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCES -->
+    <section id="experiences">
+        <div class="container">
+            <div class="exp-head">
+                <div class="reveal">
+                    <div class="s-tag"><span>Private Events</span></div>
+                    <h2 class="s-title">A Floating Resort for<br><span>Every Occasion</span></h2>
+                </div>
+                <div class="arrow-pair">
+                    <button class="arr-btn" id="expPrev" aria-label="Previous"><svg viewBox="0 0 24 24">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg></button>
+                    <button class="arr-btn" id="expNext" aria-label="Next"><svg viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg></button>
+                </div>
+            </div>
+            <div class="exp-wrap">
+                <div class="exp-track" id="expTrack">
+                    <div class="exp-card"><img
+                            src="img1.webp"
+                            alt="Sunset Cruises">
+                        <div class="exp-overlay">
+                            <h3>Sunset Cruises &amp; Day Excursions</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                    <div class="exp-card"><img
+                            src="img2.webp"
+                            alt="Celebrations">
+                        <div class="exp-overlay">
+                            <h3>Birthday &amp; Anniversary Celebrations</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                    <div class="exp-card"><img
+                            src="img3.webp"
+                            alt="Corporate Events">
+                        <div class="exp-overlay">
+                            <h3>Corporate &amp; Executive Events</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                    <div class="exp-card"><img
+                            src="img4.webp"
+                            alt="Wellness Retreats">
+                        <div class="exp-overlay">
+                            <h3>Wellness Retreats on the Water</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                    <div class="exp-card"><img
+                            src="img5.webp"
+                            alt="Fine Dining">
+                        <div class="exp-overlay">
+                            <h3>Fine Dining Celebrations</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                    <div class="exp-card"><img
+                            src="img6.png"
+                            alt="Alfresco Lunch">
+                        <div class="exp-overlay">
+                            <h3>Alfresco Lunch Functions</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                    <div class="exp-card"><img
+                            src="img7.webp"
+                            alt="First Class Relaxation">
+                        <div class="exp-overlay">
+                            <h3>First Class Relaxation</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                    <div class="exp-card"><img
+                            src="img8.webp"
+                            alt="Cooking Classes">
+                        <div class="exp-overlay">
+                            <h3>Chef's Cooking Classes</h3>
+                            <div class="exp-book">Book Now <svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="exp-corner"><svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></div>
+                    </div>
+                </div>
+            </div>
+            <div class="exp-foot reveal">
+                <p>With its spa-like amenities, elegant interiors, and professional crew, Serendipity is designed to
+                    impress. Plan your private event with us today.</p>
+                <a href="https://serendipityyachtcharter.com/destinations/" class="link-g">Explore Destinations <svg
+                        viewBox="0 0 24 24">
+                        <path d="M7 17L17 7" />
+                        <polyline points="7 7 17 7 17 17" />
+                    </svg></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACCOMMODATIONS -->
+    <section id="accommodations">
+        <div class="container">
+            <div class="s-tag reveal"><span>Luxury Living</span></div>
+            <h2 class="s-title reveal">Elegant Accommodations<br><span>for Up to 12 Guests</span></h2>
+            <p class="s-sub reveal">Rest and unwind in four refined guest suites, each designed for absolute comfort and
+                offering total privacy.</p>
+            <div class="accom-grid">
+                <div class="accom-img reveal from-left">
+                    <img src="img5.webp"
+                        alt="Yacht Accommodations">
+                    <div class="accom-badge">
+                        <div class="an">4</div>
+                        <div class="al">Private Suites</div>
+                    </div>
+                </div>
+                <div class="reveal from-right">
+                    <div class="room-list">
+                        <div class="room-row">
+                            <div>
+                                <h4>Master Stateroom</h4>
+                                <p>King bed, ensuite bath</p>
+                            </div>
+                            <div class="rarr"><svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="room-row">
+                            <div>
+                                <h4>Port &amp; Starboard VIPs</h4>
+                                <p>Queen beds, ensuite baths</p>
+                            </div>
+                            <div class="rarr"><svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                        <div class="room-row">
+                            <div>
+                                <h4>Midship Guest Stateroom</h4>
+                                <p>Double bed, ensuite bath</p>
+                            </div>
+                            <div class="rarr"><svg viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg></div>
+                        </div>
+                    </div>
+                    <div class="amenities-box">
+                        <h3>Expansive Flybridge with Jacuzzi &amp; Lounge</h3>
+                        <div class="amenity-row">
+                            <div class="amenity-dot"><svg viewBox="0 0 12 10">
+                                    <polyline points="1 5 4 8 11 1" />
+                                </svg></div><span>A hot/cold Jacuzzi</span>
+                        </div>
+                        <div class="amenity-row">
+                            <div class="amenity-dot"><svg viewBox="0 0 12 10">
+                                    <polyline points="1 5 4 8 11 1" />
+                                </svg></div><span>Oversized chaise lounges for sunbathing</span>
+                        </div>
+                        <div class="amenity-row">
+                            <div class="amenity-dot"><svg viewBox="0 0 12 10">
+                                    <polyline points="1 5 4 8 11 1" />
+                                </svg></div><span>Al fresco dining with ocean views</span>
+                        </div>
+                        <div class="amenity-row">
+                            <div class="amenity-dot"><svg viewBox="0 0 12 10">
+                                    <polyline points="1 5 4 8 11 1" />
+                                </svg></div><span>Wet bar for handcrafted cocktails</span>
+                        </div>
+                        <p style="font-size:13px;color:rgba(255,255,255,.48);margin-top:18px;line-height:1.72;">All
+                            rooms include individual climate control, plasma TVs, and entertainment systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLEET -->
+    <section id="fleet">
+        <div class="container">
+            <div class="fleet-top">
+                <div class="reveal from-left">
+                    <div class="s-tag"><span>Our Exclusive Fleet</span></div>
+                    <h2 class="s-title">Plan Your Yacht<br><span>Experience Today</span></h2>
+                </div>
+                <p class="reveal from-right">From romantic cruises off Anna Maria Island to corporate retreats in Tampa
+                    Bay, adventure meets luxury with a full suite of water sports gear — jet skis, RIB, paddle boards
+                    &amp; more.</p>
+            </div>
+            <div class="fleet-wrap">
+                <div class="fleet-track" id="fleetTrack">
+                    <div class="fleet-card"><img
+                            src="img1.webp"
+                            alt="Serenity Wave">
+                        <div class="fleet-label">
+                            <p>Serenity Wave</p><a href="#booking">&#x279a;</a>
+                        </div>
+                    </div>
+                    <div class="fleet-card"><img
+                            src="img2.webp"
+                            alt="Ocean's Embrace">
+                        <div class="fleet-label">
+                            <p>Ocean's Embrace</p><a href="#booking">&#x279a;</a>
+                        </div>
+                    </div>
+                    <div class="fleet-card"><img
+                             src="img3.webp"
+                            alt="Gulf Star">
+                        <div class="fleet-label">
+                            <p>Gulf Star</p><a href="#booking">&#x279a;</a>
+                        </div>
+                    </div>
+                    <div class="fleet-card"><img
+                              src="img4.webp"
+                            alt="Azure Dream">
+                        <div class="fleet-label">
+                            <p>Azure Dream</p><a href="#booking">&#x279a;</a>
+                        </div>
+                    </div>
+                    <div class="fleet-card"><img
+                              src="img5.webp"
+                            alt="Bay Pearl">
+                        <div class="fleet-label">
+                            <p>Bay Pearl</p><a href="#booking">&#x279a;</a>
+                        </div>
+                    </div>
+                    <div class="fleet-card"><img
+                              src="img6.png"
+                            alt="Sunset Glory">
+                        <div class="fleet-label">
+                            <p>Sunset Glory</p><a href="">&#x279a;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fleet-arrows">
+                <button class="arr-btn" id="fleetPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg></button>
+                <button class="arr-btn" id="fleetNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="container">
+            <div class="test-layout">
+                <div class="reveal from-left">
+                    <div class="s-tag"><span>Reviews</span></div>
+                    <h2 class="s-title" style="font-size:46px;">What Our<br>Clients<br><span>Say</span></h2>
+                    <p>Thousands of travelers have set sail with us — see what they have to say about their
+                        unforgettable cruise experiences.</p>
+                    <div class="stars-row">
+                        <svg viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <svg viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <svg viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <svg viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <svg viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>5.0 Average</span>
+                    </div>
+                </div>
+                <div class="test-cards reveal from-right">
+                    <div class="test-card full">
+                        <svg class="q-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                        <div class="t-stars"><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg></div>
+                        <p class="t-text">"We just had a 5 day charter and we could not be any happier. Captain John,
+                            Jake and Hailey were amazing. The crew made it perfect and the yacht's beauty I could not
+                            even explain. We are already planning our next trip. 5 stars no doubt!!!"</p>
+                        <div class="t-author">
+                            <div class="t-avatar">C</div>
+                            <div>
+                                <h5>Carolina Reyes</h5>
+                                <p>5-Day Charter Guest</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="test-card">
+                        <svg class="q-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                        <div class="t-stars"><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg></div>
+                        <p class="t-text">"I had the opportunity to be a guest for a day cruise and it was lovely. The
+                            boat is top notch as are the captains. Definitely recommend!"</p>
+                        <div class="t-author">
+                            <div class="t-avatar">S</div>
+                            <div>
+                                <h5>Shannon Cook</h5>
+                                <p>Day Cruise Guest</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="test-card">
+                        <svg class="q-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                        <div class="t-stars"><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg><svg viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg></div>
+                        <p class="t-text">"We had an amazing time aboard the Serendipity! Unforgettable from start to
+                            finish. Already planning our return!"</p>
+                        <div class="t-author">
+                            <div class="t-avatar">B</div>
+                            <div>
+                                <h5>Byron Wilson</h5>
+                                <p>Weekend Charter Guest</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking" style="position:relative;">
+        <div class="cta-bg-img"></div>
+        <div class="container">
+            <div class="cta-layout">
+                <div class="cta-left reveal from-left">
+                    <div class="s-tag"><span>Start Planning</span></div>
+                    <h2 class="s-title">Send Us Your<br>Event <span>Requirements</span></h2>
+                    <p>Whether celebrating a milestone or seeking peace on the water, Serendipity brings refined luxury,
+                        privacy, and adventure together.</p>
+                    <div class="cta-contact">
+                        <div class="c-item">
+                            <div class="c-icon"><svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 015.19 12.9a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                                </svg></div><span>(727) 555-0123</span>
+                        </div>
+                        <div class="c-item">
+                            <div class="c-icon"><svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg></div><span>charter@serendipityyacht.com</span>
+                        </div>
+                        <div class="c-item">
+                            <div class="c-icon"><svg viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg></div><span>Saint Petersburg, FL</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-card reveal from-right">
+                    <h3>Book Your Experience</h3>
+                    <p class="fc-sub">Tell us about your dream charter and we'll craft the perfect itinerary.</p>
+                    <form onsubmit="handleSubmit(event)">
+                        <div class="f-row">
+                            <div class="f-group"><label>First Name</label><input type="text" placeholder="John"
+                                    required></div>
+                            <div class="f-group"><label>Last Name</label><input type="text" placeholder="Doe" required>
+                            </div>
+                        </div>
+                        <div class="f-group"><label>Email Address</label><input type="email"
+                                placeholder="john@example.com" required></div>
+                        <div class="f-group"><label>Event Type</label><select>
+                                <option>Day Charter</option>
+                                <option>Sunset Cruise</option>
+                                <option>Overnight Charter</option>
+                                <option>Corporate Event</option>
+                                <option>Private Celebration</option>
+                                <option>Wellness Retreat</option>
+                            </select></div>
+                        <div class="f-group"><label>Message</label><textarea rows="3"
+                                placeholder="Tell us about your event..."></textarea></div>
+                        <button class="f-submit" type="submit">Submit Request <svg viewBox="0 0 24 24">
+                                <path d="M7 17L17 7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <div class="foot-logo"><img
+                            src="https://serendipityyachtcharter.com/wp-content/uploads/2025/09/site-logo.png"
+                            alt="Serendipity"></div>
+                    <p>A stunning 94' Lazzara Hardtop motor yacht based in Saint Petersburg, Florida. Experience refined
+                        luxury on Florida's Gulf Coast.</p>
+                    <div class="foot-socials"><a href="#" class="foot-social">FB</a><a href="#"
+                            class="foot-social">IG</a><a href="#" class="foot-social">TW</a></div>
+                </div>
+                <div class="foot-col">
+                    <h4>Charter</h4><a href="#">Day Excursions</a><a href="#">Sunset Cruises</a><a href="#">Overnight
+                        Stays</a><a href="#">Corporate Events</a>
+                </div>
+                <div class="foot-col">
+                    <h4>Vessel</h4><a href="#">Specifications</a><a href="#">Accommodations</a><a href="#">Water
+                        Toys</a><a href="#">Flybridge</a>
+                </div>
+                <div class="foot-col">
+                    <h4>Destinations</h4><a href="#">Tampa Bay</a><a href="#">Anna Maria Island</a><a href="#">Egmont
+                        Key</a><a href="#">Longboat Pass</a>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <p>&copy; 2025 Serendipity Yacht Charter. All rights reserved.</p>
+                <div class="foot-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* NAVBAR */
+        var navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function () { navbar.classList.toggle('scrolled', window.scrollY > 55); });
+
+        /* MOBILE MENU */
+        document.getElementById('menuBtn').addEventListener('click', function () { document.getElementById('mobileMenu').classList.add('open'); });
+        document.getElementById('menuClose').addEventListener('click', function () { document.getElementById('mobileMenu').classList.remove('open'); });
+        document.querySelectorAll('.m-link').forEach(function (l) { l.addEventListener('click', function () { document.getElementById('mobileMenu').classList.remove('open'); }); });
+
+        /* HERO SLIDER */
+        var heroIdx = 0, heroTotal = 3;
+        var heroSlides = document.getElementById('heroSlides');
+        var heroDots = document.querySelectorAll('#heroNav button');
+        function goHero(i) { heroIdx = (i + heroTotal) % heroTotal; heroSlides.style.transform = 'translateX(-' + (heroIdx * 100) + '%)'; heroDots.forEach(function (d, j) { d.classList.toggle('active', j === heroIdx); }); }
+        heroDots.forEach(function (b) { b.addEventListener('click', function () { goHero(parseInt(b.getAttribute('data-idx'))); }); });
+        setInterval(function () { goHero(heroIdx + 1); }, 6500);
+
+        /* EXPERIENCES CAROUSEL */
+        var expIdx = 0;
+        var expTrack = document.getElementById('expTrack');
+        function expCardW() { var c = expTrack.children[0]; return c ? c.offsetWidth + 22 : 307; }
+        function expVisible() { return window.innerWidth <= 600 ? 1 : window.innerWidth <= 900 ? 2 : 4; }
+        function moveExp() { var max = expTrack.children.length - expVisible(); expIdx = Math.max(0, Math.min(expIdx, max)); expTrack.style.transform = 'translateX(-' + (expIdx * expCardW()) + 'px)'; }
+        document.getElementById('expNext').addEventListener('click', function () { expIdx++; moveExp(); });
+        document.getElementById('expPrev').addEventListener('click', function () { expIdx--; moveExp(); });
+
+        /* FLEET CAROUSEL */
+        var fleetIdx = 0;
+        var fleetTrack = document.getElementById('fleetTrack');
+        function fleetVisible() { return window.innerWidth <= 600 ? 1 : window.innerWidth <= 900 ? 2 : 4; }
+        function setFleetW() { var vis = fleetVisible(), gap = 20, tw = fleetTrack.parentElement.offsetWidth, cw = (tw - (gap * (vis - 1))) / vis; Array.from(fleetTrack.children).forEach(function (c) { c.style.width = cw + 'px'; }); moveFleet(); }
+        function moveFleet() { var max = fleetTrack.children.length - fleetVisible(); fleetIdx = Math.max(0, Math.min(fleetIdx, max)); var cw = fleetTrack.children[0] ? fleetTrack.children[0].offsetWidth + 20 : 0; fleetTrack.style.transform = 'translateX(-' + (fleetIdx * cw) + 'px)'; }
+        document.getElementById('fleetNext').addEventListener('click', function () { fleetIdx++; moveFleet(); });
+        document.getElementById('fleetPrev').addEventListener('click', function () { fleetIdx--; moveFleet(); });
+        window.addEventListener('resize', function () { setFleetW(); moveExp(); });
+        window.addEventListener('load', setFleetW);
+
+        /* SCROLL REVEAL */
+        var obs = new IntersectionObserver(function (entries) { entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.13 });
+        document.querySelectorAll('.reveal').forEach(function (el) { obs.observe(el); });
+
+        /* FORM */
+        function handleSubmit(e) {
+            e.preventDefault();
+            var btn = e.target.querySelector('.f-submit');
+            var orig = btn.innerHTML;
+            btn.textContent = "✓ Sent! We'll be in touch soon.";
+            btn.style.background = 'linear-gradient(135deg,#2a7a4b,#1d5c38)';
+            btn.style.color = '#fff';
+            setTimeout(function () { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; e.target.reset(); }, 3500);
+        }
+    </script>
+</body>
+
+</html>
