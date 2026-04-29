@@ -49,7 +49,7 @@ interface Room {
 // --- Constants ---
 const EXPERIENCES: Experience[] = [
   {
-    img: "../assets/occasion1.png",
+    img: "/assets/occasion1.png",
     tag: "Leisure",
     title: "Sunset Cruises & Day Excursions",
     desc: "Watch the Gulf Coast horizon blaze with color as Serendipity glides through calm waters. Our sunset cruises are timed perfectly to the golden hour, with craft cocktails, soft music, and panoramic views from the flybridge.",
@@ -61,7 +61,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "../assets/occasion2.png",
+    img: "/assets/occasion2.png",
     tag: "Celebration",
     title: "Birthday & Anniversary Celebrations",
     desc: "Make your milestone unforgettable. We coordinate every detail—from floral décor and custom cakes to curated playlists and chef-prepared menus—so all you do is celebrate.",
@@ -73,7 +73,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "../assets/occasion3.png",
+    img: "/assets/occasion3.png",
     tag: "Corporate",
     title: "Corporate & Executive Events",
     desc: "Impress clients and inspire your team in an extraordinary setting. Serendipity offers an exclusive boardroom on the water with full AV capabilities, catering, and absolute privacy.",
@@ -85,7 +85,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "../assets/occasion4.png",
+    img: "/assets/occasion4.png",
     tag: "Wellness",
     title: "Wellness Retreats on the Water",
     desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
@@ -97,7 +97,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "../assets/occasion5.png",
+    img: "/assets/occasion5.png",
     tag: "First Class",
     title: "First Class Relaxation",
     desc: "Impress clients and inspire your team in an extraordinary setting. Serendipity offers an exclusive boardroom on the water with full AV capabilities, catering, and absolute privacy.",
@@ -109,7 +109,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "../assets/occasion6.png",
+    img: "/assets/occasion6.png",
     tag: "Cooking Class",
     title: "Chef’s Cooking Classes",
     desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
@@ -124,7 +124,7 @@ const EXPERIENCES: Experience[] = [
 
 const ROOMS: Room[] = [
   {
-    img: "../assets/occasion5.png",
+    img: "/assets/occasion5.png",
     sub: "Master Suite",
     title: "Master Stateroom",
     desc: "The crown jewel of Serendipity — a sprawling master stateroom with a king-size bed, premium linens, and a full ensuite bathroom featuring a walk-in rain shower and imported stone fixtures.",
@@ -136,7 +136,7 @@ const ROOMS: Room[] = [
     ],
   },
   {
-    img: "../assets/bedroom2.png",
+    img: "/assets/bedroom2.png",
     sub: "VIP Staterooms",
     title: "Port & Starboard VIPs",
     desc: "Two symmetrical VIP staterooms — one port, one starboard — each featuring queen-size beds, ensuite bathrooms, and elegant décor.",
@@ -150,19 +150,19 @@ const ROOMS: Room[] = [
 
 const FLEET = [
   {
-    img: "../assets/occasion1.png",
+    img: "/assets/occasion1.png",
     name: "Serenity Wave",
   },
   {
-    img: "../assets/occasion3.png",
+    img: "/assets/occasion3.png",
     name: "Ocean's Embrace",
   },
   {
-    img: "../assets/occasion4.png",
+    img: "/assets/occasion4.png",
     name: "Gulf Star",
   },
   {
-    img: "../assets/occasion2.png",
+    img: "/assets/occasion2.png",
     name: "Azure Dream",
   },
 ];
@@ -602,7 +602,7 @@ function Navbar({
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <a href="#" className="flex items-center gap-3 group">
           <img
-            src="../assets/logo.png"
+            src="/assets/logo.png"
             alt="Serendipity Logo"
             className="h-20 md:h-16 w-auto group-hover:scale-105 transition-transform"
           />
@@ -701,21 +701,21 @@ function Hero({
       line1: "Your Gulf Coast",
       line2: "Escape Awaits",
       desc: "Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.",
-      img: "../assets/hero1.png",
+      img: "/assets/hero1.png",
       tag: "Saint Petersburg, FL",
     },
     {
       line1: "Experience",
       line2: "Pure Luxury",
       desc: "Discover breathtaking views and world-class comfort on Florida's Gulf Coast.",
-      img: "../assets/hero2.png",
+      img: "/assets/hero2.png",
       tag: "Tampa Bay, FL",
     },
     {
       line1: "Make Memories",
       line2: "at Sea",
       desc: "Unforgettable moments aboard our expertly remodeled luxury yacht.",
-      img: "../assets/hero3.png",
+      img: "/assets/hero3.png",
       tag: "Gulf Coast, FL",
     },
   ];
@@ -793,7 +793,7 @@ function Hero({
       {/* Floating UI */}
       <div className="absolute top-28 right-16 hidden lg:block w-64 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-float-y">
         <img
-          src="../assets/hero1.png"
+          src="/assets/hero1.png"
           className="w-full aspect-video object-cover rounded-xl mb-4"
         />
         <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
@@ -866,7 +866,7 @@ function VesselSection({
             onClick={openGallery}
           >
             <img
-              src="../assets/gallerymain.png"
+              src="/assets/gallerymain.png"
               className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
               alt="Serendipity Yacht"
             />
@@ -1120,7 +1120,7 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           <div className="relative rounded-[2.5rem] overflow-hidden group">
             <img
-              src="../assets/gallerymain.png"
+              src="/assets/gallerymain.png"
               className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700"
               alt=""
             />
@@ -1402,7 +1402,7 @@ function BookingSection({
     >
       <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
         <img
-          src="../assets/occasion4.png"
+          src="/assets/occasion4.png"
           className="w-full h-full object-cover"
           alt=""
         />
@@ -1534,7 +1534,7 @@ function Footer() {
           <div className="col-span-1 lg:col-span-1">
             <div className="flex items-center gap-2 mb-6">
               <img
-                src="../assets/logo.png"
+                src="/assets/logo.png"
                 alt="Serendipity Logo"
                 className="h-20 w-auto"
               />
