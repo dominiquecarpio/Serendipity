@@ -90,6 +90,9 @@ h2.text-4xl.md\:text-6xl.font-serif.leading-tight.mb-6 {
 h2.text-4xl.md\:text-5xl.font-serif.leading-tight.mb-6 {
     font-size: 66px;
 }
+.flex.flex-col.md\:flex-row.md\:items-end.justify-between.gap-10.mb-16 {
+    margin-bottom: 16px;
+}
 .p-10.bg-white\/5.border.border-white\/10.rounded-\[2\.5rem\].relative.overflow-hidden.group {
     margin-top: -9px;
 }

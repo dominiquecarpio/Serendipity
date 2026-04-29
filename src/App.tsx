@@ -1172,7 +1172,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto"
       >
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16 relative z-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10 relative z-20">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-[1.5px] bg-gold" />
@@ -1321,55 +1321,7 @@ function SpecialistsSection({ openSpecialist }: { openSpecialist: (s: Specialist
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Carousel Container */}
           <div className="relative overflow-hidden rounded-3xl">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIdx}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.5 }}
-                className="relative"
-              >
-                <img
-                  src={SPECIALISTS[currentIdx].img}
-                  alt={SPECIALISTS[currentIdx].name}
-                  className="w-full aspect-[4/5] object-cover rounded-3xl"
-                />
-                {/* Overlay with profile info */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy via-navy/80 to-transparent p-8 rounded-b-3xl">
-                  <div className="flex items-end gap-4">
-                    <img
-                      src={SPECIALISTS[currentIdx].profileImg}
-                      alt={SPECIALISTS[currentIdx].name}
-                      className="w-16 h-16 rounded-full border-2 border-gold object-cover"
-                    />
-                    <div>
-                      <h3 className="text-2xl font-serif">{SPECIALISTS[currentIdx].name}</h3>
-                      <p className="text-gold text-sm font-semibold">{SPECIALISTS[currentIdx].tag}</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Slide indicators */}
-            <div className="absolute top-6 right-6 flex gap-2 z-10">
-              {SPECIALISTS.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentIdx(i)}
-                  className={`h-2 rounded-full transition-all ${
-                    i === currentIdx
-                      ? "w-8 bg-gold"
-                      : "w-2 bg-white/30 hover:bg-white/50"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Content */}
-          <AnimatePresence mode="wait">
+           <AnimatePresence mode="wait">
             <motion.div
               key={currentIdx}
               initial={{ opacity: 0, y: 20 }}
@@ -1413,6 +1365,54 @@ function SpecialistsSection({ openSpecialist }: { openSpecialist: (s: Specialist
               </button>
             </motion.div>
           </AnimatePresence>
+
+            {/* Slide indicators */}
+            <div className="absolute top-6 right-6 flex gap-2 z-10">
+              {SPECIALISTS.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentIdx(i)}
+                  className={`h-2 rounded-full transition-all ${
+                    i === currentIdx
+                      ? "w-8 bg-gold"
+                      : "w-2 bg-white/30 hover:bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Content */}
+         <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIdx}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.5 }}
+                className="relative"
+              >
+                <img
+                  src={SPECIALISTS[currentIdx].img}
+                  alt={SPECIALISTS[currentIdx].name}
+                  className="w-full aspect-[4/5] object-cover rounded-3xl"
+                />
+                {/* Overlay with profile info */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy via-navy/80 to-transparent p-8 rounded-b-3xl">
+                  <div className="flex items-end gap-4">
+                    <img
+                      src={SPECIALISTS[currentIdx].profileImg}
+                      alt={SPECIALISTS[currentIdx].name}
+                      className="w-16 h-16 rounded-full border-2 border-gold object-cover"
+                    />
+                    <div>
+                      <h3 className="text-2xl font-serif">{SPECIALISTS[currentIdx].name}</h3>
+                      <p className="text-gold text-sm font-semibold">{SPECIALISTS[currentIdx].tag}</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
         </div>
       </motion.div>
     </section>
