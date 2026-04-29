@@ -1499,21 +1499,15 @@ function Footer() {
               ],
             },
             {
-              title: "Vessel",
-              links: [
-                "Specifications",
-                "Accommodations",
-                "Water Toys",
-                "Flybridge",
-              ],
+              title: "Contact",
+              links: ["Call Jake: 412-418-2968", "Manager Bryon: 727-644-9653"],
             },
             {
-              title: "Destinations",
+              title: "Location",
               links: [
-                "Tampa Bay",
-                "Anna Maria Island",
-                "Egmont Key",
-                "Longboat Pass",
+                "Maximo Marina",
+                "3701 50 Ave S.",
+                "Saint Petersburg, FL 33371",
               ],
             },
           ].map((c, i) => (
@@ -1521,13 +1515,8 @@ function Footer() {
               <h4 className="font-serif text-lg mb-6">{c.title}</h4>
               <ul className="space-y-3">
                 {c.links.map((l) => (
-                  <li key={l}>
-                    <a
-                      href="#"
-                      className="text-sm text-white/30 hover:text-gold transition-colors"
-                    >
-                      {l}
-                    </a>
+                  <li key={l} className="text-sm text-white/30">
+                    {l}
                   </li>
                 ))}
               </ul>
