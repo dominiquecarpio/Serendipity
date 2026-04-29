@@ -87,6 +87,9 @@ img.w-full.aspect-\[4\/5\].object-cover.rounded-3xl {
 h2.text-4xl.md\:text-6xl.font-serif.leading-tight.mb-6 {
     font-size: 51px;
 }
+h2.text-4xl.md\:text-5xl.font-serif.leading-tight.mb-6 {
+    font-size: 66px;
+}
 .p-10.bg-white\/5.border.border-white\/10.rounded-\[2\.5rem\].relative.overflow-hidden.group {
     margin-top: -9px;
 }
