@@ -1634,7 +1634,7 @@ function ReviewsSection() {
                 <Star key={i} className="w-4 h-4 fill-gold text-gold" />
               ))}
             </div>
-            <p className="text-xl md:text-2xl text-white/80 leading-relaxed mb-8">
+            <p className="text-xl md:text-2xl text-white/80 leading-relaxed mb-8 ">
               "We just had a 5 day charter and we could not be any happier.
               Captain John, Jake and Hailey were amazing. The crew made it
               perfect and the yacht's beauty I could not even explain. We are

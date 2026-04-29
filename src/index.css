@@ -65,8 +65,17 @@ footer.bg-\[\#040810\].py-20.px-6.border-t.border-white\/5{
 .mt-20.pt-10.border-t.border-white\/10.flex.flex-wrap.items-center.justify-between.gap-10.relative.z-20 {
     margin-top: 20px;
 }
+p.text-xl.md\:text-2xl.text-white\/80.leading-relaxed.mb-8 {
+    font-size: 14px;
+}
+p.text-white\/60.mb-8.leading-relaxed {
+    font-size: 13px;
+}
+p.text-white\/50.mb-8.max-w-xs {
+    font-size: 21px;
+}
 .flex.flex-col.gap-4 {
-    margin-top: -200x;
+    margin-top: -200px;
     margin-left: 30px;
 }
 img.w-full.aspect-\[16\/10\].object-cover.group-hover\:scale-105.transition-transform.duration-700 {
@@ -84,6 +93,7 @@ h2.text-4xl.md\:text-6xl.font-serif.leading-tight.mb-6 {
 .p-10.md\:p-12.bg-navy\/90.backdrop-blur-3xl.border.border-white\/10.rounded-\[2\.5rem\].shadow-2xl {
     width: 696px;
 }
+
 
   .text-gradient {
     background: #c9a227;
