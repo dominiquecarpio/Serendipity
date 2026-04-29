@@ -947,7 +947,7 @@ function VesselSection({
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-1 mb-4">
             <div className="w-12 h-[1.5px] bg-gold" />
             <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
               About Serendipity
