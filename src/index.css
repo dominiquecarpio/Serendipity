@@ -38,9 +38,29 @@
     content: "";
     @apply w-10 h-[1.5px] bg-gold block;
   }
-
+section#vessel {
+    padding-block: calc(var(--spacing) * 10);
+}
+section#experiences{
+    padding-block: calc(var(--spacing) * 10);
+}
+section#accommodations{
+    padding-block: calc(var(--spacing) * 10);
+}
+section#fleet{
+    padding-block: calc(var(--spacing) * 10);
+}
+section#reviews{
+    padding-block: calc(var(--spacing) * 10);
+}
+section#booking{
+    padding-block: calc(var(--spacing) * 10);
+}
+footer.bg-\[\#040810\].py-20.px-6.border-t.border-white\/5{
+    padding-block: calc(var(--spacing) * 10);
+}
   .text-gradient {
-    background: linear-gradient(135deg, #c9a227 0%, #7ec8e3 100%);
+    background: yellow;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
