@@ -49,7 +49,7 @@ interface Room {
 // --- Constants ---
 const EXPERIENCES: Experience[] = [
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2026/01/Hero-Header-Bannern2.1-mobile.webp",
+    img: "../assets/occasion1.png",
     tag: "Leisure",
     title: "Sunset Cruises & Day Excursions",
     desc: "Watch the Gulf Coast horizon blaze with color as Serendipity glides through calm waters. Our sunset cruises are timed perfectly to the golden hour, with craft cocktails, soft music, and panoramic views from the flybridge.",
@@ -61,7 +61,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp",
+    img: "../assets/occasion2.png",
     tag: "Celebration",
     title: "Birthday & Anniversary Celebrations",
     desc: "Make your milestone unforgettable. We coordinate every detail—from floral décor and custom cakes to curated playlists and chef-prepared menus—so all you do is celebrate.",
@@ -73,7 +73,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-Bannern2.webp",
+    img: "../assets/occasion3.png",
     tag: "Corporate",
     title: "Corporate & Executive Events",
     desc: "Impress clients and inspire your team in an extraordinary setting. Serendipity offers an exclusive boardroom on the water with full AV capabilities, catering, and absolute privacy.",
@@ -85,9 +85,33 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000",
+    img: "../assets/occasion4.png",
     tag: "Wellness",
     title: "Wellness Retreats on the Water",
+    desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
+    features: [
+      "Certified yoga instructor",
+      "Spa & massage options",
+      "Organic catering menu",
+      "Mindfulness packages",
+    ],
+  },
+  {
+    img: "../assets/occasion5.png",
+    tag: "Corporate1",
+    title: "Corporate & Executive Events1",
+    desc: "Impress clients and inspire your team in an extraordinary setting. Serendipity offers an exclusive boardroom on the water with full AV capabilities, catering, and absolute privacy.",
+    features: [
+      "Full AV & WiFi setup",
+      "Catering packages",
+      "Up to 12 executives",
+      "NDAs & confidentiality honored",
+    ],
+  },
+  {
+    img: "../assets/occasion6.png",
+    tag: "Wellness1",
+    title: "Wellness Retreats on the Water1",
     desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
     features: [
       "Certified yoga instructor",
@@ -100,7 +124,7 @@ const EXPERIENCES: Experience[] = [
 
 const ROOMS: Room[] = [
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2026/01/Hero-Header-Bannern2.1-mobile.webp",
+    img: "../assets/occasion5.png",
     sub: "Master Suite",
     title: "Master Stateroom",
     desc: "The crown jewel of Serendipity — a sprawling master stateroom with a king-size bed, premium linens, and a full ensuite bathroom featuring a walk-in rain shower and imported stone fixtures.",
@@ -112,7 +136,7 @@ const ROOMS: Room[] = [
     ],
   },
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp",
+    img: "../assets/occasion6.png",
     sub: "VIP Staterooms",
     title: "Port & Starboard VIPs",
     desc: "Two symmetrical VIP staterooms — one port, one starboard — each featuring queen-size beds, ensuite bathrooms, and elegant décor.",
@@ -126,19 +150,19 @@ const ROOMS: Room[] = [
 
 const FLEET = [
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2026/01/Hero-Header-Bannern2.1-mobile.webp",
+    img: "../assets/occasion1.png",
     name: "Serenity Wave",
   },
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp",
+    img: "../assets/occasion3.png",
     name: "Ocean's Embrace",
   },
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-Bannern2.webp",
+    img: "../assets/occasion4.png",
     name: "Gulf Star",
   },
   {
-    img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp",
+    img: "../assets/occasion2.png",
     name: "Azure Dream",
   },
 ];
@@ -580,7 +604,7 @@ function Navbar({
           <img
             src="../assets/logo.png"
             alt="Serendipity Logo"
-            className="h-10 md:h-12 w-auto group-hover:scale-105 transition-transform"
+            className="h-20 md:h-16 w-auto group-hover:scale-105 transition-transform"
           />
         </a>
 
@@ -677,21 +701,21 @@ function Hero({
       line1: "Your Gulf Coast",
       line2: "Escape Awaits",
       desc: "Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.",
-      img: "https://serendipityyachtcharter.com/wp-content/uploads/2026/01/Hero-Header-Bannern2.1-mobile.webp",
+      img: "../assets/hero1.png",
       tag: "Saint Petersburg, FL",
     },
     {
       line1: "Experience",
       line2: "Pure Luxury",
       desc: "Discover breathtaking views and world-class comfort on Florida's Gulf Coast.",
-      img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp",
+      img: "../assets/hero2.png",
       tag: "Tampa Bay, FL",
     },
     {
       line1: "Make Memories",
       line2: "at Sea",
       desc: "Unforgettable moments aboard our expertly remodeled luxury yacht.",
-      img: "https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-Bannern2.webp",
+      img: "../assets/hero3.png",
       tag: "Gulf Coast, FL",
     },
   ];
@@ -769,7 +793,7 @@ function Hero({
       {/* Floating UI */}
       <div className="absolute top-28 right-16 hidden lg:block w-64 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-float-y">
         <img
-          src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400"
+          src="../assets/hero1.png"
           className="w-full aspect-video object-cover rounded-xl mb-4"
         />
         <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
@@ -842,7 +866,7 @@ function VesselSection({
             onClick={openGallery}
           >
             <img
-              src="https://serendipityyachtcharter.com/wp-content/uploads/2026/01/Hero-Header-Bannern2.1-mobile.webp"
+              src="../assets/gallerymain.png"
               className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
               alt="Serendipity Yacht"
             />
@@ -917,15 +941,51 @@ function VesselSection({
 }
 
 function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
-  const [idx, setIdx] = useState(0);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const [idx, setIdx] = useState(EXPERIENCES.length);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [transitionStatus, setTransitionStatus] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Triple the items to create a seamless infinite scroll buffer
+  const extendedItems = useMemo(
+    () => [...EXPERIENCES, ...EXPERIENCES, ...EXPERIENCES],
+    [],
+  );
 
   const slide = (d: number) => {
-    setIdx((prev) => Math.max(0, Math.min(prev + d, EXPERIENCES.length - 1)));
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTransitionStatus(true);
+    setIdx((prev) => prev + d);
+    setTimeout(() => setIsAnimating(false), 500);
   };
 
+  // Teleport logic to handle infinite loop seamlessly
+  useEffect(() => {
+    if (isAnimating) return;
+
+    if (idx >= EXPERIENCES.length * 2) {
+      setTransitionStatus(false);
+      setIdx(idx - EXPERIENCES.length);
+    } else if (idx < EXPERIENCES.length) {
+      setTransitionStatus(false);
+      setIdx(idx + EXPERIENCES.length);
+    }
+  }, [idx, isAnimating]);
+
+  const itemWidth =
+    typeof window !== "undefined" && window.innerWidth >= 768 ? 350 : 300;
+  const gap = 24;
+
   return (
-    <section id="experiences" className="py-24 md:py-40 px-6 bg-navy">
+    <section
+      id="experiences"
+      className="py-24 md:py-40 px-6 bg-navy overflow-hidden relative"
+    >
+      {/* Edge Gradients for Cinematic Feel */}
+      <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
+
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -933,7 +993,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto"
       >
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16 relative z-20">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-[1.5px] bg-gold" />
@@ -950,47 +1010,56 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
           <div className="flex gap-4">
             <button
               onClick={() => slide(-1)}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all"
+              disabled={isAnimating}
+              className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={() => slide(1)}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all"
+              disabled={isAnimating}
+              className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}
             >
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
         </div>
 
-        <div className="overflow-visible relative">
+        <div className="relative" ref={containerRef}>
           <motion.div
-            ref={trackRef}
-            animate={{ x: `-${idx * (100 / 1)}%` }} // Very basic implementation for simplicity
-            className="flex gap-6"
+            animate={{ x: -idx * (itemWidth + gap) }}
+            transition={
+              transitionStatus
+                ? { type: "spring", stiffness: 200, damping: 30, mass: 1 }
+                : { duration: 0 }
+            }
+            className="flex gap-6 pointer-events-auto"
             style={{
-              display: "flex",
               width: "max-content",
             }}
           >
-            {EXPERIENCES.map((e, i) => (
+            {extendedItems.map((e, i) => (
               <div
                 key={i}
                 onClick={() => openExp(e)}
-                className="w-[300px] md:w-[350px] aspect-[3/4] relative group rounded-3xl overflow-hidden cursor-pointer"
+                className="w-[300px] md:w-[350px] aspect-[3/4] relative group rounded-3xl overflow-hidden cursor-pointer shrink-0 shadow-2xl"
               >
                 <img
                   src={e.img}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   alt=""
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <h3 className="text-xl md:text-2xl font-serif group-hover:text-gold transition-colors">
+                {/* Enhanced Dark Gradient for each card */}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-navy/20 hover:bg-transparent transition-colors duration-500" />
+
+                <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
+                  <div className="mb-2 w-8 h-[1px] bg-gold group-hover:w-12 transition-all" />
+                  <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-gold transition-colors">
                     {e.title}
                   </h3>
-                  <div className="flex items-center gap-2 text-gold text-xs font-bold uppercase tracking-widest mt-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all">
-                    Explore <ArrowUpRight className="w-3 h-3" />
+                  <div className="flex items-center gap-2 text-gold text-[10px] font-bold uppercase tracking-[2px] mt-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                    Discover More <ArrowUpRight className="w-3 h-3" />
                   </div>
                 </div>
               </div>
@@ -998,7 +1067,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
           </motion.div>
         </div>
 
-        <div className="mt-20 pt-10 border-t border-white/10 flex flex-wrap items-center justify-between gap-10">
+        <div className="mt-20 pt-10 border-t border-white/10 flex flex-wrap items-center justify-between gap-10 relative z-20">
           <div className="max-w-lg">
             <p className="text-white/40 mb-3">
               With spa-inspired amenities, elegant interiors, and professional
@@ -1051,7 +1120,7 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           <div className="relative rounded-[2.5rem] overflow-hidden group">
             <img
-              src="https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp"
+              src="../assets/gallerymain.png"
               className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700"
               alt=""
             />
@@ -1333,7 +1402,7 @@ function BookingSection({
     >
       <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
         <img
-          src="https://serendipityyachtcharter.com/wp-content/uploads/2025/10/Hero-Header-night-banner.webp"
+          src="../assets/occasion4.png"
           className="w-full h-full object-cover"
           alt=""
         />
@@ -1365,8 +1434,8 @@ function BookingSection({
 
           <div className="space-y-6">
             {[
-              { icon: Phone, text: "(727) 555-0123" },
-              { icon: Mail, text: "charter@serendipityyacht.com" },
+              { icon: Phone, text: "Call Jake: 412-418-2969" },
+              { icon: Phone, text: "Call Manager Bryon: 727-644-9653" },
               { icon: MapPin, text: "Saint Petersburg, FL" },
             ].map((c, i) => (
               <div key={i} className="flex items-center gap-4 group">
@@ -1467,7 +1536,7 @@ function Footer() {
               <img
                 src="../assets/logo.png"
                 alt="Serendipity Logo"
-                className="h-10 w-auto"
+                className="h-20 w-auto"
               />
             </div>
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs">
@@ -1500,13 +1569,13 @@ function Footer() {
             },
             {
               title: "Contact",
-              links: ["Call Jake: 412-418-2968", "Manager Bryon: 727-644-9653"],
+              links: ["Capt Jake 412-418-2969", "Manager Bryon 727-644-9653"],
             },
             {
               title: "Location",
               links: [
                 "Maximo Marina",
-                "3701 50 Ave S.",
+                "3701 50th Ave S.",
                 "Saint Petersburg, FL 33371",
               ],
             },
