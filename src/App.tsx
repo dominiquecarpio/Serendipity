@@ -854,7 +854,7 @@ function Hero({
       line1: "Your Gulf Coast",
       line2: "Escape Awaits",
       desc: "Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.",
-      img: "/assets/hero1.png",
+      img: "/assets/hero3.png",
       tag: "Saint Petersburg, FL",
     },
     {
@@ -868,7 +868,7 @@ function Hero({
       line1: "Make Memories",
       line2: "at Sea",
       desc: "Unforgettable moments aboard our expertly remodeled luxury yacht.",
-      img: "/assets/hero3.png",
+      img: "/assets/hero1.png",
       tag: "Gulf Coast, FL",
     },
   ];
