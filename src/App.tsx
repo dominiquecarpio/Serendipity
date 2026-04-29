@@ -167,7 +167,7 @@ const SPECIALISTS: Specialist[] = [
     title: "Crafting Cocktails That Spark Connection",
     subtitle: "Featured Expert",
     tag: "Mixology & Spirits",
-    desc: "Looking to elevate your next party, corporate event, private dinner, or yacht celebration? Nelly brings the art of mixology to every occasion, blending premium spirits, fresh ingredients, and creative flair into unforgettable drinks. For her, mixology isn't just about pouring cocktails—it's about creating an experience where every sip tells a story and every guest feels celebrated.",
+    desc: "Looking to elevate your next party, corporate event, private dinner, or yacht celebration? Nelly brings the art of mixology to every occasion, blending premium spirits, fresh ingredients, and creative flair into unforgettable drinks. For her, mixology isn't just about pouring cocktails it's about creating an experience where every sip tells a story and every guest feels celebrated.",
     features: [
       "Premium spirit selection",
       "Custom cocktail creation",
