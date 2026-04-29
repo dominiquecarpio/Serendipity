@@ -111,7 +111,7 @@ const EXPERIENCES: Experience[] = [
   {
     img: "/assets/occasion6.png",
     tag: "Cooking Class",
-    title: "Chef’s Cooking Classes",
+    title: "Chef's Cooking Classes",
     desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
     features: [
       "Certified yoga instructor",
@@ -287,6 +287,7 @@ export default function App() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isAvailOpen, setIsAvailOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [isPopularRouteOpen, setIsPopularRouteOpen] = useState(false);
   const [showFab, setShowFab] = useState(false);
   const [toasts, setToasts] = useState<
     { id: number; msg: string; title: string; type: string }[]
@@ -327,7 +328,7 @@ export default function App() {
     <div className="min-h-screen selection:bg-gold selection:text-white">
       {/* Scroll Progress */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold to-blue-400 z-[10001] origin-left shadow-[0_0_10px_rgba(201,162,39,0.5)]"
+        className="fixed top-0 left-0 right-0 h-1 bg-gold z-[10001] origin-left shadow-[0_0_10px_rgba(201,162,39,0.5)]"
         style={{ scaleX }}
       />
 
@@ -342,6 +343,7 @@ export default function App() {
         setHeroIdx={setHeroIdx}
         openAvail={() => setIsAvailOpen(true)}
         openVideo={() => setIsVideoOpen(true)}
+        openPopularRoute={() => setIsPopularRouteOpen(true)}
       />
 
       <main>
@@ -524,6 +526,61 @@ export default function App() {
           </Modal>
         )}
 
+        {isPopularRouteOpen && (
+          <Modal onClose={() => setIsPopularRouteOpen(false)}>
+            <div className="max-w-2xl bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+              <img
+                src="/assets/hero1.png"
+                alt="Island Hopping"
+                className="w-full h-80 object-cover"
+              />
+              <div className="p-8 md:p-12">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-10 h-[1.5px] bg-gold" />
+                  <span className="text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
+                    Popular Route
+                  </span>
+                </div>
+                <h2 className="text-4xl font-serif mb-4 leading-tight">
+                  Island Hopping Adventure
+                </h2>
+                <p className="text-white/60 mb-6 leading-relaxed">
+                  Explore exclusive inlets and hidden sandbars across Florida's Gulf Coast. 
+                  This carefully curated route takes you to pristine locations that only our 
+                  expert crew knows, offering privacy and natural beauty at every stop.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+                  {[
+                    "Secret sandbar stops",
+                    "Dolphin watching areas",
+                    "Protected anchorages",
+                    "Snorkeling spots",
+                    "Sunset viewing points",
+                    "Wildlife sanctuaries"
+                  ].map((f, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl"
+                    >
+                      <Check className="w-4 h-4 text-gold" />
+                      <span className="text-sm text-white/70">{f}</span>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => {
+                    setIsPopularRouteOpen(false);
+                    window.location.hash = "booking";
+                  }}
+                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
+                >
+                  Book This Route <ArrowUpRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
         {isVideoOpen && (
           <Modal onClose={() => setIsVideoOpen(false)}>
             <div className="w-[95vw] md:w-[80vw] lg:w-[70vw] aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl relative border border-white/10">
@@ -547,7 +604,7 @@ export default function App() {
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-gold to-gold/80 rounded-full flex items-center justify-center shadow-xl z-50 group"
+            className="fixed bottom-8 right-8 w-14 h-14 bg-gold rounded-full flex items-center justify-center shadow-xl z-50 group"
           >
             <ChevronLeft className="w-6 h-6 text-navy rotate-90 group-hover:translate-y-[-2px] transition-transform" />
           </motion.button>
@@ -690,11 +747,13 @@ function Hero({
   setHeroIdx,
   openAvail,
   openVideo,
+  openPopularRoute,
 }: {
   heroIdx: number;
   setHeroIdx: (i: number) => void;
   openAvail: () => void;
   openVideo: () => void;
+  openPopularRoute: () => void;
 }) {
   const slides = [
     {
@@ -790,17 +849,21 @@ function Hero({
         </motion.div>
       </div>
 
-      {/* Floating UI */}
-      <div className="absolute top-28 right-16 hidden lg:block w-64 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-float-y">
+      {/* Floating UI - Popular Route Card with Minimal Gaps */}
+      <div 
+        onClick={openPopularRoute}
+        className="absolute top-28 right-16 hidden lg:block w-64 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-3 shadow-2xl animate-float-y cursor-pointer hover:border-gold/30 transition-all group"
+      >
         <img
           src="/assets/hero1.png"
-          className="w-full aspect-video object-cover rounded-xl mb-4"
+          className="w-full aspect-video object-cover rounded-xl mb-2 group-hover:scale-105 transition-transform"
+          alt="Island Hopping"
         />
-        <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
+        <span className="text-[10px] font-bold text-gold tracking-widest uppercase block px-1">
           Popular Route
         </span>
-        <h4 className="font-semibold mt-1">Island Hopping</h4>
-        <p className="text-xs text-white/50 mt-1">
+        <h4 className="font-semibold mt-1 group-hover:text-gold transition-colors px-1">Island Hopping</h4>
+        <p className="text-xs text-white/50 mt-0.5 px-1">
           Exclusive inlets & hidden sandbars
         </p>
       </div>
@@ -1158,7 +1221,7 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
               </div>
             ))}
 
-            <div className="p-8 mt-4 bg-gradient-to-br from-gold/10 to-blue-400/5 border border-white/5 rounded-3xl">
+            <div className="p-8 mt-4 bg-gold/10 border border-white/5 rounded-3xl">
               <h3 className="text-xl font-serif mb-6">
                 Premium Flybridge Features
               </h3>
@@ -1311,7 +1374,7 @@ function ReviewsSection() {
               already planning our next trip. 5 stars no doubt!!!"
             </p>
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-gold to-blue-400 rounded-full flex items-center justify-center font-bold text-navy">
+              <div className="w-14 h-14 bg-gold rounded-full flex items-center justify-center font-bold text-navy">
                 CR
               </div>
               <div>
@@ -1515,7 +1578,7 @@ function BookingSection({
             </div>
             <button
               disabled={loading}
-              className="w-full py-5 bg-gradient-to-r from-gold to-gold-hover text-navy font-bold rounded-2xl shadow-xl shadow-gold/20 hover:translate-y-[-2px] active:scale-[0.98] transition-all disabled:opacity-50 disabled:translate-y-0"
+              className="w-full py-5 bg-gold text-navy font-bold rounded-2xl shadow-xl shadow-gold/20 hover:translate-y-[-2px] active:scale-[0.98] transition-all disabled:opacity-50 disabled:translate-y-0"
             >
               {loading ? "Sending Request..." : "Submit Request"}
             </button>
