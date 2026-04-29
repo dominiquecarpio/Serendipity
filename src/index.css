@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Manrope", sans-serif;
+  --color-gold: #c9a227;
+  --color-gold-hover: #e2b930;
+  --color-navy: #080f1e;
+  --color-navy-light: #0c1424;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-navy text-white overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .shimmer-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer-wrap::after {
+    content: "";
+    @apply absolute inset-0 pointer-events-none;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.07) 50%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: shimmerMove 3s ease-in-out infinite;
+  }
+
+  .hero-tag-line::before {
+    content: "";
+    @apply w-10 h-[1.5px] bg-gold block;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #c9a227 0%, #7ec8e3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+  }
+
+  /* Availability Calendar Styles */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+
+  .cal-head {
+    @apply text-[11px] font-bold text-white/35 text-center p-1 uppercase;
+  }
+
+  .cal-day {
+    @apply aspect-square rounded-lg flex items-center justify-center text-sm font-medium cursor-pointer transition-all relative;
+  }
+
+  .cal-day:hover:not(.booked):not(.empty) {
+    @apply bg-gold/15 text-gold;
+  }
+
+  .cal-day.today {
+    @apply border border-gold text-gold;
+  }
+
+  .cal-day.booked {
+    @apply bg-red-500/10 text-red-500/50 cursor-not-allowed line-through;
+  }
+
+  .cal-day.selected {
+    @apply bg-gold text-navy font-bold;
+  }
+
+  .cal-day.available {
+    @apply text-white/75;
+  }
+
+  .cal-day.empty {
+    @apply cursor-default;
+  }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.animate-float-y {
+  animation: floatY 5s ease-in-out infinite;
+}
+
+@keyframes shimmerMove {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.animate-pulse-ring {
+  animation: pulseRing 2s ease-out infinite;
+}
