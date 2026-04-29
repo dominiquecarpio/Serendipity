@@ -59,12 +59,16 @@ section#booking{
 footer.bg-\[\#040810\].py-20.px-6.border-t.border-white\/5{
     padding-block: calc(var(--spacing) * 10);
 }
+p.text-3xl.font-serif.text-gold.font-bold {
+    font-family: fantasy;
+}
   .text-gradient {
-    background: yellow;
+    background: rgb(173, 173, 20);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     display: inline-block;
+     font-family: fantasy;
   }
 
   /* Availability Calendar Styles */
