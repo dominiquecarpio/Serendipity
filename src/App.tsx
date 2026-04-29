@@ -46,6 +46,17 @@ interface Room {
   amenities: string[];
 }
 
+interface Specialist {
+  img: string;
+  name: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  features: string[];
+  profileImg: string;
+  tag: string;
+}
+
 // --- Constants ---
 const EXPERIENCES: Experience[] = [
   {
@@ -144,6 +155,39 @@ const ROOMS: Room[] = [
       "Queen bed with premium bedding",
       "Private ensuite bathroom",
       "Climate-controlled environment",
+    ],
+  },
+];
+
+const SPECIALISTS: Specialist[] = [
+  {
+    img: "/assets/nelly_foods.jpeg",
+    profileImg: "/assets/nelly.jpeg",
+    name: "Nelly the Mixologist",
+    title: "Crafting Cocktails That Spark Connection",
+    subtitle: "Featured Expert",
+    tag: "Mixology & Spirits",
+    desc: "Looking to elevate your next party, corporate event, private dinner, or yacht celebration? Nelly brings the art of mixology to every occasion, blending premium spirits, fresh ingredients, and creative flair into unforgettable drinks. For her, mixology isn't just about pouring cocktails—it's about creating an experience where every sip tells a story and every guest feels celebrated.",
+    features: [
+      "Premium spirit selection",
+      "Custom cocktail creation",
+      "Interactive bartending shows",
+      "Event coordination expertise",
+    ],
+  },
+  {
+    img: "/assets/cheryl_foods.jpeg",
+    profileImg: "/assets/cheryl.jpeg",
+    name: "Gulf Coast's Chef Cheryl",
+    title: "Where Fine Dining Meets Home Comfort",
+    subtitle: "Featured Expert",
+    tag: "Private Chef & Catering",
+    desc: "Looking for a personal chef for a party, work event, family dinner, or yacht excursion? These are just some of the types of events I cater to on a weekly basis. Catering to a client never feels like a job to me, but rather a dream come true having the opportunity to do what I love!",
+    features: [
+      "Custom menu planning",
+      "Fine dining expertise",
+      "Event preparation",
+      "Weekly catering availability",
     ],
   },
 ];
@@ -284,6 +328,7 @@ export default function App() {
   const [heroIdx, setHeroIdx] = useState(0);
   const [selectedExp, setSelectedExp] = useState<Experience | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [selectedSpecialist, setSelectedSpecialist] = useState<Specialist | null>(null);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isAvailOpen, setIsAvailOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -353,6 +398,7 @@ export default function App() {
           openAvail={() => setIsAvailOpen(true)}
         />
         <ExperiencesSection openExp={setSelectedExp} />
+        <SpecialistsSection openSpecialist={setSelectedSpecialist} />
         <AccommodationsSection openRoom={setSelectedRoom} />
         <FleetSection />
         <ReviewsSection />
@@ -403,6 +449,53 @@ export default function App() {
                   className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
                 >
                   Book This Experience <ArrowUpRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
+        {selectedSpecialist && (
+          <Modal onClose={() => setSelectedSpecialist(null)}>
+            <div className="max-w-3xl bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+              <img
+                src={selectedSpecialist.img}
+                alt={selectedSpecialist.name}
+                className="w-full h-80 object-cover"
+              />
+              <div className="p-8 md:p-12">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-10 h-[1.5px] bg-gold" />
+                  <span className="text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
+                    {selectedSpecialist.tag}
+                  </span>
+                </div>
+                <h2 className="text-4xl font-serif mb-2 leading-tight">
+                  {selectedSpecialist.name}
+                </h2>
+                <p className="text-gold text-lg font-semibold mb-4">{selectedSpecialist.title}</p>
+                <p className="text-white/60 mb-6 leading-relaxed">
+                  {selectedSpecialist.desc}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+                  {selectedSpecialist.features.map((f, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl"
+                    >
+                      <Check className="w-4 h-4 text-gold" />
+                      <span className="text-sm text-white/70">{f}</span>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => {
+                    setSelectedSpecialist(null);
+                    window.location.hash = "booking";
+                  }}
+                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
+                >
+                  Book This Specialist <ArrowUpRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -666,7 +759,7 @@ function Navbar({
         </a>
 
         <div className="hidden lg:flex items-center gap-1">
-          {["Vessel", "Experiences", "Accommodations", "Fleet", "Reviews"].map(
+          {["Vessel", "Experiences", "Specialists", "Accommodations", "Fleet", "Reviews"].map(
             (l) => (
               <a
                 key={l}
@@ -723,6 +816,7 @@ function MobileMenu({
           "Home",
           "Vessel",
           "Experiences",
+          "Specialists",
           "Accommodations",
           "Fleet",
           "Reviews",
@@ -940,6 +1034,30 @@ function VesselSection({
               </p>
             </div>
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { val: "94 ft", label: "Yacht Length", icon: Wind },
+              { val: "12", label: "Max Guests", icon: User },
+            ].map((s, i) => (
+              <div
+                key={i}
+                onClick={() =>
+                  i === 2
+                    ? openAvail()
+                    : addToast(`Detail about ${s.label}`, s.val, "gold")
+                }
+                className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-gold/30 transition-all cursor-pointer group"
+              >
+                <s.icon className="w-6 h-6 text-gold mb-4 group-hover:scale-110 transition-transform" />
+                <p className="text-3xl font-serif text-gold font-bold">
+                  {s.val}
+                </p>
+                <p className="text-xs text-white/40 uppercase tracking-widest mt-1">
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div
@@ -970,11 +1088,8 @@ function VesselSection({
               anchorages that few yachts of this size can reach.
             </p>
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
+ <div className="grid grid-cols-2 gap-4">
             {[
-              { val: "94 ft", label: "Yacht Length", icon: Wind },
-              { val: "12", label: "Max Guests", icon: User },
               { val: "20+", label: "Destinations", icon: MapPin },
               { val: "5.0 ★", label: "Guest Rating", icon: Star },
             ].map((s, i) => (
@@ -997,6 +1112,7 @@ function VesselSection({
               </div>
             ))}
           </div>
+          
         </motion.div>
       </div>
     </section>
@@ -1152,9 +1268,160 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   );
 }
 
+function SpecialistsSection({ openSpecialist }: { openSpecialist: (s: Specialist) => void }) {
+  const [currentIdx, setCurrentIdx] = useState(0);
+
+  const handlePrevious = () => {
+    setCurrentIdx((prev) => (prev === 0 ? SPECIALISTS.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIdx((prev) => (prev === SPECIALISTS.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <section id="specialists" className="py-24 md:py-40 px-6 bg-navy-light overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="max-w-7xl mx-auto"
+      >
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-[1.5px] bg-gold" />
+              <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
+                Expert Specialists
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-serif leading-tight">
+              Meet Our Luxury
+              <br />
+              <span className="text-gradient">Experts</span>
+            </h2>
+          </div>
+          <div className="flex gap-4">
+            <button
+              onClick={handlePrevious}
+              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Carousel Container */}
+          <div className="relative overflow-hidden rounded-3xl">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIdx}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.5 }}
+                className="relative"
+              >
+                <img
+                  src={SPECIALISTS[currentIdx].img}
+                  alt={SPECIALISTS[currentIdx].name}
+                  className="w-full aspect-[4/5] object-cover rounded-3xl"
+                />
+                {/* Overlay with profile info */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy via-navy/80 to-transparent p-8 rounded-b-3xl">
+                  <div className="flex items-end gap-4">
+                    <img
+                      src={SPECIALISTS[currentIdx].profileImg}
+                      alt={SPECIALISTS[currentIdx].name}
+                      className="w-16 h-16 rounded-full border-2 border-gold object-cover"
+                    />
+                    <div>
+                      <h3 className="text-2xl font-serif">{SPECIALISTS[currentIdx].name}</h3>
+                      <p className="text-gold text-sm font-semibold">{SPECIALISTS[currentIdx].tag}</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Slide indicators */}
+            <div className="absolute top-6 right-6 flex gap-2 z-10">
+              {SPECIALISTS.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentIdx(i)}
+                  className={`h-2 rounded-full transition-all ${
+                    i === currentIdx
+                      ? "w-8 bg-gold"
+                      : "w-2 bg-white/30 hover:bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIdx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-[1.5px] bg-gold" />
+                <span className="text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
+                  {SPECIALISTS[currentIdx].subtitle}
+                </span>
+              </div>
+              <h2 className="text-4xl font-serif mb-2 leading-tight">
+                {SPECIALISTS[currentIdx].name}
+              </h2>
+              <p className="text-gold text-xl font-semibold mb-6">
+                {SPECIALISTS[currentIdx].title}
+              </p>
+              <p className="text-white/60 mb-8 leading-relaxed">
+                {SPECIALISTS[currentIdx].desc}
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 mb-10">
+                {SPECIALISTS[currentIdx].features.map((f, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl"
+                  >
+                    <Check className="w-4 h-4 text-gold shrink-0" />
+                    <span className="text-sm text-white/70">{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => openSpecialist(SPECIALISTS[currentIdx])}
+                className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
+              >
+                Book This Specialist <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
 function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
   return (
-    <section id="accommodations" className="py-24 md:py-40 px-6 bg-navy-light">
+    <section id="accommodations" className="py-24 md:py-40 px-6 bg-navy">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1254,7 +1521,7 @@ function FleetSection() {
   const [idx, setIdx] = useState(0);
 
   return (
-    <section id="fleet" className="py-24 md:py-40 px-6 bg-navy">
+    <section id="fleet" className="py-24 md:py-40 px-6 bg-navy-light">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1313,7 +1580,7 @@ function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="py-24 md:py-40 px-6 bg-navy-light relative overflow-hidden"
+      className="py-24 md:py-40 px-6 bg-navy relative overflow-hidden"
     >
       {/* Background Decoration */}
       <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[120px]" />
@@ -1352,7 +1619,7 @@ function ReviewsSection() {
         </div>
 
         <div className="space-y-6">
-          <div className="p-10 bg-white/5 border border-white/10 rounded-[2.5rem] relative overflow-hidden group">
+          <div className="p-5 bg-white/5 border border-white/10 rounded-[2.5rem] relative overflow-hidden group">
             <div className="text-gold/20 mb-6 font-serif text-6xl">
               <svg
                 className="w-12 h-12"
@@ -1401,7 +1668,7 @@ function ReviewsSection() {
             ].map((r, i) => (
               <div
                 key={i}
-                className="p-10 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-gold/30 transition-all"
+                className="p-5 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-gold/30 transition-all"
               >
                 <div className="text-gold/20 mb-6">
                   <svg
@@ -1461,7 +1728,7 @@ function BookingSection({
   return (
     <section
       id="booking"
-      className="py-24 md:py-48 px-6 bg-navy relative overflow-hidden"
+      className="py-24 md:py-48 px-6 bg-navy-light relative overflow-hidden"
     >
       <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
         <img
@@ -1513,7 +1780,7 @@ function BookingSection({
           </div>
         </div>
 
-        <div className="p-8 md:p-12 bg-navy-light/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-2xl">
+        <div className="p-10 md:p-12 bg-navy/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-2xl">
           <h3 className="text-3xl font-serif mb-2">Inquire Now</h3>
           <p className="text-white/40 mb-10 text-sm">
             Tell us about your dream charter and we'll craft the perfect
