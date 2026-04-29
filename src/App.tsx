@@ -98,8 +98,8 @@ const EXPERIENCES: Experience[] = [
   },
   {
     img: "../assets/occasion5.png",
-    tag: "Corporate1",
-    title: "Corporate & Executive Events1",
+    tag: "First Class",
+    title: "First Class Relaxation",
     desc: "Impress clients and inspire your team in an extraordinary setting. Serendipity offers an exclusive boardroom on the water with full AV capabilities, catering, and absolute privacy.",
     features: [
       "Full AV & WiFi setup",
@@ -110,8 +110,8 @@ const EXPERIENCES: Experience[] = [
   },
   {
     img: "../assets/occasion6.png",
-    tag: "Wellness1",
-    title: "Wellness Retreats on the Water1",
+    tag: "Cooking Class",
+    title: "Chef’s Cooking Classes",
     desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
     features: [
       "Certified yoga instructor",
@@ -136,7 +136,7 @@ const ROOMS: Room[] = [
     ],
   },
   {
-    img: "../assets/occasion6.png",
+    img: "../assets/bedroom2.png",
     sub: "VIP Staterooms",
     title: "Port & Starboard VIPs",
     desc: "Two symmetrical VIP staterooms — one port, one starboard — each featuring queen-size beds, ensuite bathrooms, and elegant décor.",
