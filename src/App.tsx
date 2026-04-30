@@ -142,18 +142,22 @@ const FLEET = [
   {
     img: "assets/occasion1.png",
     name: "Serenity Wave",
+    desc: "A sleek 94' masterpiece designed for those who appreciate the finer details of maritime luxury.",
   },
   {
     img: "assets/occasion2.png",
     name: "Ocean's Embrace",
+    desc: "Experience unparalleled privacy and comfort on this expertly remodeled hardtop motor yacht.",
   },
   {
     img: "assets/occasion3.png",
     name: "Gulf Star",
+    desc: "The perfect vessel for exploring the stunning beaches and hidden sandbars of the Gulf Coast.",
   },
   {
     img: "assets/occasion4.png",
     name: "Azure Dream",
+    desc: "A floating resort offering a full suite of water sports gear for the ultimate aquatic adventure.",
   },
 ];
 
@@ -1478,18 +1482,32 @@ function FleetSection() {
           {FLEET.map((f, i) => (
             <div
               key={i}
-              className="relative aspect-[3/4] rounded-3xl overflow-hidden group cursor-pointer"
+              className="relative aspect-[3/4] rounded-3xl overflow-hidden group cursor-pointer shadow-2xl"
             >
               <img
                 src={f.img}
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 alt=""
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all">
-                <p className="font-bold text-lg">{f.name}</p>
-                <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-navy shadow-lg">
-                  <ArrowUpRight className="w-5 h-5" />
+              <div className="absolute inset-0 bg-navy/20 group-hover:bg-navy/80 transition-colors duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-500" />
+
+              <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+                <div className="translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                  <p className="font-bold text-xl mb-3 text-white group-hover:text-gold transition-colors">
+                    {f.name}
+                  </p>
+                  <p className="text-sm text-white/0 group-hover:text-white/70 line-clamp-3 transition-colors duration-500 delay-100 mb-6">
+                    {f.desc}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-200">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
+                    View Details
+                  </span>
+                  <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-navy shadow-lg hover:scale-110 transition-transform">
+                    <ArrowUpRight className="w-5 h-5" />
+                  </div>
                 </div>
               </div>
             </div>
