@@ -46,21 +46,10 @@ interface Room {
   amenities: string[];
 }
 
-interface Specialist {
-  img: string;
-  name: string;
-  title: string;
-  subtitle: string;
-  desc: string;
-  features: string[];
-  profileImg: string;
-  tag: string;
-}
-
 // --- Constants ---
 const EXPERIENCES: Experience[] = [
   {
-    img: "/assets/occasion1.png",
+    img: "assets/occasion1.png",
     tag: "Leisure",
     title: "Sunset Cruises & Day Excursions",
     desc: "Watch the Gulf Coast horizon blaze with color as Serendipity glides through calm waters. Our sunset cruises are timed perfectly to the golden hour, with craft cocktails, soft music, and panoramic views from the flybridge.",
@@ -72,7 +61,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "/assets/occasion2.png",
+    img: "assets/occasion2.png",
     tag: "Celebration",
     title: "Birthday & Anniversary Celebrations",
     desc: "Make your milestone unforgettable. We coordinate every detail—from floral décor and custom cakes to curated playlists and chef-prepared menus—so all you do is celebrate.",
@@ -84,7 +73,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "/assets/occasion3.png",
+    img: "assets/occasion3.png",
     tag: "Corporate",
     title: "Corporate & Executive Events",
     desc: "Impress clients and inspire your team in an extraordinary setting. Serendipity offers an exclusive boardroom on the water with full AV capabilities, catering, and absolute privacy.",
@@ -96,7 +85,7 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "/assets/occasion4.png",
+    img: "assets/occasion4.png",
     tag: "Wellness",
     title: "Wellness Retreats on the Water",
     desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
@@ -108,34 +97,34 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    img: "/assets/occasion5.png",
-    tag: "First Class",
+    img: "assets/occasion5.png",
+    tag: "VIP Room",
     title: "First Class Relaxation",
-    desc: "Impress clients and inspire your team in an extraordinary setting. Serendipity offers an exclusive boardroom on the water with full AV capabilities, catering, and absolute privacy.",
+    desc: "Experience the pinnacle of luxury in our VIP staterooms, designed for ultimate comfort and privacy. Perfect for high-profile guests or anyone seeking a serene escape at sea.",
     features: [
-      "Full AV & WiFi setup",
-      "Catering packages",
-      "Up to 12 executives",
-      "NDAs & confidentiality honored",
+      "Private ensuite bathroom",
+      "Premium bedding",
+      "Personalized service",
+      "Exclusive amenities",
     ],
   },
   {
-    img: "/assets/occasion6.png",
-    tag: "Cooking Class",
+    img: "assets/occasion6.png",
+    tag: "Kitchen Area",
     title: "Chef's Cooking Classes",
-    desc: "Disconnect from the noise and reconnect with yourself. Our wellness retreats feature guided meditation, yoga on the sundeck, spa treatments, and clean, nourishing cuisine tailored to your needs.",
+    desc: "Learn to cook delicious meals with our expert chefs in the comfort of your yacht's kitchen.",
     features: [
-      "Certified yoga instructor",
-      "Spa & massage options",
-      "Organic catering menu",
-      "Mindfulness packages",
+      "Certified culinary instructor",
+      " hands-on cooking experience",
+      "Fresh, locally-sourced ingredients",
+      "Customizable menu options",
     ],
   },
 ];
 
 const ROOMS: Room[] = [
   {
-    img: "/assets/occasion5.png",
+    img: "assets/gallerymain.png",
     sub: "Master Suite",
     title: "Master Stateroom",
     desc: "The crown jewel of Serendipity — a sprawling master stateroom with a king-size bed, premium linens, and a full ensuite bathroom featuring a walk-in rain shower and imported stone fixtures.",
@@ -147,7 +136,7 @@ const ROOMS: Room[] = [
     ],
   },
   {
-    img: "/assets/bedroom2.png",
+    img: "assets/occasion5.png",
     sub: "VIP Staterooms",
     title: "Port & Starboard VIPs",
     desc: "Two symmetrical VIP staterooms — one port, one starboard — each featuring queen-size beds, ensuite bathrooms, and elegant décor.",
@@ -159,54 +148,21 @@ const ROOMS: Room[] = [
   },
 ];
 
-const SPECIALISTS: Specialist[] = [
-  {
-    img: "/assets/nelly_foods.jpeg",
-    profileImg: "/assets/nelly.jpeg",
-    name: "Nelly the Mixologist",
-    title: "Crafting Cocktails That Spark Connection",
-    subtitle: "Featured Expert",
-    tag: "Mixology & Spirits",
-    desc: "Looking to elevate your next party, corporate event, private dinner, or yacht celebration? Nelly brings the art of mixology to every occasion, blending premium spirits, fresh ingredients, and creative flair into unforgettable drinks. For her, mixology isn't just about pouring cocktails it's about creating an experience where every sip tells a story and every guest feels celebrated.",
-    features: [
-      "Premium spirit selection",
-      "Custom cocktail creation",
-      "Interactive bartending shows",
-      "Event coordination expertise",
-    ],
-  },
-  {
-    img: "/assets/cheryl_foods.jpeg",
-    profileImg: "/assets/cheryl.jpeg",
-    name: "Gulf Coast's Chef Cheryl",
-    title: "Where Fine Dining Meets Home Comfort",
-    subtitle: "Featured Expert",
-    tag: "Private Chef & Catering",
-    desc: "Looking for a personal chef for a party, work event, family dinner, or yacht excursion? These are just some of the types of events I cater to on a weekly basis. Catering to a client never feels like a job to me, but rather a dream come true having the opportunity to do what I love!",
-    features: [
-      "Custom menu planning",
-      "Fine dining expertise",
-      "Event preparation",
-      "Weekly catering availability",
-    ],
-  },
-];
-
 const FLEET = [
   {
-    img: "/assets/occasion1.png",
+    img: "assets/occasion1.png",
     name: "Serenity Wave",
   },
   {
-    img: "/assets/occasion3.png",
+    img: "assets/occasion2.png",
     name: "Ocean's Embrace",
   },
   {
-    img: "/assets/occasion4.png",
+    img: "assets/occasion3.png",
     name: "Gulf Star",
   },
   {
-    img: "/assets/occasion2.png",
+    img: "assets/occasion4.png",
     name: "Azure Dream",
   },
 ];
@@ -328,11 +284,9 @@ export default function App() {
   const [heroIdx, setHeroIdx] = useState(0);
   const [selectedExp, setSelectedExp] = useState<Experience | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
-  const [selectedSpecialist, setSelectedSpecialist] = useState<Specialist | null>(null);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isAvailOpen, setIsAvailOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const [isPopularRouteOpen, setIsPopularRouteOpen] = useState(false);
   const [showFab, setShowFab] = useState(false);
   const [toasts, setToasts] = useState<
     { id: number; msg: string; title: string; type: string }[]
@@ -373,14 +327,23 @@ export default function App() {
     <div className="min-h-screen selection:bg-gold selection:text-white">
       {/* Scroll Progress */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gold z-[10001] origin-left shadow-[0_0_10px_rgba(201,162,39,0.5)]"
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold to-blue-400 z-[10001] origin-left shadow-[0_0_10px_rgba(201,162,39,0.5)]"
         style={{ scaleX }}
       />
 
-      <Navbar isScrolled={isScrolled} setMobileMenuOpen={setMobileMenuOpen} />
+      <Navbar
+        isScrolled={isScrolled}
+        setMobileMenuOpen={setMobileMenuOpen}
+        openAvail={() => setIsAvailOpen(true)}
+      />
 
       <AnimatePresence>
-        {mobileMenuOpen && <MobileMenu setMobileMenuOpen={setMobileMenuOpen} />}
+        {mobileMenuOpen && (
+          <MobileMenu
+            setMobileMenuOpen={setMobileMenuOpen}
+            openAvail={() => setIsAvailOpen(true)}
+          />
+        )}
       </AnimatePresence>
 
       <Hero
@@ -388,7 +351,6 @@ export default function App() {
         setHeroIdx={setHeroIdx}
         openAvail={() => setIsAvailOpen(true)}
         openVideo={() => setIsVideoOpen(true)}
-        openPopularRoute={() => setIsPopularRouteOpen(true)}
       />
 
       <main>
@@ -398,7 +360,6 @@ export default function App() {
           openAvail={() => setIsAvailOpen(true)}
         />
         <ExperiencesSection openExp={setSelectedExp} />
-        <SpecialistsSection openSpecialist={setSelectedSpecialist} />
         <AccommodationsSection openRoom={setSelectedRoom} />
         <FleetSection />
         <ReviewsSection />
@@ -411,33 +372,35 @@ export default function App() {
       <AnimatePresence>
         {selectedExp && (
           <Modal onClose={() => setSelectedExp(null)}>
-            <div className="max-w-3xl bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <div className="max-w-3xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
               <img
                 src={selectedExp.img}
                 alt={selectedExp.title}
-                className="w-full h-80 object-cover"
+                className="w-full h-64 md:h-80 object-cover"
               />
-              <div className="p-8 md:p-12">
+              <div className="p-6 md:p-12">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-10 h-[1.5px] bg-gold" />
-                  <span className="text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
+                  <span className="text-[10px] md:text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
                     {selectedExp.tag} Event
                   </span>
                 </div>
-                <h2 className="text-4xl font-serif mb-4 leading-tight">
+                <h2 className="text-3xl md:text-4xl font-serif mb-4 leading-tight">
                   {selectedExp.title}
                 </h2>
-                <p className="text-white/60 mb-6 leading-relaxed">
+                <p className="text-sm md:text-base text-white/60 mb-6 leading-relaxed">
                   {selectedExp.desc}
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                   {selectedExp.features.map((f, i) => (
                     <div
                       key={i}
                       className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl"
                     >
                       <Check className="w-4 h-4 text-gold" />
-                      <span className="text-sm text-white/70">{f}</span>
+                      <span className="text-xs md:text-sm text-white/70">
+                        {f}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -446,7 +409,7 @@ export default function App() {
                     setSelectedExp(null);
                     window.location.hash = "booking";
                   }}
-                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
                 >
                   Book This Experience <ArrowUpRight className="w-4 h-4" />
                 </button>
@@ -455,76 +418,29 @@ export default function App() {
           </Modal>
         )}
 
-        {selectedSpecialist && (
-          <Modal onClose={() => setSelectedSpecialist(null)}>
-            <div className="max-w-3xl bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-              <img
-                src={selectedSpecialist.img}
-                alt={selectedSpecialist.name}
-                className="w-full h-80 object-cover"
-              />
-              <div className="p-8 md:p-12">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-10 h-[1.5px] bg-gold" />
-                  <span className="text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
-                    {selectedSpecialist.tag}
-                  </span>
-                </div>
-                <h2 className="text-4xl font-serif mb-2 leading-tight">
-                  {selectedSpecialist.name}
-                </h2>
-                <p className="text-gold text-lg font-semibold mb-4">{selectedSpecialist.title}</p>
-                <p className="text-white/60 mb-6 leading-relaxed">
-                  {selectedSpecialist.desc}
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-                  {selectedSpecialist.features.map((f, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl"
-                    >
-                      <Check className="w-4 h-4 text-gold" />
-                      <span className="text-sm text-white/70">{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  onClick={() => {
-                    setSelectedSpecialist(null);
-                    window.location.hash = "booking";
-                  }}
-                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
-                >
-                  Book This Specialist <ArrowUpRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </Modal>
-        )}
-
         {selectedRoom && (
           <Modal onClose={() => setSelectedRoom(null)}>
-            <div className="max-w-2xl bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <div className="max-w-2xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
               <img
                 src={selectedRoom.img}
                 alt={selectedRoom.title}
-                className="w-full h-72 object-cover"
+                className="w-full h-60 md:h-72 object-cover"
               />
-              <div className="p-8 md:p-10">
-                <span className="text-[11px] font-bold tracking-[1.5px] uppercase text-gold mb-2 block">
+              <div className="p-6 md:p-10">
+                <span className="text-[10px] md:text-[11px] font-bold tracking-[1.5px] uppercase text-gold mb-2 block">
                   {selectedRoom.sub}
                 </span>
-                <h2 className="text-3xl font-serif mb-4 leading-tight">
+                <h2 className="text-2xl md:text-3xl font-serif mb-4 leading-tight">
                   {selectedRoom.title}
                 </h2>
-                <p className="text-white/60 mb-6 leading-relaxed">
+                <p className="text-sm md:text-base text-white/60 mb-6 leading-relaxed">
                   {selectedRoom.desc}
                 </p>
-                <div className="grid grid-cols-2 gap-3 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                   {selectedRoom.amenities.map((a, i) => (
                     <div
                       key={i}
-                      className="flex items-center gap-2 text-sm text-white/60"
+                      className="flex items-center gap-2 text-xs md:text-sm text-white/60"
                     >
                       <span className="text-gold">✦</span> {a}
                     </div>
@@ -535,7 +451,7 @@ export default function App() {
                     setSelectedRoom(null);
                     window.location.hash = "booking";
                   }}
-                  className="px-8 py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
                 >
                   Inquire Now <ArrowUpRight className="w-4 h-4" />
                 </button>
@@ -546,17 +462,55 @@ export default function App() {
 
         {isGalleryOpen && (
           <Modal onClose={() => setIsGalleryOpen(false)}>
-            <div className="max-w-4xl bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl p-8">
-              <h2 className="text-3xl font-serif mb-2">Photo Gallery</h2>
-              <p className="text-white/40 mb-6">
-                Serendipity — 94' Lazzara Hardtop Motor Yacht
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div
+            <div className="max-w-5xl w-full bg-navy-light rounded-3xl border border-white/10 shadow-2xl p-6 md:p-12 overflow-y-auto max-h-[90vh] scrollbar-hide">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                <div>
+                  <h2 className="text-2xl md:text-4xl font-serif mb-2">
+                    The Collection
+                  </h2>
+                  <p className="text-white/40 text-sm md:text-base">
+                    Serendipity — 94' Lazzara Hardtop Motor Yacht
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="px-4 py-2 rounded-full bg-gold/10 border border-gold/20 text-gold text-[10px] font-bold uppercase tracking-widest">
+                    Exterior
+                  </div>
+                  <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                    Interior
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {[
+                  "assets/occasion1.png",
+                  "assets/occasion2.png",
+                  "assets/occasion3.png",
+                  "assets/occasion4.png",
+                  "assets/occasion5.png",
+                  "assets/occasion6.png",
+                  "assets/cheryl_foods.jpeg",
+                  "assets/cheryl_foods1.jpeg",
+                  "assets/cheryl_foods2.jpeg",
+                  "assets/hero1.png",
+                  "assets/hero2.png",
+                  "assets/hero3.png",
+                ].map((img, i) => (
+                  <motion.div
                     key={i}
-                    className="aspect-video bg-white/5 rounded-xl border border-white/10 animate-pulse"
-                  />
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="aspect-[4/3] rounded-2xl overflow-hidden border border-white/5 group relative"
+                  >
+                    <img
+                      src={img}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      alt={`Gallery ${i}`}
+                    />
+                    <div className="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors duration-500" />
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -565,12 +519,12 @@ export default function App() {
 
         {isAvailOpen && (
           <Modal onClose={() => setIsAvailOpen(false)}>
-            <div className="max-w-lg w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative">
-              <div className="p-8 md:p-12">
-                <h2 className="text-3xl font-serif mb-2 mr-5">
+            <div className="max-w-lg w-full bg-navy-light rounded-3xl overflow-y-auto max-h-[90vh] scrollbar-hide border border-white/10 shadow-2xl relative">
+              <div className="p-6 md:p-12">
+                <h2 className="text-2xl md:text-3xl font-serif mb-2 mr-5">
                   Check Availability
                 </h2>
-                <p className="text-white/40 mb-8 text-sm">
+                <p className="text-white/40 mb-8 text-xs md:text-sm">
                   Select your desired dates to check current availability.
                 </p>
 
@@ -610,65 +564,10 @@ export default function App() {
                 <a
                   href="#booking"
                   onClick={() => setIsAvailOpen(false)}
-                  className="mt-10 w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2 ripple-btn"
+                  className="mt-10 w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2 ripple-btn text-sm md:text-base"
                 >
                   Request Selected Dates <ArrowUpRight className="w-4 h-4" />
                 </a>
-              </div>
-            </div>
-          </Modal>
-        )}
-
-        {isPopularRouteOpen && (
-          <Modal onClose={() => setIsPopularRouteOpen(false)}>
-            <div className="max-w-2xl bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-              <img
-                src="/assets/hero1.png"
-                alt="Island Hopping"
-                className="w-full h-80 object-cover"
-              />
-              <div className="p-8 md:p-12">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-10 h-[1.5px] bg-gold" />
-                  <span className="text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
-                    Popular Route
-                  </span>
-                </div>
-                <h2 className="text-4xl font-serif mb-4 leading-tight">
-                  Island Hopping Adventure
-                </h2>
-                <p className="text-white/60 mb-6 leading-relaxed">
-                  Explore exclusive inlets and hidden sandbars across Florida's Gulf Coast. 
-                  This carefully curated route takes you to pristine locations that only our 
-                  expert crew knows, offering privacy and natural beauty at every stop.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-                  {[
-                    "Secret sandbar stops",
-                    "Dolphin watching areas",
-                    "Protected anchorages",
-                    "Snorkeling spots",
-                    "Sunset viewing points",
-                    "Wildlife sanctuaries"
-                  ].map((f, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl"
-                    >
-                      <Check className="w-4 h-4 text-gold" />
-                      <span className="text-sm text-white/70">{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  onClick={() => {
-                    setIsPopularRouteOpen(false);
-                    window.location.hash = "booking";
-                  }}
-                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
-                >
-                  Book This Route <ArrowUpRight className="w-4 h-4" />
-                </button>
               </div>
             </div>
           </Modal>
@@ -697,7 +596,7 @@ export default function App() {
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-8 right-8 w-14 h-14 bg-gold rounded-full flex items-center justify-center shadow-xl z-50 group"
+            className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-gold to-gold/80 rounded-full flex items-center justify-center shadow-xl z-50 group"
           >
             <ChevronLeft className="w-6 h-6 text-navy rotate-90 group-hover:translate-y-[-2px] transition-transform" />
           </motion.button>
@@ -741,25 +640,42 @@ export default function App() {
 function Navbar({
   isScrolled,
   setMobileMenuOpen,
+  openAvail,
 }: {
   isScrolled: boolean;
   setMobileMenuOpen: (o: boolean) => void;
+  openAvail: () => void;
 }) {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 px-6 md:px-16 ${isScrolled ? "bg-navy/90 backdrop-blur-2xl py-4 shadow-xl" : "py-8"}`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3 group">
-          <img
-            src="/assets/logo.png"
-            alt="Serendipity Logo"
-            className="h-20 md:h-16 w-auto group-hover:scale-105 transition-transform"
-          />
-        </a>
+        <div className="flex items-center gap-8">
+          <a href="#" className="flex items-center gap-3 group">
+            <img
+              src="https://serendipityyachtcharter.com/wp-content/uploads/2025/11/Header-Logov2.png"
+              alt="Serendipity Logo"
+              className="h-14 md:h-20 w-auto group-hover:scale-105 transition-transform"
+            />
+          </a>
+
+          {/* Availability Status Badge */}
+          <button
+            onClick={openAvail}
+            className="hidden xl:flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-gold/30 hover:bg-white/10 transition-all cursor-pointer group/avail"
+          >
+            <div className="w-2 h-2 rounded-full bg-green-500 relative">
+              <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse opacity-70" />
+            </div>
+            <span className="text-[10px] font-bold text-white/40 tracking-[2px] uppercase group-hover/avail:text-gold transition-colors">
+              Live Availability
+            </span>
+          </button>
+        </div>
 
         <div className="hidden lg:flex items-center gap-1">
-          {["Vessel", "Experiences", "Specialists", "Accommodations", "Fleet", "Reviews"].map(
+          {["Vessel", "Experiences", "Accommodations", "Fleet", "Reviews"].map(
             (l) => (
               <a
                 key={l}
@@ -794,8 +710,10 @@ function Navbar({
 
 function MobileMenu({
   setMobileMenuOpen,
+  openAvail,
 }: {
   setMobileMenuOpen: (o: boolean) => void;
+  openAvail: () => void;
 }) {
   return (
     <motion.div
@@ -811,12 +729,11 @@ function MobileMenu({
         <X className="w-8 h-8" />
       </button>
 
-      <div className="flex flex-col gap-6 text-center">
+      <div className="flex flex-col gap-6 text-center mb-12">
         {[
           "Home",
           "Vessel",
           "Experiences",
-          "Specialists",
           "Accommodations",
           "Fleet",
           "Reviews",
@@ -832,6 +749,17 @@ function MobileMenu({
           </a>
         ))}
       </div>
+
+      <button
+        onClick={() => {
+          setMobileMenuOpen(false);
+          openAvail();
+        }}
+        className="flex items-center gap-3 px-6 py-3 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-bold uppercase tracking-widest"
+      >
+        <div className="w-2 h-2 rounded-full bg-green-500" />
+        Check Availability
+      </button>
     </motion.div>
   );
 }
@@ -841,34 +769,32 @@ function Hero({
   setHeroIdx,
   openAvail,
   openVideo,
-  openPopularRoute,
 }: {
   heroIdx: number;
   setHeroIdx: (i: number) => void;
   openAvail: () => void;
   openVideo: () => void;
-  openPopularRoute: () => void;
 }) {
   const slides = [
     {
       line1: "Your Gulf Coast",
       line2: "Escape Awaits",
       desc: "Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.",
-      img: "/assets/hero3.png",
+      img: "assets/hero1.png",
       tag: "Saint Petersburg, FL",
     },
     {
       line1: "Experience",
       line2: "Pure Luxury",
       desc: "Discover breathtaking views and world-class comfort on Florida's Gulf Coast.",
-      img: "/assets/hero2.png",
+      img: "assets/hero2.png",
       tag: "Tampa Bay, FL",
     },
     {
       line1: "Make Memories",
       line2: "at Sea",
       desc: "Unforgettable moments aboard our expertly remodeled luxury yacht.",
-      img: "/assets/hero1.png",
+      img: "assets/hero3.png",
       tag: "Gulf Coast, FL",
     },
   ];
@@ -910,6 +836,18 @@ function Hero({
             <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
               {slides[heroIdx].tag}
             </span>
+            <div className="h-4 w-[1px] bg-white/10 mx-2" />
+            <button
+              onClick={openAvail}
+              className="flex items-center gap-2 group/avail-hero hover:bg-white/5 px-2 py-1 rounded-lg transition-colors"
+            >
+              <div className="w-2 h-2 rounded-full bg-green-500 relative">
+                <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse opacity-70" />
+              </div>
+              <span className="text-[10px] font-bold text-white/40 tracking-[2px] uppercase group-hover/avail-hero:text-gold transition-colors">
+                Live Status: Open
+              </span>
+            </button>
           </div>
           <h1 className="text-[40px] md:text-[62px] font-serif leading-[1.08] tracking-tight mb-6">
             <span>{slides[heroIdx].line1}</span>
@@ -943,39 +881,20 @@ function Hero({
         </motion.div>
       </div>
 
-      {/* Floating UI - Popular Route Card with Minimal Gaps */}
-      <div 
-        onClick={openPopularRoute}
-        className="absolute top-28 right-16 hidden lg:block w-64 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-3 shadow-2xl animate-float-y cursor-pointer hover:border-gold/30 transition-all group"
-      >
+      {/* Floating UI */}
+      <div className="absolute top-28 right-16 hidden lg:block w-64 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-float-y">
         <img
-          src="/assets/hero1.png"
-          className="w-full aspect-video object-cover rounded-xl mb-2 group-hover:scale-105 transition-transform"
-          alt="Island Hopping"
+          src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400"
+          className="w-full aspect-video object-cover rounded-xl mb-4"
         />
-        <span className="text-[10px] font-bold text-gold tracking-widest uppercase block px-1">
+        <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
           Popular Route
         </span>
-        <h4 className="font-semibold mt-1 group-hover:text-gold transition-colors px-1">Island Hopping</h4>
-        <p className="text-xs text-white/50 mt-0.5 px-1">
+        <h4 className="font-semibold mt-1">Island Hopping</h4>
+        <p className="text-xs text-white/50 mt-1">
           Exclusive inlets & hidden sandbars
         </p>
       </div>
-
-      <button
-        onClick={openAvail}
-        className="absolute top-[60%] right-28 hidden lg:flex items-center gap-4 bg-navy/80 border border-gold/30 backdrop-blur-xl p-4 rounded-2xl shadow-2xl hover:border-gold transition-all group z-20"
-      >
-        <div className="w-3 h-3 rounded-full bg-green-500 relative">
-          <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse-ring" />
-        </div>
-        <div className="text-left">
-          <p className="text-sm font-bold">Check Availability</p>
-          <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1">
-            Summer 2025 dates open
-          </p>
-        </div>
-      </button>
 
       {/* Nav Dots */}
       <div className="absolute right-8 md:right-16 bottom-32 md:bottom-40 flex flex-col gap-3">
@@ -1023,7 +942,7 @@ function VesselSection({
             onClick={openGallery}
           >
             <img
-              src="/assets/gallerymain.png"
+              src="assets/gallerymain.png"
               className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
               alt="Serendipity Yacht"
             />
@@ -1033,30 +952,6 @@ function VesselSection({
                 Lazzara Motor Yacht
               </p>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { val: "94 ft", label: "Yacht Length", icon: Wind },
-              { val: "12", label: "Max Guests", icon: User },
-            ].map((s, i) => (
-              <div
-                key={i}
-                onClick={() =>
-                  i === 2
-                    ? openAvail()
-                    : addToast(`Detail about ${s.label}`, s.val, "gold")
-                }
-                className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-gold/30 transition-all cursor-pointer group"
-              >
-                <s.icon className="w-6 h-6 text-gold mb-4 group-hover:scale-110 transition-transform" />
-                <p className="text-3xl font-serif text-gold font-bold">
-                  {s.val}
-                </p>
-                <p className="text-xs text-white/40 uppercase tracking-widest mt-1">
-                  {s.label}
-                </p>
-              </div>
-            ))}
           </div>
         </motion.div>
 
@@ -1088,8 +983,11 @@ function VesselSection({
               anchorages that few yachts of this size can reach.
             </p>
           </div>
- <div className="grid grid-cols-2 gap-4">
+
+          <div className="grid grid-cols-2 gap-4">
             {[
+              { val: "94 ft", label: "Yacht Length", icon: Wind },
+              { val: "12", label: "Max Guests", icon: User },
               { val: "20+", label: "Destinations", icon: MapPin },
               { val: "5.0 ★", label: "Guest Rating", icon: Star },
             ].map((s, i) => (
@@ -1112,7 +1010,6 @@ function VesselSection({
               </div>
             ))}
           </div>
-          
         </motion.div>
       </div>
     </section>
@@ -1162,8 +1059,8 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
       className="py-24 md:py-40 px-6 bg-navy overflow-hidden relative"
     >
       {/* Edge Gradients for Cinematic Feel */}
-      <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
+      <div className="hidden md:block absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
+      <div className="hidden md:block absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -1172,7 +1069,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto"
       >
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10 relative z-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16 relative z-20">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-[1.5px] bg-gold" />
@@ -1268,160 +1165,9 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   );
 }
 
-function SpecialistsSection({ openSpecialist }: { openSpecialist: (s: Specialist) => void }) {
-  const [currentIdx, setCurrentIdx] = useState(0);
-
-  const handlePrevious = () => {
-    setCurrentIdx((prev) => (prev === 0 ? SPECIALISTS.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIdx((prev) => (prev === SPECIALISTS.length - 1 ? 0 : prev + 1));
-  };
-
-  return (
-    <section id="specialists" className="py-24 md:py-40 px-6 bg-navy-light overflow-hidden">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="max-w-7xl mx-auto"
-      >
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-[1.5px] bg-gold" />
-              <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
-                Expert Specialists
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-serif leading-tight">
-              Meet Our Luxury
-              <br />
-              <span className="text-gradient">Experts</span>
-            </h2>
-          </div>
-          <div className="flex gap-4">
-            <button
-              onClick={handlePrevious}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={handleNext}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Carousel Container */}
-          <div className="relative overflow-hidden rounded-3xl">
-           <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIdx}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-[1.5px] bg-gold" />
-                <span className="text-[11px] font-bold tracking-[2.5px] uppercase text-gold">
-                  {SPECIALISTS[currentIdx].subtitle}
-                </span>
-              </div>
-              <h2 className="text-4xl font-serif mb-2 leading-tight">
-                {SPECIALISTS[currentIdx].name}
-              </h2>
-              <p className="text-gold text-xl font-semibold mb-6">
-                {SPECIALISTS[currentIdx].title}
-              </p>
-              <p className="text-white/60 mb-8 leading-relaxed">
-                {SPECIALISTS[currentIdx].desc}
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 mb-10">
-                {SPECIALISTS[currentIdx].features.map((f, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl"
-                  >
-                    <Check className="w-4 h-4 text-gold shrink-0" />
-                    <span className="text-sm text-white/70">{f}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => openSpecialist(SPECIALISTS[currentIdx])}
-                className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
-              >
-                Book This Specialist <ArrowUpRight className="w-4 h-4" />
-              </button>
-            </motion.div>
-          </AnimatePresence>
-
-            {/* Slide indicators */}
-            <div className="absolute top-6 right-6 flex gap-2 z-10">
-              {SPECIALISTS.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentIdx(i)}
-                  className={`h-2 rounded-full transition-all ${
-                    i === currentIdx
-                      ? "w-8 bg-gold"
-                      : "w-2 bg-white/30 hover:bg-white/50"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Content */}
-         <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIdx}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.5 }}
-                className="relative"
-              >
-                <img
-                  src={SPECIALISTS[currentIdx].img}
-                  alt={SPECIALISTS[currentIdx].name}
-                  className="w-full aspect-[4/5] object-cover rounded-3xl"
-                />
-                {/* Overlay with profile info */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy via-navy/80 to-transparent p-8 rounded-b-3xl">
-                  <div className="flex items-end gap-4">
-                    <img
-                      src={SPECIALISTS[currentIdx].profileImg}
-                      alt={SPECIALISTS[currentIdx].name}
-                      className="w-16 h-16 rounded-full border-2 border-gold object-cover"
-                    />
-                    <div>
-                      <h3 className="text-2xl font-serif">{SPECIALISTS[currentIdx].name}</h3>
-                      <p className="text-gold text-sm font-semibold">{SPECIALISTS[currentIdx].tag}</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
 function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
   return (
-    <section id="accommodations" className="py-24 md:py-40 px-6 bg-navy">
+    <section id="accommodations" className="py-24 md:py-40 px-6 bg-navy-light">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1450,7 +1196,7 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           <div className="relative rounded-[2.5rem] overflow-hidden group">
             <img
-              src="/assets/gallerymain.png"
+              src="assets/hero2.png"
               className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700"
               alt=""
             />
@@ -1488,7 +1234,7 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
               </div>
             ))}
 
-            <div className="p-8 mt-4 bg-gold/10 border border-white/5 rounded-3xl">
+            <div className="p-8 mt-4 bg-gradient-to-br from-gold/10 to-blue-400/5 border border-white/5 rounded-3xl">
               <h3 className="text-xl font-serif mb-6">
                 Premium Flybridge Features
               </h3>
@@ -1521,7 +1267,7 @@ function FleetSection() {
   const [idx, setIdx] = useState(0);
 
   return (
-    <section id="fleet" className="py-24 md:py-40 px-6 bg-navy-light">
+    <section id="fleet" className="py-24 md:py-40 px-6 bg-navy">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1580,7 +1326,7 @@ function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="py-24 md:py-40 px-6 bg-navy relative overflow-hidden"
+      className="py-24 md:py-40 px-6 bg-navy-light relative overflow-hidden"
     >
       {/* Background Decoration */}
       <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[120px]" />
@@ -1619,7 +1365,7 @@ function ReviewsSection() {
         </div>
 
         <div className="space-y-6">
-          <div className="p-5 bg-white/5 border border-white/10 rounded-[2.5rem] relative overflow-hidden group">
+          <div className="p-10 bg-white/5 border border-white/10 rounded-[2.5rem] relative overflow-hidden group">
             <div className="text-gold/20 mb-6 font-serif text-6xl">
               <svg
                 className="w-12 h-12"
@@ -1634,14 +1380,14 @@ function ReviewsSection() {
                 <Star key={i} className="w-4 h-4 fill-gold text-gold" />
               ))}
             </div>
-            <p className="text-xl md:text-2xl text-white/80 leading-relaxed mb-8 ">
+            <p className="text-xl md:text-2xl text-white/80 leading-relaxed mb-8">
               "We just had a 5 day charter and we could not be any happier.
               Captain John, Jake and Hailey were amazing. The crew made it
               perfect and the yacht's beauty I could not even explain. We are
               already planning our next trip. 5 stars no doubt!!!"
             </p>
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gold rounded-full flex items-center justify-center font-bold text-navy">
+              <div className="w-14 h-14 bg-gradient-to-br from-gold to-blue-400 rounded-full flex items-center justify-center font-bold text-navy">
                 CR
               </div>
               <div>
@@ -1668,7 +1414,7 @@ function ReviewsSection() {
             ].map((r, i) => (
               <div
                 key={i}
-                className="p-5 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-gold/30 transition-all"
+                className="p-10 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-gold/30 transition-all"
               >
                 <div className="text-gold/20 mb-6">
                   <svg
@@ -1728,11 +1474,11 @@ function BookingSection({
   return (
     <section
       id="booking"
-      className="py-24 md:py-48 px-6 bg-navy-light relative overflow-hidden"
+      className="py-24 md:py-48 px-6 bg-navy relative overflow-hidden"
     >
       <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
         <img
-          src="/assets/occasion4.png"
+          src="assets/hero1.png"
           className="w-full h-full object-cover"
           alt=""
         />
@@ -1764,8 +1510,8 @@ function BookingSection({
 
           <div className="space-y-6">
             {[
-              { icon: Phone, text: "Call Jake: 412-418-2969" },
-              { icon: Phone, text: "Call Manager Bryon: 727-644-9653" },
+              { icon: Phone, text: "(727) 555-0123" },
+              { icon: Mail, text: "charter@serendipityyacht.com" },
               { icon: MapPin, text: "Saint Petersburg, FL" },
             ].map((c, i) => (
               <div key={i} className="flex items-center gap-4 group">
@@ -1780,7 +1526,7 @@ function BookingSection({
           </div>
         </div>
 
-        <div className="p-10 md:p-12 bg-navy/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-2xl">
+        <div className="p-8 md:p-12 bg-navy-light/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-2xl">
           <h3 className="text-3xl font-serif mb-2">Inquire Now</h3>
           <p className="text-white/40 mb-10 text-sm">
             Tell us about your dream charter and we'll craft the perfect
@@ -1845,7 +1591,7 @@ function BookingSection({
             </div>
             <button
               disabled={loading}
-              className="w-full py-5 bg-gold text-navy font-bold rounded-2xl shadow-xl shadow-gold/20 hover:translate-y-[-2px] active:scale-[0.98] transition-all disabled:opacity-50 disabled:translate-y-0"
+              className="w-full py-5 bg-gradient-to-r from-gold to-gold-hover text-navy font-bold rounded-2xl shadow-xl shadow-gold/20 hover:translate-y-[-2px] active:scale-[0.98] transition-all disabled:opacity-50 disabled:translate-y-0"
             >
               {loading ? "Sending Request..." : "Submit Request"}
             </button>
@@ -1864,9 +1610,9 @@ function Footer() {
           <div className="col-span-1 lg:col-span-1">
             <div className="flex items-center gap-2 mb-6">
               <img
-                src="/assets/logo.png"
+                src="https://serendipityyachtcharter.com/wp-content/uploads/2025/11/Header-Logov2.png"
                 alt="Serendipity Logo"
-                className="h-20 w-auto"
+                className="h-16 w-auto"
               />
             </div>
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs">
@@ -1899,13 +1645,13 @@ function Footer() {
             },
             {
               title: "Contact",
-              links: ["Capt Jake 412-418-2969", "Manager Bryon 727-644-9653"],
+              links: ["Call Jake: 412-418-2968", "Manager Bryon: 727-644-9653"],
             },
             {
               title: "Location",
               links: [
                 "Maximo Marina",
-                "3701 50th Ave S.",
+                "3701 50 Ave S.",
                 "Saint Petersburg, FL 33371",
               ],
             },
@@ -1949,26 +1695,33 @@ function Modal({
   children: React.ReactNode;
   onClose: () => void;
 }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 bg-navy/90 backdrop-blur-xl z-[10002] flex items-center justify-center p-6 md:p-10"
+      className="fixed inset-0 bg-navy/90 backdrop-blur-xl z-[10002] flex items-center justify-center p-4 md:p-10"
     >
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative"
+        className="relative max-h-full"
       >
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 md:-right-12 p-3 text-white/50 hover:text-white transition-colors"
+          className="absolute top-4 right-4 p-2 text-white/50 hover:text-white transition-colors z-[10003] bg-navy/20 backdrop-blur-md rounded-full hover:bg-navy/40"
         >
-          <X className="w-8 h-8" />
+          <X className="w-5 h-5 md:w-6 md:h-6" />
         </button>
         {children}
       </motion.div>
