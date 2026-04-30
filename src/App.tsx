@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import {
   Menu,
@@ -327,12 +327,12 @@ export default function App() {
 
       <main>
         <VesselSection addToast={addToast} openGallery={() => setIsGalleryOpen(true)} openAvail={() => setIsAvailOpen(true)} />
+        {/* ExperiencesSection now uses swipe + auto-advance */}
         <ExperiencesSection openExp={setSelectedExp} />
         <AccommodationsSection openRoom={setSelectedRoom} />
         <FleetSection />
         <CulinarySection />
         <ReviewsSection />
-        {/* BookingSection now navigates to /payment instead of opening a modal */}
         <BookingSection addToast={addToast} openPayment={navigateToPayment} />
       </main>
 
@@ -729,29 +729,23 @@ function VesselSection({ addToast, openGallery, openAvail }: { addToast: (m: str
   );
 }
 
-// --- ExperiencesSection ---
+// --- ExperiencesSection — swipeable + auto-advancing carousel ---
 function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   const [idx, setIdx] = useState(EXPERIENCES.length);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [transitionStatus, setTransitionStatus] = useState(true);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Touch / mouse drag state
+  const dragStartX = useRef<number | null>(null);
+  const isDragging = useRef(false);
+
   const extendedItems = useMemo(() => [...EXPERIENCES, ...EXPERIENCES, ...EXPERIENCES], []);
 
-  const slide = (d: number) => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setTransitionStatus(true);
-    setIdx((prev) => prev + d);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
-
-  useEffect(() => {
-    if (isAnimating) return;
-    if (idx >= EXPERIENCES.length * 2) { setTransitionStatus(false); setIdx(idx - EXPERIENCES.length); }
-    else if (idx < EXPERIENCES.length) { setTransitionStatus(false); setIdx(idx + EXPERIENCES.length); }
-  }, [idx, isAnimating]);
-
-  const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -763,11 +757,112 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   const sectionPadding = windowWidth < 768 ? 24 : 64;
   const offset = (windowWidth - itemWidth) / 2 - (windowWidth < 768 ? sectionPadding : 0);
 
+  const slide = useCallback(
+    (d: number) => {
+      if (isAnimating) return;
+      setIsAnimating(true);
+      setTransitionEnabled(true);
+      setIdx((prev) => prev + d);
+      setTimeout(() => setIsAnimating(false), 500);
+    },
+    [isAnimating]
+  );
+
+  // Infinite loop repositioning
+  useEffect(() => {
+    if (isAnimating) return;
+    if (idx >= EXPERIENCES.length * 2) {
+      setTransitionEnabled(false);
+      setIdx(idx - EXPERIENCES.length);
+    } else if (idx < EXPERIENCES.length) {
+      setTransitionEnabled(false);
+      setIdx(idx + EXPERIENCES.length);
+    }
+  }, [idx, isAnimating]);
+
+  // Auto-advance every 3.5 s
+  const resetAutoPlay = useCallback(() => {
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    autoPlayRef.current = setInterval(() => slide(1), 3500);
+  }, [slide]);
+
+  useEffect(() => {
+    resetAutoPlay();
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [resetAutoPlay]);
+
+  // Touch handlers
+  const onTouchStart = (e: React.TouchEvent) => {
+    dragStartX.current = e.touches[0].clientX;
+    isDragging.current = false;
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (dragStartX.current === null) return;
+    if (Math.abs(e.touches[0].clientX - dragStartX.current) > 5) {
+      isDragging.current = true;
+    }
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (dragStartX.current === null) return;
+    const diff = dragStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      slide(diff > 0 ? 1 : -1);
+      resetAutoPlay();
+    }
+    dragStartX.current = null;
+    isDragging.current = false;
+  };
+
+  // Mouse drag handlers
+  const onMouseDown = (e: React.MouseEvent) => {
+    dragStartX.current = e.clientX;
+    isDragging.current = false;
+  };
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (dragStartX.current === null) return;
+    if (Math.abs(e.clientX - dragStartX.current) > 5) {
+      isDragging.current = true;
+    }
+  };
+  const onMouseUp = (e: React.MouseEvent) => {
+    if (dragStartX.current === null) return;
+    const diff = dragStartX.current - e.clientX;
+    if (Math.abs(diff) > 40) {
+      slide(diff > 0 ? 1 : -1);
+      resetAutoPlay();
+    }
+    dragStartX.current = null;
+  };
+  const onMouseLeave = () => {
+    dragStartX.current = null;
+    isDragging.current = false;
+  };
+
+  const handleCardClick = (e: React.MouseEvent, exp: Experience) => {
+    // Only open modal if user wasn't dragging
+    if (!isDragging.current) {
+      openExp(exp);
+    }
+  };
+
+  // Dot index — which real slide index (0..N-1) is active
+  const activeDot = ((idx % EXPERIENCES.length) + EXPERIENCES.length) % EXPERIENCES.length;
+
   return (
     <section id="experiences" className="py-12 md:py-20 bg-navy overflow-hidden relative px-6 md:px-16">
       <div className="hidden xl:block absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
       <div className="hidden md:block absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
-      <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="max-w-7xl mx-auto"
+      >
+        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16 relative z-30 px-6 md:px-0">
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -779,28 +874,67 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
               <em className="text-gold italic font-serif">Every Occasion</em>
             </h2>
           </div>
+
+          {/* Arrow buttons */}
           <div className="flex gap-4">
-            <button onClick={() => slide(-1)} disabled={isAnimating} className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}>
+            <button
+              onClick={() => { slide(-1); resetAutoPlay(); }}
+              disabled={isAnimating}
+              className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}
+            >
               <ChevronLeft className="w-6 h-6" />
             </button>
-            <button onClick={() => slide(1)} disabled={isAnimating} className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}>
+            <button
+              onClick={() => { slide(1); resetAutoPlay(); }}
+              disabled={isAnimating}
+              className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}
+            >
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
         </div>
-        <div className="relative" ref={containerRef}>
+
+        {/* Carousel track — touch + mouse swipe */}
+        <div
+          className="relative select-none cursor-grab active:cursor-grabbing"
+          ref={containerRef}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseLeave}
+        >
           <motion.div
             animate={{ x: -idx * (itemWidth + gap) + (windowWidth < 768 ? offset : 0) }}
-            transition={transitionStatus ? { type: "spring", stiffness: 180, damping: 25, mass: 1 } : { duration: 0 }}
-            className="flex gap-6 pointer-events-auto" style={{ width: "max-content" }}>
+            transition={
+              transitionEnabled
+                ? { type: "spring", stiffness: 180, damping: 25, mass: 1 }
+                : { duration: 0 }
+            }
+            className="flex gap-6 pointer-events-auto"
+            style={{ width: "max-content" }}
+          >
             {extendedItems.map((e, i) => (
-              <div key={i} onClick={() => openExp(e)}
-                className="w-[280px] md:w-[350px] aspect-[3/4.2] relative group rounded-3xl overflow-hidden cursor-pointer shrink-0 shadow-2xl bg-navy-light">
-                <img src={e.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
+              <div
+                key={i}
+                onClick={(ev) => handleCardClick(ev, e)}
+                className="w-[280px] md:w-[350px] aspect-[3/4.2] relative group rounded-3xl overflow-hidden shrink-0 shadow-2xl bg-navy-light"
+                style={{ cursor: isDragging.current ? "grabbing" : "pointer" }}
+              >
+                <img
+                  src={e.img}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 pointer-events-none"
+                  alt=""
+                  draggable={false}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 p-8 z-10 pointer-events-none">
                   <div className="mb-2 w-8 h-[1px] bg-gold group-hover:w-12 transition-all" />
-                  <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-gold transition-colors">{e.title}</h3>
+                  <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-gold transition-colors">
+                    {e.title}
+                  </h3>
                   <div className="flex items-center gap-2 text-gold text-[10px] font-bold uppercase tracking-[2px] mt-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                     Discover More <ArrowUpRight className="w-3 h-3" />
                   </div>
@@ -809,9 +943,31 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
             ))}
           </motion.div>
         </div>
-        <div className="mt-20 pt-10 border-t border-white/10 flex flex-wrap items-center justify-between gap-10 relative z-20">
+
+        {/* Dot indicators */}
+        <div className="flex justify-center gap-2 mt-8 relative z-20">
+          {EXPERIENCES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                if (isAnimating) return;
+                const diff = i - activeDot;
+                slide(diff);
+                resetAutoPlay();
+              }}
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                activeDot === i ? "w-8 bg-gold" : "w-2.5 bg-white/20 hover:bg-white/40"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Footer strip */}
+        <div className="mt-16 pt-10 border-t border-white/10 flex flex-wrap items-center justify-between gap-10 relative z-20">
           <div className="max-w-lg">
-            <p className="text-white/40 mb-3">With spa-inspired amenities, elegant interiors, and professional crew, Serendipity is designed to impress.</p>
+            <p className="text-white/40 mb-3">
+              With spa-inspired amenities, elegant interiors, and professional crew, Serendipity is designed to impress.
+            </p>
             <p className="text-gold font-bold text-lg">Plan your private event with us today.</p>
           </div>
           <a href="#" className="flex items-center gap-3 text-gold font-bold text-sm tracking-widest uppercase hover:gap-5 transition-all">
