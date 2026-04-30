@@ -1348,19 +1348,23 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto"
       >
-        <div className="max-w-2xl mb-16">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-[1.5px] bg-gold" />
-            <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
-              Luxury Living
-            </span>
+        <div className="mb-16 lg:grid lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-12 lg:items-start">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-[1.5px] bg-gold" />
+              <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
+                Luxury Living
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-6 lg:mb-0">
+              Elegant Accommodations
+              <br />
+              <em className="text-gold italic font-serif">
+                for Up to 12 Guests
+              </em>
+            </h2>
           </div>
-          <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-6">
-            Elegant Accommodations
-            <br />
-            <em className="text-gold italic font-serif">for Up to 12 Guests</em>
-          </h2>
-          <p className="text-white/50 text-lg">
+          <p className="text-white/50 text-lg lg:max-w-md lg:justify-self-end lg:pt-12">
             Rest and unwind in four refined guest suites, each designed for
             absolute comfort and offering total privacy.
           </p>
