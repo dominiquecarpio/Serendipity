@@ -402,6 +402,7 @@ export default function App() {
         <ExperiencesSection openExp={setSelectedExp} />
         <AccommodationsSection openRoom={setSelectedRoom} />
         <FleetSection />
+        <CulinarySection />
         <ReviewsSection />
         <BookingSection addToast={addToast} />
       </main>
@@ -805,18 +806,23 @@ function Navbar({
         </div>
 
         <div className="hidden lg:flex items-center gap-1">
-          {["Vessel", "Experiences", "Accommodations", "Fleet", "Reviews"].map(
-            (l) => (
-              <a
-                key={l}
-                href={`#${l.toLowerCase()}`}
-                className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors relative group"
-              >
-                {l}
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-1/2" />
-              </a>
-            ),
-          )}
+          {[
+            "Vessel",
+            "Experiences",
+            "Accommodations",
+            "Fleet",
+            "Culinary",
+            "Reviews",
+          ].map((l) => (
+            <a
+              key={l}
+              href={`#${l.toLowerCase()}`}
+              className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors relative group"
+            >
+              {l}
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-1/2" />
+            </a>
+          ))}
         </div>
 
         <div className="flex items-center gap-4">
@@ -866,6 +872,7 @@ function MobileMenu({
           "Experiences",
           "Accommodations",
           "Fleet",
+          "Culinary",
           "Reviews",
           "Contact",
         ].map((l, i) => (
@@ -1514,6 +1521,246 @@ function FleetSection() {
           ))}
         </div>
       </motion.div>
+    </section>
+  );
+}
+
+function CulinarySection() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const slides = [
+    {
+      id: "chef",
+      tag: "Master of the Galley",
+      name: "Chef Cheryl",
+      role: "Gulf Coast's Premier Yacht Chef",
+      profileImg:
+        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=200",
+      titleLine1: "Where ",
+      titleItalic: "Fine Dining",
+      titleLine2: " Meets Home Comfort",
+      description:
+        "Looking for a personal chef for a party, work event, family dinner, or yacht excursion? Chef Cheryl brings the dream of fine dining to your charter table, where every dish is a labor of love.",
+      items: [
+        "https://images.unsplash.com/photo-1544022613-e87ce71c8599?auto=format&fit=crop&q=80&w=400",
+        "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=400",
+        "https://images.unsplash.com/photo-1534766555764-ce878a5e3a2b?auto=format&fit=crop&q=80&w=400",
+      ],
+      mainImgs: [
+        "assets/cheryl_foods.jpeg",
+        "assets/cheryl_foods1.jpeg",
+        "assets/cheryl_foods2.jpeg",
+      ],
+      icon: <Utensils className="w-4 h-4 text-gold" />,
+    },
+    {
+      id: "mixology",
+      tag: "The Art of Mixology",
+      name: "Nelly the Mixologist",
+      role: "Expert Craft Cocktail Artist",
+      profileImg:
+        "https://images.unsplash.com/photo-1574096079513-d8259312b785?auto=format&fit=crop&q=80&w=200",
+      titleLine1: "Crafting Cocktails That ",
+      titleItalic: "Spark Connection",
+      titleLine2: "",
+      description:
+        "Mixology isn't just about pouring drinks—it's about creating an experience where every sip tells a story. Nelly blends premium spirits and fresh ingredients with a creative flair that makes every guest feel celebrated.",
+      items: [
+        "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=400",
+        "https://images.unsplash.com/photo-1536935338218-d413d714d74e?auto=format&fit=crop&q=80&w=400",
+        "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=400",
+      ],
+      mainImgs: [
+        "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=500",
+        "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=500",
+        "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=600",
+      ],
+      icon: (
+        <svg
+          className="w-4 h-4 text-gold"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M7.5,7L5.5,5H18.5L16.5,7M11,13V19H6V21H18V19H13V13L21,5V3H3V5L11,13Z" />
+        </svg>
+      ),
+    },
+  ];
+
+  const nextSlide = () => {
+    setDirection(1);
+    setActiveSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setDirection(-1);
+    setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+  };
+
+  return (
+    <section
+      id="culinary"
+      className="py-20 md:py-32 bg-navy-light overflow-hidden relative"
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-[10px] relative">
+        <div className="flex items-center justify-between mb-12">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-[1.5px] bg-gold" />
+              <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
+                Culinary & Mixology
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-serif">
+              Epicurean <em className="text-gold italic font-serif">Journey</em>
+            </h2>
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              onClick={prevSlide}
+              className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy transition-all group"
+            >
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy transition-all group"
+            >
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative h-auto lg:h-[700px]">
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.div
+              key={activeSlide}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.4 },
+              }}
+              className="lg:absolute inset-0"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center h-full">
+                <div className="order-2 lg:order-1">
+                  <div className="bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden group/card hover:border-gold/20 transition-colors">
+                    {/* Floating Glow */}
+                    <div className="absolute -top-24 -left-24 w-48 h-48 bg-gold/5 rounded-full blur-[60px]" />
+
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-[1px] bg-gold/50" />
+                        <span className="text-[10px] font-bold tracking-[2px] uppercase text-gold/60">
+                          {slides[activeSlide].tag}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-5 mb-8">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-gold/30 p-1 shrink-0 shadow-xl relative">
+                          <img
+                            src={slides[activeSlide].profileImg}
+                            className="w-full h-full object-cover rounded-full"
+                            alt={slides[activeSlide].name}
+                          />
+                          <div className="absolute -bottom-1 -right-1 bg-navy border border-white/10 rounded-full p-1.5 scale-90">
+                            {slides[activeSlide].icon}
+                          </div>
+                        </div>
+                        <div>
+                          <h3 className="text-xl md:text-2xl font-serif">
+                            {slides[activeSlide].name}
+                          </h3>
+                          <p className="text-gold text-[9px] md:text-[10px] uppercase tracking-widest mt-1 font-bold opacity-80">
+                            {slides[activeSlide].role}
+                          </p>
+                        </div>
+                      </div>
+
+                      <h2 className="text-2xl md:text-4xl font-serif mb-6 leading-snug">
+                        {slides[activeSlide].titleLine1}
+                        <em className="text-gold italic font-serif">
+                          {slides[activeSlide].titleItalic}
+                        </em>
+                        {slides[activeSlide].titleLine2}
+                      </h2>
+
+                      <p className="text-white/50 text-sm md:text-base leading-relaxed">
+                        {slides[activeSlide].description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="order-1 lg:order-2 grid grid-cols-2 gap-4 md:gap-6 relative px-4 lg:px-0">
+                  <div className="absolute inset-0 bg-gold/5 blur-[100px] rounded-full -z-10" />
+                  <div className="mt-12">
+                    <motion.img
+                      whileHover={{ y: -10 }}
+                      src={slides[activeSlide].mainImgs[0]}
+                      className="w-full aspect-[4/5] object-cover rounded-[2rem] md:rounded-[2.5rem] shadow-2xl border border-white/10"
+                      alt="Specialty 1"
+                    />
+                  </div>
+                  <div>
+                    <motion.img
+                      whileHover={{ y: -10 }}
+                      src={slides[activeSlide].mainImgs[1]}
+                      className="w-full aspect-[4/5] object-cover rounded-[2rem] md:rounded-[2.5rem] shadow-2xl border border-white/10"
+                      alt="Specialty 2"
+                    />
+                  </div>
+                  <div className="col-span-2 px-12 md:px-20 -mt-10 relative z-10">
+                    <motion.img
+                      whileHover={{ scale: 1.02 }}
+                      src={slides[activeSlide].mainImgs[2]}
+                      className="w-full aspect-video object-cover rounded-[2rem] md:rounded-[2.5rem] shadow-2xl border border-white/20"
+                      alt="Specialty 3"
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Slide Indicators */}
+        <div className="flex justify-center gap-3 mt-12 md:mt-20">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setDirection(i > activeSlide ? 1 : -1);
+                setActiveSlide(i);
+              }}
+              className={`h-1.5 transition-all duration-500 rounded-full ${activeSlide === i ? "w-8 bg-gold" : "w-4 bg-white/20"}`}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
