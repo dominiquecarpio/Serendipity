@@ -876,22 +876,6 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
           </div>
 
           {/* Arrow buttons */}
-          <div className="flex gap-4">
-            <button
-              onClick={() => { slide(-1); resetAutoPlay(); }}
-              disabled={isAnimating}
-              className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={() => { slide(1); resetAutoPlay(); }}
-              disabled={isAnimating}
-              className={`w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:border-gold hover:text-gold transition-all active:scale-95 ${isAnimating ? "opacity-50" : ""}`}
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          </div>
         </div>
 
         {/* Carousel track — touch + mouse swipe */}
