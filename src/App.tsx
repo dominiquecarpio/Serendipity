@@ -654,7 +654,7 @@ function Navbar({
         <div className="flex items-center gap-8">
           <a href="#" className="flex items-center gap-3 group">
             <img
-              src="https://serendipityyachtcharter.com/wp-content/uploads/2025/11/Header-Logov2.png"
+              src="assets/logo.png"
               alt="Serendipity Logo"
               className="h-14 md:h-20 w-auto group-hover:scale-105 transition-transform"
             />
@@ -1610,7 +1610,7 @@ function Footer() {
           <div className="col-span-1 lg:col-span-1">
             <div className="flex items-center gap-2 mb-6">
               <img
-                src="https://serendipityyachtcharter.com/wp-content/uploads/2025/11/Header-Logov2.png"
+                src="assets/logo.png"
                 alt="Serendipity Logo"
                 className="h-16 w-auto"
               />
