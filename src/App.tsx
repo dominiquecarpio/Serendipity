@@ -840,19 +840,12 @@ function Hero({
             <button
               onClick={openAvail}
               className="flex items-center gap-2 group/avail-hero hover:bg-white/5 px-2 py-1 rounded-lg transition-colors"
-            >
-              <div className="w-2 h-2 rounded-full bg-green-500 relative">
-                <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse opacity-70" />
-              </div>
-              <span className="text-[10px] font-bold text-white/40 tracking-[2px] uppercase group-hover/avail-hero:text-gold transition-colors">
-                Live Status: Open
-              </span>
-            </button>
+            ></button>
           </div>
           <h1 className="text-[40px] md:text-[62px] font-serif leading-[1.08] tracking-tight mb-6">
             <span>{slides[heroIdx].line1}</span>
             <br />
-            <em className="text-gold italic not-italic font-serif">
+            <em className="text-gold italic font-serif">
               {slides[heroIdx].line2}
             </em>
           </h1>
@@ -969,7 +962,9 @@ function VesselSection({
           <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-8">
             Experience the Ocean
             <br />
-            <span className="text-gradient">Like Never Before</span>
+            <span className="text-gold italic font-serif">
+              Like Never Before
+            </span>
           </h2>
           <div className="space-y-6 text-white/60 leading-relaxed text-lg pb-10">
             <p>
@@ -1080,7 +1075,9 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
             <h2 className="text-4xl md:text-5xl font-serif leading-tight">
               A Floating Resort for
               <br />
-              <span className="text-gradient">Every Occasion</span>
+              <span className="text-gold italic font-serif">
+                Every Occasion
+              </span>
             </h2>
           </div>
           <div className="flex gap-4">
@@ -1185,7 +1182,9 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
           <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-6">
             Elegant Accommodations
             <br />
-            <span className="text-gradient">for Up to 12 Guests</span>
+            <span className="text-gold italic font-serif">
+              for Up to 12 Guests
+            </span>
           </h2>
           <p className="text-white/50 text-lg">
             Rest and unwind in four refined guest suites, each designed for
@@ -1286,7 +1285,9 @@ function FleetSection() {
             <h2 className="text-4xl md:text-5xl font-serif leading-tight">
               Plan Your Yacht
               <br />
-              <span className="text-gradient">Experience Today</span>
+              <span className="text-gold italic font-serif">
+                Experience Today
+              </span>
             </h2>
           </div>
           <p className="text-white/50 text-lg leading-relaxed">
@@ -1350,7 +1351,7 @@ function ReviewsSection() {
             <br />
             Clients
             <br />
-            <span className="text-gradient">Say</span>
+            <span className="text-gold italic font-serif">Say</span>
           </h2>
           <p className="text-white/50 mb-8 max-w-xs">
             Thousands of travelers have set sail with us — see what they have to
@@ -1501,7 +1502,7 @@ function BookingSection({
           <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-8">
             Ready for Your
             <br />
-            <span className="text-gradient">Next Adventure?</span>
+            <span className="text-gold italic font-serif">Next Adventure?</span>
           </h2>
           <p className="text-white/50 text-lg mb-12 max-w-sm">
             Whether celebrating a milestone or seeking peace on the water,
@@ -1510,8 +1511,8 @@ function BookingSection({
 
           <div className="space-y-6">
             {[
-              { icon: Phone, text: "(727) 555-0123" },
-              { icon: Mail, text: "charter@serendipityyacht.com" },
+              { icon: Phone, text: "Call Jake: 412-418-2968" },
+              { icon: Phone, text: "Call Bryon: 727-644-9653" },
               { icon: MapPin, text: "Saint Petersburg, FL" },
             ].map((c, i) => (
               <div key={i} className="flex items-center gap-4 group">
