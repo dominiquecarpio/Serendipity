@@ -1,27 +1,29 @@
-<!doctype html>
-<html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Serendipity Yacht Charter</title>
 
-    <!-- Open Graph / Facebook / Messenger -->
+    <!-- 1. Browser Favicon (The Tab Thumbnail) -->
+    <!-- This ensures the logo appears in the browser tab and bookmarks -->
+    <link rel="icon" type="image/png" href="/assets/site-logo.png" />
+    <link rel="apple-touch-icon" href="/assets/site-logo.png" />
+
+    <!-- 2. Search Engine Metadata -->
+    <meta name="description" content="Experience luxury on a 94' Lazzara Yacht in St. Petersburg, Florida. Perfect for private events and premium excursions." />
+
+    <!-- 3. Social Media Sharing (Open Graph) -->
+    <!-- This ensures the logo and site name appear when you text or post the link[cite: 2] -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://serendipityyacht.netlify.app/" />
     <meta property="og:title" content="Serendipity Yacht Charter" />
-    <meta property="og:description" content="Luxury 94' Lazzara Yacht Charter in St. Petersburg, Florida. Private events, excursions, and premium accommodations on the Gulf Coast." />
-    <meta property="og:image" content="https://serendipityyacht.netlify.app/assets/logo.png" />
+    <meta property="og:description" content="Luxury 94' Lazzara Yacht Charter in St. Petersburg, Florida." />
+    <!-- Use the absolute URL for the image to ensure it loads on all platforms[cite: 2] -->
+    <meta property="og:image" content="https://serendipityyacht.netlify.app/assets/site-logo.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
-    <!-- Twitter Card -->
+    <!-- 4. Twitter/X Sharing -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Serendipity Yacht Charter" />
-    <meta name="twitter:description" content="Luxury 94' Lazzara Yacht Charter in St. Petersburg, Florida." />
-    <meta name="twitter:image" content="https://serendipityyacht.netlify.app/assets/logo.png" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+    <meta name="twitter:image" content="https://serendipityyacht.netlify.app/assets/site-logo.png" />
+</head>
