@@ -100,25 +100,15 @@ const EXPERIENCES: Experience[] = [
     img: "assets/occasion5.png",
     tag: "VIP Room",
     title: "First Class Relaxation",
-    desc: "Experience the pinnacle of luxury in our VIP staterooms, designed for ultimate comfort and privacy. Perfect for high-profile guests or anyone seeking a serene escape at sea.",
-    features: [
-      "Private ensuite bathroom",
-      "Premium bedding",
-      "Personalized service",
-      "Exclusive amenities",
-    ],
+    desc: "Experience the pinnacle of luxury in our VIP staterooms. Each room is a sanctuary of comfort, featuring plush bedding, ambient lighting, and personalized service to ensure your stay is nothing short of extraordinary.",
+    features: ["Plush bedding with premium linens"],
   },
   {
     img: "assets/occasion6.png",
-    tag: "Kitchen Area",
-    title: "Chef's Cooking Classes",
-    desc: "Learn to cook delicious meals with our expert chefs in the comfort of your yacht's kitchen.",
-    features: [
-      "Certified culinary instructor",
-      " hands-on cooking experience",
-      "Fresh, locally-sourced ingredients",
-      "Customizable menu options",
-    ],
+    tag: "Kitchen",
+    title: "Chef's Cooking Class",
+    desc: "Join our award-winning chef for an immersive culinary experience on the water. Learn to prepare signature dishes while enjoying stunning ocean views.",
+    features: ["Hands-on cooking experience"],
   },
 ];
 
@@ -287,7 +277,9 @@ export default function App() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isAvailOpen, setIsAvailOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [isRouteOpen, setIsRouteOpen] = useState(false);
   const [showFab, setShowFab] = useState(false);
+  const [isStickyRoute, setIsStickyRoute] = useState(false);
   const [toasts, setToasts] = useState<
     { id: number; msg: string; title: string; type: string }[]
   >([]);
@@ -303,6 +295,18 @@ export default function App() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
       setShowFab(window.scrollY > 600);
+
+      // Sticky Route logic: Show between Vessel and Experiences
+      const vesselSection = document.getElementById("vessel");
+      const experiencesSection = document.getElementById("experiences");
+      if (vesselSection && experiencesSection) {
+        const vesselTop = vesselSection.offsetTop;
+        const experiencesBottom =
+          experiencesSection.offsetTop + experiencesSection.offsetHeight;
+        setIsStickyRoute(
+          window.scrollY > vesselTop && window.scrollY < experiencesBottom,
+        );
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -351,7 +355,39 @@ export default function App() {
         setHeroIdx={setHeroIdx}
         openAvail={() => setIsAvailOpen(true)}
         openVideo={() => setIsVideoOpen(true)}
+        openRoute={() => setIsRouteOpen(true)}
       />
+
+      {/* Sticky Route Sidebar Indicator - Minimized */}
+      <AnimatePresence>
+        {isStickyRoute && !isRouteOpen && (
+          <motion.div
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 20, opacity: 0 }}
+            onClick={() => setIsRouteOpen(true)}
+            className="fixed right-0 top-1/2 -translate-y-1/2 z-[999] flex items-center gap-3 bg-navy-light/40 backdrop-blur-md border-l border-y border-gold/10 pl-2 pr-1.5 py-5 rounded-l-xl cursor-pointer hover:bg-gold/10 hover:border-gold/30 transition-all group shadow-xl"
+          >
+            <div className="flex flex-col items-center gap-4">
+              <motion.div
+                animate={{ y: [0, -3, 0] }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <MapPin className="w-3.5 h-3.5 text-gold/60 group-hover:text-gold transition-colors" />
+              </motion.div>
+              <div className="rotate-180 [writing-mode:vertical-lr] flex items-center gap-2 whitespace-nowrap">
+                <span className="text-[8px] font-bold tracking-[3px] uppercase text-white/20 group-hover:text-gold/60 transition-colors">
+                  Route
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main>
         <VesselSection
@@ -585,6 +621,96 @@ export default function App() {
             </div>
           </Modal>
         )}
+
+        {isRouteOpen && (
+          <Modal onClose={() => setIsRouteOpen(false)}>
+            <div className="max-w-2xl w-full bg-navy-light rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl flex flex-col scrollbar-hide overflow-y-auto max-h-[95vh] md:max-h-[90vh]">
+              <div className="relative h-48 md:h-64 shrink-0">
+                <img
+                  src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000"
+                  className="w-full h-full object-cover"
+                  alt=""
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-light via-transparent to-transparent" />
+                <div className="absolute top-4 left-4 md:top-6 md:left-6 flex items-center gap-2 bg-gold/90 px-3 py-1.5 rounded-full text-navy font-bold text-[10px] uppercase tracking-widest shadow-lg">
+                  <Star className="w-3 h-3 fill-current" /> High Demand
+                </div>
+              </div>
+
+              <div className="p-6 md:p-12">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-[1.5px] bg-gold" />
+                  <span className="text-[10px] md:text-[11px] font-bold tracking-[2px] uppercase text-gold">
+                    Exclusive Itinerary
+                  </span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-serif mb-4">
+                  The Island Hopper
+                </h2>
+                <p className="text-xs md:text-sm text-white/60 mb-8 leading-relaxed">
+                  Navigate the crown jewels of Florida's coast. From the
+                  pristine sandbars of Egmont Key to the bohemian charm of
+                  Pass-A-Grille, this route is curated for those who seek the
+                  perfect balance of seclusion and style.
+                </p>
+
+                <div className="space-y-4 md:space-y-6">
+                  {[
+                    {
+                      t: "Egmont Key State Park",
+                      d: "Visit the historic lighthouse and explore ruins hidden within lush foliage.",
+                    },
+                    {
+                      t: "Shell Key Preserve",
+                      d: "Anchor in crystal turquoise waters for world-class shelling and paddleboarding.",
+                    },
+                    {
+                      t: "Pass-A-Grille Historic District",
+                      d: "Enjoy a legendary sunset with a curated beach picnic delivered to your yacht.",
+                    },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex gap-4 md:gap-6 group">
+                      <div className="flex flex-col items-center">
+                        <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border border-gold/30 flex items-center justify-center text-[9px] md:text-[10px] text-gold font-bold transition-all group-hover:bg-gold group-hover:text-navy shrink-0">
+                          {idx + 1}
+                        </div>
+                        {idx < 2 && (
+                          <div className="w-px h-full bg-white/10 my-1 md:my-2" />
+                        )}
+                      </div>
+                      <div className="pb-2 md:pb-4">
+                        <h4 className="font-bold text-xs md:text-sm mb-1 group-hover:text-gold transition-colors">
+                          {item.t}
+                        </h4>
+                        <p className="text-[10px] md:text-xs text-white/40 leading-relaxed">
+                          {item.d}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 md:mt-10 pt-6 md:pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+                  <div className="text-center sm:text-left">
+                    <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">
+                      Duration
+                    </p>
+                    <p className="font-serif text-gold text-lg">4 - 8 Hours</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setIsRouteOpen(false);
+                      window.location.hash = "booking";
+                    }}
+                    className="w-full sm:w-auto px-8 py-4 bg-gold text-navy font-bold rounded-xl text-sm transition-all hover:scale-105 active:scale-95 shadow-xl shadow-gold/20"
+                  >
+                    Reserve This Route
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        )}
       </AnimatePresence>
 
       {/* FAB */}
@@ -729,7 +855,7 @@ function MobileMenu({
         <X className="w-8 h-8" />
       </button>
 
-      <div className="flex flex-col gap-6 text-center mb-12">
+      <div className="flex flex-col gap-8 text-center mb-16">
         {[
           "Home",
           "Vessel",
@@ -738,28 +864,36 @@ function MobileMenu({
           "Fleet",
           "Reviews",
           "Contact",
-        ].map((l) => (
-          <a
+        ].map((l, i) => (
+          <motion.a
             key={l}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05 + 0.2 }}
             href={`#${l === "Home" ? "home" : l === "Contact" ? "booking" : l.toLowerCase()}`}
             onClick={() => setMobileMenuOpen(false)}
-            className="text-4xl font-serif text-white hover:text-gold transition-colors"
+            className="text-2xl md:text-3xl font-serif text-white hover:text-gold transition-colors tracking-wide"
           >
             {l}
-          </a>
+          </motion.a>
         ))}
       </div>
 
-      <button
+      <motion.button
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
         onClick={() => {
           setMobileMenuOpen(false);
           openAvail();
         }}
-        className="flex items-center gap-3 px-6 py-3 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-bold uppercase tracking-widest"
+        className="flex items-center gap-4 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-gold text-xs font-bold uppercase tracking-[3px] backdrop-blur-xl hover:bg-gold/10 hover:border-gold/30 transition-all"
       >
-        <div className="w-2 h-2 rounded-full bg-green-500" />
-        Check Availability
-      </button>
+        <div className="w-2.5 h-2.5 rounded-full bg-green-500 relative">
+          <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse blur-[2px]" />
+        </div>
+        Availability
+      </motion.button>
     </motion.div>
   );
 }
@@ -769,11 +903,13 @@ function Hero({
   setHeroIdx,
   openAvail,
   openVideo,
+  openRoute,
 }: {
   heroIdx: number;
   setHeroIdx: (i: number) => void;
   openAvail: () => void;
   openVideo: () => void;
+  openRoute: () => void;
 }) {
   const slides = [
     {
@@ -836,20 +972,15 @@ function Hero({
             <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
               {slides[heroIdx].tag}
             </span>
-            <div className="h-4 w-[1px] bg-white/10 mx-2" />
-            <button
-              onClick={openAvail}
-              className="flex items-center gap-2 group/avail-hero hover:bg-white/5 px-2 py-1 rounded-lg transition-colors"
-            ></button>
           </div>
-          <h1 className="text-[40px] md:text-[62px] font-serif leading-[1.08] tracking-tight mb-6">
+          <h1 className="text-[32px] md:text-[62px] font-serif leading-[1.08] tracking-tight mb-6">
             <span>{slides[heroIdx].line1}</span>
             <br />
             <em className="text-gold italic font-serif">
               {slides[heroIdx].line2}
             </em>
           </h1>
-          <p className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-lg">
+          <p className="text-base md:text-xl text-white/70 mb-10 leading-relaxed max-w-lg">
             {slides[heroIdx].desc}
           </p>
           <div className="flex flex-wrap gap-6 items-center">
@@ -874,20 +1005,52 @@ function Hero({
         </motion.div>
       </div>
 
-      {/* Floating UI */}
-      <div className="absolute top-28 right-16 hidden lg:block w-64 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-float-y">
-        <img
-          src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400"
-          className="w-full aspect-video object-cover rounded-xl mb-4"
-        />
-        <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
-          Popular Route
-        </span>
-        <h4 className="font-semibold mt-1">Island Hopping</h4>
-        <p className="text-xs text-white/50 mt-1">
-          Exclusive inlets & hidden sandbars
+      {/* Interactive Popular Route Card */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.8 }}
+        onClick={openRoute}
+        className="absolute top-40 right-16 hidden lg:block w-72 bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl hover:border-gold/50 hover:bg-navy/60 transition-all cursor-pointer group animate-float-y z-20"
+      >
+        <div className="relative overflow-hidden rounded-xl mb-4 pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400"
+            className="w-full h-full aspect-video object-cover group-hover:scale-110 transition-transform duration-700"
+            alt=""
+          />
+          <div className="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors" />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="bg-gold/90 text-navy px-4 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg">
+              View Route <ArrowUpRight className="w-3 h-3" />
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-between mb-2 pointer-events-none">
+          <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
+            Popular Route
+          </span>
+          <div className="flex items-center gap-1">
+            <Star className="w-3 h-3 fill-gold text-gold" />
+            <span className="text-[10px] font-bold text-white/80">4.9</span>
+          </div>
+        </div>
+        <h4 className="font-serif text-lg group-hover:text-gold transition-colors pointer-events-none">
+          Island Hopping
+        </h4>
+        <p className="text-xs text-white/50 mt-1 leading-relaxed pointer-events-none">
+          Egmont Key, Shell Key & hidden sandbars
         </p>
-      </div>
+
+        <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between pointer-events-none">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-white/30">
+            From $1,200
+          </span>
+          <div className="flex items-center gap-2 text-gold text-[10px] font-bold uppercase tracking-widest">
+            View Itinerary <ArrowUpRight className="w-3 h-3" />
+          </div>
+        </div>
+      </motion.div>
 
       {/* Nav Dots */}
       <div className="absolute right-8 md:right-16 bottom-32 md:bottom-40 flex flex-col gap-3">
@@ -920,7 +1083,7 @@ function VesselSection({
   return (
     <section
       id="vessel"
-      className="py-24 md:py-40 px-6 bg-navy-light relative overflow-hidden"
+      className="py-12 md:py-20 px-6 md:px-[10px] bg-navy-light relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         <motion.div
@@ -962,9 +1125,7 @@ function VesselSection({
           <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-8">
             Experience the Ocean
             <br />
-            <span className="text-gold italic font-serif">
-              Like Never Before
-            </span>
+            <em className="text-gold italic font-serif">Like Never Before</em>
           </h2>
           <div className="space-y-6 text-white/60 leading-relaxed text-lg pb-10">
             <p>
@@ -1044,18 +1205,30 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
     }
   }, [idx, isAnimating]);
 
-  const itemWidth =
-    typeof window !== "undefined" && window.innerWidth >= 768 ? 350 : 300;
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200,
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const itemWidth = windowWidth >= 768 ? 350 : 280;
   const gap = 24;
+  const sectionPadding = windowWidth < 768 ? 24 : 64; // px-6 is 24px
+  const offset =
+    (windowWidth - itemWidth) / 2 - (windowWidth < 768 ? sectionPadding : 0);
 
   return (
     <section
       id="experiences"
-      className="py-24 md:py-40 px-6 bg-navy overflow-hidden relative"
+      className="py-12 md:py-20 bg-navy overflow-hidden relative px-6 md:px-16"
     >
-      {/* Edge Gradients for Cinematic Feel */}
-      <div className="hidden md:block absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
-      <div className="hidden md:block absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-navy via-navy/80 to-transparent z-10 pointer-events-none" />
+      {/* Edge Gradients - Moved to far edges to ensure first card clarity */}
+      <div className="hidden xl:block absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
+      <div className="hidden md:block absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -1064,7 +1237,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto"
       >
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16 relative z-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16 relative z-30 px-6 md:px-0">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-[1.5px] bg-gold" />
@@ -1075,9 +1248,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
             <h2 className="text-4xl md:text-5xl font-serif leading-tight">
               A Floating Resort for
               <br />
-              <span className="text-gold italic font-serif">
-                Every Occasion
-              </span>
+              <em className="text-gold italic font-serif">Every Occasion</em>
             </h2>
           </div>
           <div className="flex gap-4">
@@ -1100,10 +1271,12 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
 
         <div className="relative" ref={containerRef}>
           <motion.div
-            animate={{ x: -idx * (itemWidth + gap) }}
+            animate={{
+              x: -idx * (itemWidth + gap) + (windowWidth < 768 ? offset : 0),
+            }}
             transition={
               transitionStatus
-                ? { type: "spring", stiffness: 200, damping: 30, mass: 1 }
+                ? { type: "spring", stiffness: 180, damping: 25, mass: 1 }
                 : { duration: 0 }
             }
             className="flex gap-6 pointer-events-auto"
@@ -1115,7 +1288,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
               <div
                 key={i}
                 onClick={() => openExp(e)}
-                className="w-[300px] md:w-[350px] aspect-[3/4] relative group rounded-3xl overflow-hidden cursor-pointer shrink-0 shadow-2xl"
+                className="w-[280px] md:w-[350px] aspect-[3/4.2] relative group rounded-3xl overflow-hidden cursor-pointer shrink-0 shadow-2xl bg-navy-light"
               >
                 <img
                   src={e.img}
@@ -1164,7 +1337,10 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
 
 function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
   return (
-    <section id="accommodations" className="py-24 md:py-40 px-6 bg-navy-light">
+    <section
+      id="accommodations"
+      className="py-12 md:py-20 px-6 md:px-[10px] bg-navy-light"
+    >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1182,9 +1358,7 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
           <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-6">
             Elegant Accommodations
             <br />
-            <span className="text-gold italic font-serif">
-              for Up to 12 Guests
-            </span>
+            <em className="text-gold italic font-serif">for Up to 12 Guests</em>
           </h2>
           <p className="text-white/50 text-lg">
             Rest and unwind in four refined guest suites, each designed for
@@ -1195,7 +1369,7 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           <div className="relative rounded-[2.5rem] overflow-hidden group">
             <img
-              src="assets/hero2.png"
+              src="assets/gallerymain.png"
               className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700"
               alt=""
             />
@@ -1264,9 +1438,10 @@ function AccommodationsSection({ openRoom }: { openRoom: (r: Room) => void }) {
 
 function FleetSection() {
   const [idx, setIdx] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="fleet" className="py-24 md:py-40 px-6 bg-navy">
+    <section id="fleet" className="py-12 md:py-20 px-6 md:px-[10px] bg-navy">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1285,9 +1460,7 @@ function FleetSection() {
             <h2 className="text-4xl md:text-5xl font-serif leading-tight">
               Plan Your Yacht
               <br />
-              <span className="text-gold italic font-serif">
-                Experience Today
-              </span>
+              <em className="text-gold italic font-serif">Experience Today</em>
             </h2>
           </div>
           <p className="text-white/50 text-lg leading-relaxed">
@@ -1324,130 +1497,126 @@ function FleetSection() {
 }
 
 function ReviewsSection() {
+  const reviewsList = [
+    {
+      name: "Carolina Reyes",
+      role: "5-Day Charter Guest",
+      text: "We just had a 5 day charter and we could not be any happier. Captain John, Jake and Hailey were amazing. The crew made it perfect and the yacht's beauty I could not even explain. We are already planning our next trip. 5 stars no doubt!!!",
+      initial: "CR",
+    },
+    {
+      name: "Shannon Cook",
+      role: "Day Cruise Guest",
+      text: "I had the opportunity to be a guest for a day cruise and it was lovely. The boat is top notch as are the captains. Definitely recommend!",
+      initial: "S",
+    },
+    {
+      name: "Byron Wilson",
+      role: "Weekend Charter Guest",
+      text: "We had an amazing time aboard the Serendipity! Unforgettable from start to finish. Already planning our return!",
+      initial: "B",
+    },
+    {
+      name: "Michael Chen",
+      role: "Corporate Event",
+      text: "Stunning yacht and professional crew. Our executive team was thoroughly impressed. The perfect venue for networking.",
+      initial: "M",
+    },
+    {
+      name: "Sarah Jenkins",
+      role: "Sunset Cruise",
+      text: "The most beautiful sunset I have ever seen. The attention to detail on Serendipity is unmatched. Truly first-class.",
+      initial: "S",
+    },
+    {
+      name: "David Miller",
+      role: "Anniversary Guest",
+      text: "An absolute dream. The crew went above and beyond to make our anniversary special. Highly recommended!",
+      initial: "D",
+    },
+  ];
+
+  const infiniteReviews = [...reviewsList, ...reviewsList];
+
   return (
     <section
       id="reviews"
-      className="py-24 md:py-40 px-6 bg-navy-light relative overflow-hidden"
+      className="py-12 md:py-20 bg-navy-light relative overflow-hidden"
     >
       {/* Background Decoration */}
       <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[120px]" />
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-20"
-      >
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-[1.5px] bg-gold" />
-            <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
-              Guest Reviews
-            </span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-serif leading-tight mb-6">
-            What Our
-            <br />
-            Clients
-            <br />
-            <span className="text-gold italic font-serif">Say</span>
-          </h2>
-          <p className="text-white/50 mb-8 max-w-xs">
-            Thousands of travelers have set sail with us — see what they have to
-            say about their unforgettable experiences.
-          </p>
-          <div className="flex items-center gap-1 mb-2">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <Star key={i} className="w-5 h-5 fill-gold text-gold" />
-            ))}
-          </div>
-          <p className="text-sm font-bold">5.0 Average Rating</p>
+      <div className="max-w-7xl mx-auto px-6 md:px-[10px] mb-16">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-[1.5px] bg-gold" />
+          <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
+            Guest Reviews
+          </span>
         </div>
-
-        <div className="space-y-6">
-          <div className="p-10 bg-white/5 border border-white/10 rounded-[2.5rem] relative overflow-hidden group">
-            <div className="text-gold/20 mb-6 font-serif text-6xl">
-              <svg
-                className="w-12 h-12"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-              </svg>
-            </div>
-            <div className="flex gap-1 mb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <h2 className="text-4xl md:text-5xl font-serif leading-tight">
+            What Our Clients{" "}
+            <em className="text-gold italic font-serif">Say</em>
+          </h2>
+          <div className="flex flex-col items-end">
+            <div className="flex items-center gap-1 mb-2">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                <Star key={i} className="w-5 h-5 fill-gold text-gold" />
               ))}
             </div>
-            <p className="text-xl md:text-2xl text-white/80 leading-relaxed mb-8">
-              "We just had a 5 day charter and we could not be any happier.
-              Captain John, Jake and Hailey were amazing. The crew made it
-              perfect and the yacht's beauty I could not even explain. We are
-              already planning our next trip. 5 stars no doubt!!!"
-            </p>
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-gold to-blue-400 rounded-full flex items-center justify-center font-bold text-navy">
-                CR
-              </div>
-              <div>
-                <h5 className="font-bold">Carolina Reyes</h5>
-                <p className="text-xs text-white/40 uppercase tracking-widest mt-1">
-                  5-Day Charter Guest
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              {
-                name: "Shannon Cook",
-                role: "Day Cruise Guest",
-                text: "I had the opportunity to be a guest for a day cruise and it was lovely. The boat is top notch as are the captains. Definitely recommend!",
-              },
-              {
-                name: "Byron Wilson",
-                role: "Weekend Charter Guest",
-                text: "We had an amazing time aboard the Serendipity! Unforgettable from start to finish. Already planning our return!",
-              },
-            ].map((r, i) => (
-              <div
-                key={i}
-                className="p-10 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-gold/30 transition-all"
-              >
-                <div className="text-gold/20 mb-6">
-                  <svg
-                    className="w-10 h-10"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                </div>
-                <div className="flex gap-1 mb-6">
-                  {[1, 2, 3, 4, 5].map((j) => (
-                    <Star key={j} className="w-3 h-3 fill-gold text-gold" />
-                  ))}
-                </div>
-                <p className="text-white/60 mb-8 leading-relaxed">"{r.text}"</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xs font-bold">
-                    {r.name[0]}
-                  </div>
-                  <div>
-                    <h5 className="font-bold text-sm">{r.name}</h5>
-                    <p className="text-[10px] text-white/40 uppercase mt-1">
-                      {r.role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <p className="text-sm font-bold">5.0 Average Rating</p>
           </div>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Infinite Carousel Container */}
+      <div className="flex overflow-hidden relative py-10">
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            duration: 35,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="flex gap-6 whitespace-nowrap"
+        >
+          {infiniteReviews.map((r, i) => (
+            <div
+              key={i}
+              className="w-[350px] md:w-[450px] shrink-0 p-8 md:p-10 bg-navy/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] whitespace-normal group hover:border-gold/30 transition-all shadow-xl"
+            >
+              <div className="text-gold/20 mb-6 font-serif">
+                <svg
+                  className="w-10 h-10"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
+              <div className="flex gap-1 mb-6">
+                {[1, 2, 3, 4, 5].map((j) => (
+                  <Star key={j} className="w-3.5 h-3.5 fill-gold text-gold" />
+                ))}
+              </div>
+              <p className="text-base md:text-lg text-white/80 leading-relaxed mb-8 italic">
+                "{r.text}"
+              </p>
+              <div className="flex items-center gap-4 mt-auto">
+                <div className="w-12 h-12 bg-gold/10 border border-gold/20 rounded-full flex items-center justify-center font-bold text-gold text-sm group-hover:bg-gold group-hover:text-navy transition-all">
+                  {r.initial}
+                </div>
+                <div>
+                  <h5 className="font-bold text-sm">{r.name}</h5>
+                  <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">
+                    {r.role}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 }
@@ -1455,7 +1624,7 @@ function ReviewsSection() {
 function BookingSection({
   addToast,
 }: {
-  addToast: (m: string, t: string) => void;
+  addToast: (m: string, t: string, tp: string) => void;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -1467,6 +1636,7 @@ function BookingSection({
       addToast(
         "Your charter request has been received. We'll be in touch within 24 hours.",
         "Request Sent!",
+        "success",
       );
       (e.target as HTMLFormElement).reset();
     }, 1500);
@@ -1475,7 +1645,7 @@ function BookingSection({
   return (
     <section
       id="booking"
-      className="py-24 md:py-48 px-6 bg-navy relative overflow-hidden"
+      className="py-12 md:py-20 px-6 md:px-[10px] bg-navy relative overflow-hidden"
     >
       <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
         <img
@@ -1502,7 +1672,7 @@ function BookingSection({
           <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-8">
             Ready for Your
             <br />
-            <span className="text-gold italic font-serif">Next Adventure?</span>
+            <em className="text-gold italic font-serif">Next Adventure?</em>
           </h2>
           <p className="text-white/50 text-lg mb-12 max-w-sm">
             Whether celebrating a milestone or seeking peace on the water,

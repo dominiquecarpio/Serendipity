@@ -39,6 +39,14 @@
     @apply w-10 h-[1.5px] bg-gold block;
   }
 
+  .text-gradient {
+    background: linear-gradient(135deg, #c9a227 0%, #7ec8e3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+  }
+
   /* Availability Calendar Styles */
   .cal-grid {
     display: grid;
