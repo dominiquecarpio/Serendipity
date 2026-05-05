@@ -1249,7 +1249,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   const activeDot = ((idx % EXPERIENCES.length) + EXPERIENCES.length) % EXPERIENCES.length;
 
   return (
-    <section id="experiences" className="py-12 md:py-20 bg-navy overflow-hidden relative px-4 md:px-16">
+    <section id="experiences" className="py-12 md:py-6 md:py-5 bg-navy overflow-hidden relative px-4 md:px-16">
       <div className="hidden xl:block absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
       <div className="hidden md:block absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
@@ -1454,7 +1454,7 @@ function AccommodationsSection({
 // --- FleetSection ---
 function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
   return (
-    <section id="fleet" className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-navy">
+    <section id="fleet" className="py-12 md:py-10 px-4 md:px-8 lg:px-16 bg-navy">
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-32 items-center mb-12 md:mb-16">
           <div>

@@ -4,11 +4,9 @@
  * Reservation Page — Serendipity Yacht Charter
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  ChevronRight,
-  Ship,
   Users,
   Clock,
   Anchor,
@@ -16,12 +14,9 @@ import {
   ArrowUpRight,
   Phone,
   MapPin,
-  CreditCard,
   Lock,
   Star,
   ChevronLeft,
-  X,
-  Calendar,
   Utensils,
   Wifi,
   Shield,
@@ -40,24 +35,9 @@ const TABS: TabType[] = [
 ];
 
 const DAY_CHARTERS = [
-  {
-    hours: "4 Hours",
-    time: "Sat/Sun 10am - 2pm",
-    price: "$2,500",
-    perPerson: null,
-  },
-  {
-    hours: "6 Hours",
-    time: "Sat/Sun 10am - 4pm",
-    price: "$3,500",
-    perPerson: null,
-  },
-  {
-    hours: "10 Hours",
-    time: "Sat/Sun 8am - 6pm",
-    price: "$7,500",
-    perPerson: null,
-  },
+  { hours: "4 Hours", time: "Sat/Sun 10am - 2pm", price: "$2,500" },
+  { hours: "6 Hours", time: "Sat/Sun 10am - 4pm", price: "$3,500" },
+  { hours: "10 Hours", time: "Sat/Sun 8am - 6pm", price: "$7,500" },
 ];
 
 const OVERNIGHT_CHARTERS = [
@@ -98,6 +78,26 @@ const AMENITIES = [
   { icon: Star, label: "5-Star Service" },
 ];
 
+// --- Helper: read URL search params ---
+function getInitialImageIndex(): number {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const idx = parseInt(params.get("img") ?? "0", 10);
+    return isNaN(idx) || idx < 0 || idx >= VESSEL_IMAGES.length ? 0 : idx;
+  } catch {
+    return 0;
+  }
+}
+
+function getInitialVesselName(): string {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("vessel") ?? "";
+  } catch {
+    return "";
+  }
+}
+
 // --- Main Reservation Page ---
 export default function ReservationPage() {
   const [activeTab, setActiveTab] = useState<"day" | "overnight">("day");
@@ -109,9 +109,16 @@ export default function ReservationPage() {
   const [crewOption, setCrewOption] = useState("");
   const [additionalReq, setAdditionalReq] = useState("");
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [activeImg, setActiveImg] = useState(0);
+  const [activeImg, setActiveImg] = useState<number>(getInitialImageIndex);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  // Pre-fill vessel name from URL if available
+  const vesselName = getInitialVesselName();
+
+  // Sync active image when URL changes (e.g. back-forward)
+  useEffect(() => {
+    setActiveImg(getInitialImageIndex());
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,7 +148,10 @@ export default function ReservationPage() {
           <a href="/" className="flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors">
             <ChevronLeft className="w-4 h-4" /> Back to Main Site
           </a>
-          <a href="#reservation-form" className="hidden md:flex bg-[#c9a227] px-6 py-2.5 rounded-full text-[#040d1a] font-bold text-xs hover:translate-y-[-2px] transition-all shadow-lg shadow-[#c9a227]/20">
+          <a
+            href="#reservation-form"
+            className="hidden md:flex bg-[#c9a227] px-6 py-2.5 rounded-full text-[#040d1a] font-bold text-xs hover:translate-y-[-2px] transition-all shadow-lg shadow-[#c9a227]/20"
+          >
             Reserve Now
           </a>
         </div>
@@ -174,7 +184,9 @@ export default function ReservationPage() {
               </div>
               <h1 className="text-3xl md:text-5xl font-serif leading-tight mb-3">
                 Reserve Your Luxury<br />
-                <em className="text-[#c9a227] italic">Yacht Experience</em>
+                <em className="text-[#c9a227] italic">
+                  {vesselName ? vesselName : "Yacht Experience"}
+                </em>
               </h1>
               <p className="text-sm md:text-base text-white/60 max-w-md">
                 Set sail aboard the Serendipity Motor Yacht — where every journey is tailored for elegance, comfort, and unforgettable memories.
@@ -221,7 +233,9 @@ export default function ReservationPage() {
               <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-[#c9a227]">Charter Pricing</span>
             </div>
             <h2 className="text-2xl md:text-4xl font-serif">Charter Rates</h2>
-            <p className="text-white/40 text-sm mt-2 max-w-lg">Our rates include the vessel, Captain, and Mate. Additional expenses apply for food, beverages, fuel, and dockage (when applicable).</p>
+            <p className="text-white/40 text-sm mt-2 max-w-lg">
+              Our rates include the vessel, Captain, and Mate. Additional expenses apply for food, beverages, fuel, and dockage (when applicable).
+            </p>
           </div>
 
           {/* Day / Overnight columns */}
@@ -313,8 +327,10 @@ export default function ReservationPage() {
                 From sunrise cruises to weeklong escapes, every charter is tailored to you. Let us handle the details — your only job is to relax, indulge, and create lasting memories.
               </p>
             </div>
-            <a href="#reservation-form"
-              className="shrink-0 flex items-center gap-2 px-8 py-4 bg-[#c9a227] text-[#040d1a] font-bold rounded-xl text-sm hover:translate-y-[-2px] transition-all shadow-xl shadow-[#c9a227]/20">
+            <a
+              href="#reservation-form"
+              className="shrink-0 flex items-center gap-2 px-8 py-4 bg-[#c9a227] text-[#040d1a] font-bold rounded-xl text-sm hover:translate-y-[-2px] transition-all shadow-xl shadow-[#c9a227]/20"
+            >
               Reserve Now <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
@@ -328,10 +344,16 @@ export default function ReservationPage() {
             transition={{ delay: 0.3 }}
             className="bg-[#071224]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl"
           >
-            {/* Form Header */}
+            {/* Form Header — shows selected vessel name if available */}
             <div className="p-6 md:p-8 border-b border-white/8">
               <h2 className="text-xl md:text-2xl font-serif mb-1">Start Your Reservation</h2>
-              <p className="text-white/35 text-xs">Fill in details below and we'll confirm within 24 hours</p>
+              {vesselName ? (
+                <p className="text-[#c9a227]/80 text-xs font-semibold tracking-wide">
+                  Inquiring about: <span className="text-[#c9a227]">{vesselName}</span>
+                </p>
+              ) : (
+                <p className="text-white/35 text-xs">Fill in details below and we'll confirm within 24 hours</p>
+              )}
             </div>
 
             {/* Tab Toggle */}
@@ -339,7 +361,7 @@ export default function ReservationPage() {
               {TABS.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => { setActiveTab(tab.id); setDuration(""); }}
                   className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-all ${
                     activeTab === tab.id
                       ? "text-[#c9a227] border-b-2 border-[#c9a227] bg-[#c9a227]/5"
@@ -353,6 +375,17 @@ export default function ReservationPage() {
 
             {/* Form Body */}
             <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-4">
+
+              {/* Hidden vessel reference — shows in additional requests if vessel was passed */}
+              {vesselName && (
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#c9a227]/8 border border-[#c9a227]/20 rounded-xl">
+                  <Anchor className="w-3.5 h-3.5 text-[#c9a227] shrink-0" />
+                  <span className="text-[10px] text-[#c9a227]/80 font-semibold uppercase tracking-wider">
+                    Selected Vessel: {vesselName}
+                  </span>
+                </div>
+              )}
+
               {/* Full Name */}
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold tracking-[1.5px] uppercase text-white/30">Full Name</label>
@@ -395,17 +428,17 @@ export default function ReservationPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold tracking-[1.5px] uppercase text-white/30">Date</label>
-                  <div className="relative">
-                    <input
-                      type="date"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 focus:border-[#c9a227] rounded-xl px-3 py-3 text-sm outline-none transition-colors text-white/70 appearance-none [color-scheme:dark]"
-                    />
-                  </div>
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 focus:border-[#c9a227] rounded-xl px-3 py-3 text-sm outline-none transition-colors text-white/70 appearance-none [color-scheme:dark]"
+                  />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold tracking-[1.5px] uppercase text-white/30">Duration (Hours)</label>
+                  <label className="text-[10px] font-bold tracking-[1.5px] uppercase text-white/30">
+                    {activeTab === "day" ? "Duration (Hours)" : "Duration (Days)"}
+                  </label>
                   <div className="relative">
                     <select
                       value={duration}
@@ -441,17 +474,24 @@ export default function ReservationPage() {
               {/* Crew Option */}
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold tracking-[1.5px] uppercase text-white/30">Crew Options</label>
-                <select
-                  value={crewOption}
-                  onChange={(e) => setCrewOption(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 focus:border-[#c9a227] rounded-xl px-4 py-3 text-sm outline-none transition-colors appearance-none cursor-pointer text-white/70"
-                >
-                  <option value="" className="bg-[#040d1a]">Select crew option…</option>
-                  <option value="crew" className="bg-[#040d1a]">Crew — $250/day</option>
-                  <option value="bartender" className="bg-[#040d1a]">Bartender — $200/day</option>
-                  <option value="chef" className="bg-[#040d1a]">Chef — Pricing negotiated directly</option>
-                  <option value="full" className="bg-[#040d1a]">Full Crew Package</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={crewOption}
+                    onChange={(e) => setCrewOption(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 focus:border-[#c9a227] rounded-xl px-4 py-3 text-sm outline-none transition-colors appearance-none cursor-pointer text-white/70"
+                  >
+                    <option value="" className="bg-[#040d1a]">Select crew option…</option>
+                    <option value="crew" className="bg-[#040d1a]">Crew — $250/day</option>
+                    <option value="bartender" className="bg-[#040d1a]">Bartender — $200/day</option>
+                    <option value="chef" className="bg-[#040d1a]">Chef — Pricing negotiated directly</option>
+                    <option value="full" className="bg-[#040d1a]">Full Crew Package</option>
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg className="w-4 h-4 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               {/* Additional Requests */}
