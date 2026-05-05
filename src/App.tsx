@@ -535,8 +535,8 @@ export default function App() {
           openSpecs={() => setIsSpecsOpen(true)}
         />
         <ExperiencesSection openExp={setSelectedExp} />
-        <AccommodationsSection openRoom={setSelectedRoom} openGalleryInterior={openGalleryInterior} />
         <FleetSection openFleet={setSelectedFleet} />
+        <AccommodationsSection openRoom={setSelectedRoom} openGalleryInterior={openGalleryInterior} />
         <CulinarySection />
         <DestinationsSection />
         <PricingSection />
@@ -1309,67 +1309,141 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   );
 }
 
-// --- AccommodationsSection — with Interior Gallery CTA ---
-function AccommodationsSection({ openRoom, openGalleryInterior }: { openRoom: (r: Room) => void; openGalleryInterior: () => void }) {
+function AccommodationsSection({
+  openRoom,
+  openGalleryInterior
+}: {
+  openRoom: (r: Room) => void;
+  openGalleryInterior: () => void;
+}) {
   return (
-    <section id="accommodations" className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-navy-light">
-      <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
-        <div className="mb-12 md:mb-16 lg:grid lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-12 lg:items-start">
+    <section
+      id="accommodations"
+      className="relative py-12 md:py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-[#061226] via-[#081a33] to-[#050b18]"
+    >
+      {/* ambient glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gold/10 blur-[150px]" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-500/10 blur-[160px]" />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="relative max-w-7xl mx-auto"
+      >
+        {/* HEADER (tight) */}
+        <div className="grid lg:grid-cols-2 gap-8 items-end mb-10">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-[1.5px] bg-gold" />
-              <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">Luxury Living</span>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-14 h-[1px] bg-gradient-to-r from-gold to-transparent" />
+              <span className="text-[10px] tracking-[0.35em] uppercase text-gold/80">
+                Luxury Living
+              </span>
             </div>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif leading-tight mb-6 lg:mb-0">
-              Elegant Accommodations<br />
-              <em className="text-gold italic font-serif">for Up to 12 Guests</em>
+
+            <h2 className="text-4xl md:text-6xl font-serif leading-[1.05]">
+              Elegant Accommodations{" "}
+              <span className="block text-gold italic mt-1">
+                for up to 12 guests
+              </span>
             </h2>
           </div>
-          <p className="text-white/50 text-base md:text-lg lg:max-w-md lg:justify-self-end lg:pt-12">Rest and unwind in four refined guest suites, each designed for absolute comfort and offering total privacy.</p>
+
+          <p className="text-white/50 text-base md:text-lg max-w-md lg:justify-self-end">
+            Four private suites designed for absolute comfort, privacy, and quiet ocean living.
+          </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-          <div className="relative rounded-[2.5rem] overflow-hidden group">
-            <img src="assets/gallerymain.png" className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700" alt="" />
-            <div className="absolute bottom-8 left-8 bg-navy/80 backdrop-blur-xl border border-gold/20 p-5 md:p-6 rounded-2xl">
-              <p className="text-3xl md:text-4xl font-serif text-gold font-bold">4</p>
-              <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Private Suites</p>
+
+        {/* MAIN GRID */}
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+          
+          {/* LEFT IMAGE */}
+          <div className="relative group">
+            <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10">
+              
+              <img
+                src="assets/gallerymain.png"
+                className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+              {/* badge */}
+              <div className="absolute bottom-6 left-6 bg-black/40 backdrop-blur-xl border border-white/10 px-5 py-4 rounded-xl">
+                <p className="text-3xl font-serif text-gold leading-none">4</p>
+                <p className="text-[10px] tracking-widest text-white/40 mt-1">
+                  Private Suites
+                </p>
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={openGalleryInterior}
+                className="absolute top-5 right-5 px-4 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-gold/30 text-gold text-[10px] tracking-widest uppercase hover:bg-gold hover:text-black transition"
+              >
+                <Eye className="w-4 h-4 inline-block mr-1" />
+                Interior
+              </button>
             </div>
-            {/* Clear path CTA to interior photos */}
-            <button
-              onClick={openGalleryInterior}
-              className="absolute top-6 right-6 flex items-center gap-2 px-4 py-2 bg-navy/80 backdrop-blur-xl border border-gold/30 rounded-full text-gold text-[10px] font-bold uppercase tracking-widest hover:bg-gold hover:text-navy transition-all"
-            >
-              <Eye className="w-3.5 h-3.5" /> View Interior
-            </button>
           </div>
-          <div className="flex flex-col gap-4">
+
+          {/* RIGHT CONTENT (NO SPACE-Y = controlled stacking) */}
+          <div className="flex flex-col">
             {ROOMS.map((r, i) => (
-              <div key={i} onClick={() => openRoom(r)} className="flex items-center justify-between p-4 md:p-5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-gold/30 transition-all cursor-pointer group">
-                <div className="flex items-center gap-4 md:gap-5">
-                  <div className="w-14 md:w-16 h-14 md:h-16 rounded-xl overflow-hidden hidden sm:block shrink-0">
-                    <img src={r.img} className="w-full h-full object-cover" alt="" />
+              <div
+                key={i}
+                onClick={() => openRoom(r)}
+                className="group cursor-pointer"
+              >
+                <div className="flex items-center justify-between p-4 md:p-5 border-b border-white/5 hover:border-gold/30 hover:bg-white/5 transition-all">
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="hidden sm:block w-14 h-14 rounded-lg overflow-hidden">
+                      <img
+                        src={r.img}
+                        className="w-full h-full object-cover group-hover:scale-110 transition"
+                      />
+                    </div>
+
+                    <div>
+                      <h4 className="font-serif text-base md:text-lg group-hover:text-gold transition">
+                        {r.title}
+                      </h4>
+                      <p className="text-xs text-white/40">{r.sub}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-base md:text-lg font-serif group-hover:text-gold transition-colors">{r.title}</h4>
-                    <p className="text-xs text-white/40 mt-1">{r.sub}</p>
-                  </div>
+
+                  <ChevronRight className="w-5 h-5 text-white/20 group-hover:text-gold transition" />
                 </div>
-                <ChevronRight className="w-5 h-5 text-white/20 group-hover:text-gold transition-colors shrink-0" />
               </div>
             ))}
-            <div className="p-6 md:p-8 mt-2 bg-gradient-to-br from-gold/10 to-blue-400/5 border border-white/5 rounded-3xl">
-              <h3 className="text-xl font-serif mb-6">Premium Flybridge Features</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
-                {["Hot/Cold Jacuzzi","Oversized sun lounges","Al fresco dining area","Professional wet bar","Surround sound system","LED ambient lighting"].map((a, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-gold" />
-                    </div>
-                    <span className="text-sm text-white/60">{a}</span>
+
+            {/* FEATURE BLOCK (tight top spacing only) */}
+            <div className="mt-6 p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
+              <h3 className="text-lg font-serif mb-4 text-gold">
+                Flybridge Experience
+              </h3>
+
+              <div className="grid grid-cols-2 gap-y-3 gap-x-6">
+                {[
+                  "Jacuzzi",
+                  "Sun Lounge",
+                  "Dining Deck",
+                  "Wet Bar",
+                  "Audio System",
+                  "LED Ambience"
+                ].map((a, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-gold" />
+                    <span className="text-xs text-white/60">{a}</span>
                   </div>
                 ))}
               </div>
             </div>
+
           </div>
         </div>
       </motion.div>
@@ -1456,7 +1530,10 @@ function CulinarySection() {
   };
 
   return (
-    <section id="culinary" className="py-16 md:py-32 bg-navy-light overflow-hidden relative">
+    <section 
+  id="culinary" 
+  className="py-6 md:py-14 bg-navy-light overflow-hidden relative border-t border-white/10"
+>
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 relative">
         <div className="flex items-center justify-between mb-10 md:mb-12">
           <div>
