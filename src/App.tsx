@@ -1753,8 +1753,11 @@ function PricingSection() {
   );
 }
 
-// --- MechanicalSection — NEW ---
+// --- MechanicalSection — ENHANCED ---
 function MechanicalSection() {
+  const [showAllSpecs, setShowAllSpecs] = useState(false);
+  const [openSystem, setOpenSystem] = useState<number | null>(null);
+
   const mechanicalSpecs = [
     { label: "Hull Type", value: "Fiberglass / GRP", icon: Ship },
     { label: "Hull Configuration", value: "Monohull", icon: Anchor },
@@ -1826,85 +1829,133 @@ function MechanicalSection() {
     },
   ];
 
+  const visibleSpecs = showAllSpecs ? mechanicalSpecs : mechanicalSpecs.slice(0, 6);
+
   return (
-    <section id="mechanical" className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-navy">
-      <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
-        <div className="mb-12 md:mb-16">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-[1.5px] bg-gold" />
-            <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">Technical Details</span>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <h2 className="text-3xl md:text-5xl font-serif leading-tight">
-              Mechanical &<br />
-              <em className="text-gold italic font-serif">Technical Specs</em>
-            </h2>
-            <p className="text-white/40 max-w-sm text-sm leading-relaxed">SERENDIPITY is maintained to the highest maritime standards, with meticulous logs and a full 2022 refit ensuring she is turnkey ready.</p>
-          </div>
+    <section id="mechanical" className="py-16 md:py-24 px-6 lg:px-20 bg-navy relative overflow-hidden">
+
+      {/* glow background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gold/5 blur-[120px]" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-6xl mx-auto relative z-10"
+      >
+
+        {/* HEADER */}
+        <div className="mb-14 text-center">
+          <span className="text-[10px] tracking-[3px] uppercase text-gold/70">
+            Technical Overview
+          </span>
+
+          <h2 className="text-3xl md:text-5xl font-serif mt-4 leading-tight">
+            Mechanical <br />
+            <em className="text-gold italic">Excellence</em>
+          </h2>
+
+          <p className="text-white/40 max-w-xl mx-auto mt-4 text-sm">
+            SERENDIPITY is engineered for performance, reliability, and refined cruising comfort.
+          </p>
         </div>
 
-        {/* Spec grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-12 md:mb-16">
-          {mechanicalSpecs.map((s, i) => (
+        {/* SPECS (MINIMIZED) */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+          {visibleSpecs.map((s, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.04 }}
-              className="p-3 md:p-4 bg-white/5 border border-white/8 rounded-2xl hover:border-gold/20 hover:bg-white/8 transition-all group"
+              transition={{ delay: i * 0.05 }}
+              className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-gold/30 hover:bg-white/10 transition-all group"
             >
-              <s.icon className="w-4 h-4 text-gold/60 mb-2 group-hover:text-gold transition-colors" />
-              <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-white/25 mb-1">{s.label}</p>
-              <p className="text-xs md:text-sm font-semibold text-white/70 leading-tight">{s.value}</p>
+              <s.icon className="w-4 h-4 text-gold/60 mb-2 group-hover:text-gold" />
+              <p className="text-[9px] uppercase tracking-widest text-white/30 mb-1">
+                {s.label}
+              </p>
+              <p className="text-xs font-semibold text-white/80 leading-tight">
+                {s.value}
+              </p>
             </motion.div>
           ))}
         </div>
 
-        {/* Systems grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          {systems.map((sys, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="p-5 md:p-7 bg-white/5 border border-white/10 rounded-3xl hover:border-gold/20 transition-all group"
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                  <sys.icon className="w-4 h-4 text-gold" />
-                </div>
-                <h4 className="font-serif text-base md:text-lg">{sys.title}</h4>
-              </div>
-              <ul className="space-y-2.5">
-                {sys.items.map((item, j) => (
-                  <li key={j} className="flex items-start gap-2.5 text-xs md:text-sm text-white/55">
-                    <div className="w-1.5 h-1.5 rounded-full bg-gold/60 mt-1.5 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
+        {/* SHOW MORE BUTTON */}
+        <div className="text-center mb-14">
+          <button
+            onClick={() => setShowAllSpecs(!showAllSpecs)}
+            className="text-xs tracking-widest text-gold hover:text-gold-hover transition"
+          >
+            {showAllSpecs ? "SHOW LESS" : "VIEW ALL SPECS"}
+          </button>
+        </div>
+
+        {/* SYSTEMS (ACCORDION STYLE) */}
+        <div className="space-y-4">
+          {systems.map((sys, i) => {
+            const isOpen = openSystem === i;
+
+            return (
+              <motion.div
+                key={i}
+                layout
+                className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden"
+              >
+                {/* HEADER */}
+                <button
+                  onClick={() => setOpenSystem(isOpen ? null : i)}
+                  className="w-full flex items-center justify-between p-5 hover:bg-white/5 transition"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
+                      <sys.icon className="w-4 h-4 text-gold" />
+                    </div>
+                    <h4 className="font-serif text-lg">{sys.title}</h4>
+                  </div>
+
+                  <span className="text-xs text-white/40 tracking-widest">
+                    {isOpen ? "CLOSE" : "VIEW"}
+                  </span>
+                </button>
+
+                {/* CONTENT */}
+                {isOpen && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="px-6 pb-6"
+                  >
+                    <ul className="space-y-3 text-sm text-white/60">
+                      {sys.items.map((item, j) => (
+                        <li key={j} className="flex gap-2">
+                          <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* CTA */}
-        <div className="mt-10 md:mt-12 p-6 md:p-8 bg-gradient-to-r from-gold/8 to-blue-400/5 border border-gold/15 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h3 className="text-xl md:text-2xl font-serif mb-2">Want Full Technical Documentation?</h3>
-            <p className="text-white/40 text-sm">Complete survey reports, engine logs, and refit records available upon signed inquiry.</p>
-          </div>
-          <a href="#booking" className="shrink-0 px-8 py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center gap-2 text-sm">
-            Request Records <ArrowUpRight className="w-4 h-4" />
+        <div className="mt-16 text-center">
+          <a
+            href="#booking"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-navy font-semibold rounded-xl hover:scale-105 hover:bg-gold-hover transition"
+          >
+            Request Full Technical Docs
+            <ArrowUpRight className="w-4 h-4" />
           </a>
         </div>
+
       </motion.div>
     </section>
   );
 }
-
 // --- ReviewsSection ---
 function ReviewsSection() {
   const reviewsList = [
