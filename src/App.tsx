@@ -67,12 +67,22 @@ interface FleetVessel {
   length: string;
   guests: string;
   cabins: string;
+  imgIndex: number; // ← index matching VESSEL_IMAGES in reservation.tsx
 }
 
 interface GalleryImage {
   src: string;
   tab: "exterior" | "interior";
   label: string;
+}
+
+// --- Navigation helper ---
+function goToReservation(imgIndex: number, vesselName: string) {
+  const params = new URLSearchParams({
+    img: String(imgIndex),
+    vessel: vesselName,
+  });
+  window.location.href = `/reservation?${params.toString()}`;
 }
 
 // --- Constants ---
@@ -192,6 +202,11 @@ const ROOMS: Room[] = [
   },
 ];
 
+// imgIndex maps to VESSEL_IMAGES in reservation.tsx:
+//   0 → assets/occasion1.png
+//   1 → assets/occasion2.png
+//   2 → assets/occasion3.png
+//   3 → assets/occasion4.png
 const FLEET: FleetVessel[] = [
   {
     img: "assets/occasion1.png",
@@ -200,6 +215,7 @@ const FLEET: FleetVessel[] = [
     length: "94 ft",
     guests: "12",
     cabins: "4",
+    imgIndex: 0,
     specs: [
       { label: "Year Built", value: "2000" },
       { label: "Refit", value: "2022" },
@@ -209,11 +225,12 @@ const FLEET: FleetVessel[] = [
   },
   {
     img: "assets/occasion2.png",
-    name: "Birthday &Anniversary Celebrations",
+    name: "Birthday & Anniversary Celebrations",
     desc: "Experience unparalleled privacy and comfort on this expertly remodeled hardtop motor yacht.",
     length: "86 ft",
     guests: "10",
     cabins: "3",
+    imgIndex: 1,
     specs: [
       { label: "Year Built", value: "2004" },
       { label: "Refit", value: "2021" },
@@ -228,6 +245,7 @@ const FLEET: FleetVessel[] = [
     length: "78 ft",
     guests: "12",
     cabins: "3",
+    imgIndex: 2,
     specs: [
       { label: "Year Built", value: "2006" },
       { label: "Refit", value: "2020" },
@@ -242,6 +260,7 @@ const FLEET: FleetVessel[] = [
     length: "90 ft",
     guests: "12",
     cabins: "4",
+    imgIndex: 3,
     specs: [
       { label: "Year Built", value: "2003" },
       { label: "Refit", value: "2023" },
@@ -345,7 +364,6 @@ const CHARTER_RATES = [
   },
 ];
 
-// Additional pricing from image 4
 const SPECIAL_RATES = [
   {
     name: "Corporate Events",
@@ -601,6 +619,7 @@ export default function App() {
           </Modal>
         )}
 
+        {/* Fleet Modal — "Inquire About This Vessel" now navigates to reservation.tsx */}
         {selectedFleet && (
           <Modal onClose={() => setSelectedFleet(null)}>
             <div className="max-w-2xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
@@ -637,8 +656,11 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-                <button onClick={() => { setSelectedFleet(null); window.location.hash = "booking"; }}
-                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2">
+                {/* ↓ WIRED: navigates to /reservation with this vessel's img and name */}
+                <button
+                  onClick={() => goToReservation(selectedFleet.imgIndex, selectedFleet.name)}
+                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
+                >
                   Inquire About This Vessel <ArrowUpRight className="w-4 h-4" />
                 </button>
               </div>
@@ -646,7 +668,7 @@ export default function App() {
           </Modal>
         )}
 
-        {/* Gallery Modal — INTERIOR tab now fully functional */}
+        {/* Gallery Modal */}
         {isGalleryOpen && (
           <Modal onClose={() => setIsGalleryOpen(false)}>
             <div className="max-w-5xl w-full bg-navy-light rounded-3xl border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
@@ -656,7 +678,6 @@ export default function App() {
                     <h2 className="text-2xl md:text-4xl font-serif mb-1">The Collection</h2>
                     <p className="text-white/40 text-sm">Serendipity — 94' Lazzara Hardtop Motor Yacht</p>
                   </div>
-                  {/* Clickable EXTERIOR / INTERIOR toggle buttons */}
                   <div className="flex gap-3">
                     {(["exterior", "interior"] as const).map((tab) => (
                       <button
@@ -668,12 +689,11 @@ export default function App() {
                             : "bg-white/5 border-white/15 text-white/50 hover:text-white hover:border-white/30 hover:bg-white/10"
                         }`}
                       >
-                        {tab === "interior" ? " " : " "}{tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
                       </button>
                     ))}
                   </div>
                 </div>
-                {/* Tab description */}
                 <p className="text-white/30 text-xs">
                   {galleryTab === "exterior"
                     ? "Exterior views — hull, decks, flybridge & on-water photography"
@@ -917,9 +937,7 @@ export default function App() {
 }
 
 // --- Navbar ---
-// --- Navbar ---
 function Navbar({ isScrolled, setMobileMenuOpen, openAvail }: { isScrolled: boolean; setMobileMenuOpen: (o: boolean) => void; openAvail: () => void }) {
-  // Split links into main nav and dropdown
   const mainLinks = ["Vessel", "Experiences", "Destinations", "Pricing"];
   const dropdownLinks = ["Accommodations", "Fleet", "Culinary", "Mechanical", "Reviews"];
 
@@ -937,25 +955,21 @@ function Navbar({ isScrolled, setMobileMenuOpen, openAvail }: { isScrolled: bool
             <span className="text-[10px] font-bold text-white/40 tracking-[2px] uppercase group-hover/avail:text-gold transition-colors">Live Availability</span>
           </button>
         </div>
-        
-        {/* Desktop Navigation */}
+
         <div className="hidden lg:flex items-center gap-2 xl:gap-4">
-          {/* Main Links */}
           {mainLinks.map((l) => (
             <a key={l} href={`#${l.toLowerCase()}`} className="px-3 py-2 text-sm xl:text-base font-medium text-white/70 hover:text-white transition-colors relative group">
               {l}
               <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-1/2" />
             </a>
           ))}
-
-          {/* Dropdown Menu */}
           <div className="relative group/dropdown py-2">
             <button className="flex items-center gap-1 px-3 py-2 text-sm xl:text-base font-medium text-white/70 group-hover/dropdown:text-white transition-colors cursor-pointer">
               Explore <ChevronDown className="w-4 h-4 transition-transform group-hover/dropdown:rotate-180" />
             </button>
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-navy-light/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-300 flex flex-col overflow-hidden py-2">
               {dropdownLinks.map((l) => (
-                <a key={l} href={`#${l.toLowerCase()}`} className="px-5 py-3 text-sm font-medium text-white/70 hover:text-gold hover:bg-white/5 transition-colors relative">
+                <a key={l} href={`#${l.toLowerCase()}`} className="px-5 py-3 text-sm font-medium text-white/70 hover:text-gold hover:bg-white/5 transition-colors">
                   {l}
                 </a>
               ))}
@@ -1083,7 +1097,7 @@ function Hero({ heroIdx, setHeroIdx, openAvail, openVideo, openRoute }: { heroId
   );
 }
 
-// --- VesselSection — with multi-person icon for Max Guests and 5 real stars ---
+// --- VesselSection ---
 function VesselSection({ addToast, openGallery, openGalleryInterior, openAvail, openSpecs }: {
   addToast: (m: string, t: string, tp: string) => void;
   openGallery: () => void;
@@ -1094,44 +1108,39 @@ function VesselSection({ addToast, openGallery, openGalleryInterior, openAvail, 
   return (
     <section id="vessel" className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-navy-light relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-        <motion.div 
-  initial={{ opacity: 0, x: -50 }} 
-  whileInView={{ opacity: 1, x: 0 }} 
-  viewport={{ once: true }} 
-  className="relative group"
->
-  <div className="absolute -top-10 -left-10 w-32 h-32 border border-gold/20 rounded-full animate-spin-slow" />
-  
-  <div className="shimmer-wrap rounded-[2rem] overflow-hidden relative">
-    <img
-      src="assets/gallerymain.png"
-      className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
-      alt="Serendipity Yacht"
-      onClick={openGallery}
-    />
-    <div className="absolute bottom-6 right-6 bg-navy/90 backdrop-blur-xl border border-gold/20 p-4 md:p-6 rounded-2xl">
-      <p className="text-3xl md:text-4xl font-serif text-gold font-bold">94'</p>
-      <p className="text-xs text-white/40 uppercase tracking-widest mt-1">
-        Lazzara Motor Yacht
-      </p>
-    </div>
-  </div>
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="relative group"
+        >
+          <div className="absolute -top-10 -left-10 w-32 h-32 border border-gold/20 rounded-full animate-spin-slow" />
+          <div className="shimmer-wrap rounded-[2rem] overflow-hidden relative">
+            <img
+              src="assets/gallerymain.png"
+              className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
+              alt="Serendipity Yacht"
+              onClick={openGallery}
+            />
+            <div className="absolute bottom-6 right-6 bg-navy/90 backdrop-blur-xl border border-gold/20 p-4 md:p-6 rounded-2xl">
+              <p className="text-3xl md:text-4xl font-serif text-gold font-bold">94'</p>
+              <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Lazzara Motor Yacht</p>
+            </div>
+          </div>
+          <button
+            onClick={openGalleryInterior}
+            className="mt-3 w-full flex items-center justify-center py-3 rounded-2xl border border-gold/20 text-gold hover:border-gold/50 hover:bg-gold/5 transition-all text-xs font-bold uppercase tracking-widest bg-gold/5"
+          >
+            View Interior Photos
+          </button>
+          <button
+            onClick={openSpecs}
+            className="mt-2 w-full flex items-center justify-center py-3 rounded-2xl border border-white/10 text-white/40 hover:border-gold/40 hover:text-gold transition-all text-xs font-bold uppercase tracking-widest bg-white/5"
+          >
+            View Full Specifications
+          </button>
+        </motion.div>
 
-  {/* Interior gallery CTA */}
-  <button
-    onClick={openGalleryInterior}
-    className="mt-3 w-full flex items-center justify-center py-3 rounded-2xl border border-gold/20 text-gold hover:border-gold/50 hover:bg-gold/5 transition-all text-xs font-bold uppercase tracking-widest bg-gold/5"
-  >
-    View Interior Photos
-  </button>
-
-  <button
-    onClick={openSpecs}
-    className="mt-2 w-full flex items-center justify-center py-3 rounded-2xl border border-white/10 text-white/40 hover:border-gold/40 hover:text-gold transition-all text-xs font-bold uppercase tracking-widest bg-white/5"
-  >
-    View Full Specifications
-  </button>
-</motion.div>
         <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-[1.5px] bg-gold" />
@@ -1249,7 +1258,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   const activeDot = ((idx % EXPERIENCES.length) + EXPERIENCES.length) % EXPERIENCES.length;
 
   return (
-    <section id="experiences" className="py-12 md:py-6 md:py-5 bg-navy overflow-hidden relative px-4 md:px-16">
+    <section id="experiences" className="py-12 md:py-8 md:py-5 bg-navy overflow-hidden relative px-4 md:px-16">
       <div className="hidden xl:block absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
       <div className="hidden md:block absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
@@ -1309,133 +1318,68 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   );
 }
 
-function AccommodationsSection({
-  openRoom,
-  openGalleryInterior
-}: {
-  openRoom: (r: Room) => void;
-  openGalleryInterior: () => void;
-}) {
+// --- AccommodationsSection ---
+function AccommodationsSection({ openRoom, openGalleryInterior }: { openRoom: (r: Room) => void; openGalleryInterior: () => void }) {
   return (
-    <section
-      id="accommodations"
-      className="relative py-12 md:py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-[#061226] via-[#081a33] to-[#050b18]"
-    >
-      {/* ambient glow */}
+    <section id="accommodations" className="relative py-12 md:py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-[#061226] via-[#081a33] to-[#050b18]">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gold/10 blur-[150px]" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-500/10 blur-[160px]" />
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="relative max-w-7xl mx-auto"
-      >
-        {/* HEADER (tight) */}
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="relative max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 items-end mb-10">
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-14 h-[1px] bg-gradient-to-r from-gold to-transparent" />
-              <span className="text-[10px] tracking-[0.35em] uppercase text-gold/80">
-                Luxury Living
-              </span>
+              <span className="text-[10px] tracking-[0.35em] uppercase text-gold/80">Luxury Living</span>
             </div>
-
             <h2 className="text-4xl md:text-6xl font-serif leading-[1.05]">
               Elegant Accommodations{" "}
-              <span className="block text-gold italic mt-1">
-                for up to 12 guests
-              </span>
+              <span className="block text-gold italic mt-1">for up to 12 guests</span>
             </h2>
           </div>
-
           <p className="text-white/50 text-base md:text-lg max-w-md lg:justify-self-end">
             Four private suites designed for absolute comfort, privacy, and quiet ocean living.
           </p>
         </div>
-
-        {/* MAIN GRID */}
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
-          
-          {/* LEFT IMAGE */}
           <div className="relative group">
             <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10">
-              
-              <img
-                src="assets/gallerymain.png"
-                className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700"
-              />
-
+              <img src="assets/gallerymain.png" className="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-              {/* badge */}
               <div className="absolute bottom-6 left-6 bg-black/40 backdrop-blur-xl border border-white/10 px-5 py-4 rounded-xl">
                 <p className="text-3xl font-serif text-gold leading-none">4</p>
-                <p className="text-[10px] tracking-widest text-white/40 mt-1">
-                  Private Suites
-                </p>
+                <p className="text-[10px] tracking-widest text-white/40 mt-1">Private Suites</p>
               </div>
-
-              {/* CTA */}
               <button
                 onClick={openGalleryInterior}
                 className="absolute top-5 right-5 px-4 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-gold/30 text-gold text-[10px] tracking-widest uppercase hover:bg-gold hover:text-black transition"
               >
-                <Eye className="w-4 h-4 inline-block mr-1" />
-                Interior
+                <Eye className="w-4 h-4 inline-block mr-1" />Interior
               </button>
             </div>
           </div>
-
-          {/* RIGHT CONTENT (NO SPACE-Y = controlled stacking) */}
           <div className="flex flex-col">
             {ROOMS.map((r, i) => (
-              <div
-                key={i}
-                onClick={() => openRoom(r)}
-                className="group cursor-pointer"
-              >
+              <div key={i} onClick={() => openRoom(r)} className="group cursor-pointer">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b border-white/5 hover:border-gold/30 hover:bg-white/5 transition-all">
-                  
                   <div className="flex items-center gap-4">
                     <div className="hidden sm:block w-14 h-14 rounded-lg overflow-hidden">
-                      <img
-                        src={r.img}
-                        className="w-full h-full object-cover group-hover:scale-110 transition"
-                      />
+                      <img src={r.img} className="w-full h-full object-cover group-hover:scale-110 transition" />
                     </div>
-
                     <div>
-                      <h4 className="font-serif text-base md:text-lg group-hover:text-gold transition">
-                        {r.title}
-                      </h4>
+                      <h4 className="font-serif text-base md:text-lg group-hover:text-gold transition">{r.title}</h4>
                       <p className="text-xs text-white/40">{r.sub}</p>
                     </div>
                   </div>
-
                   <ChevronRight className="w-5 h-5 text-white/20 group-hover:text-gold transition" />
                 </div>
               </div>
             ))}
-
-            {/* FEATURE BLOCK (tight top spacing only) */}
             <div className="mt-6 p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
-              <h3 className="text-lg font-serif mb-4 text-gold">
-                Flybridge Experience
-              </h3>
-
+              <h3 className="text-lg font-serif mb-4 text-gold">Flybridge Experience</h3>
               <div className="grid grid-cols-2 gap-y-3 gap-x-6">
-                {[
-                  "Jacuzzi",
-                  "Sun Lounge",
-                  "Dining Deck",
-                  "Wet Bar",
-                  "Audio System",
-                  "LED Ambience"
-                ].map((a, i) => (
+                {["Jacuzzi","Sun Lounge","Dining Deck","Wet Bar","Audio System","LED Ambience"].map((a, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Check className="w-3.5 h-3.5 text-gold" />
                     <span className="text-xs text-white/60">{a}</span>
@@ -1443,7 +1387,6 @@ function AccommodationsSection({
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </motion.div>
@@ -1451,10 +1394,10 @@ function AccommodationsSection({
   );
 }
 
-// --- FleetSection ---
+// --- FleetSection — ↗ arrow icon on each card navigates to reservation.tsx ---
 function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
   return (
-    <section id="fleet" className="py-12 md:py-10 px-4 md:px-8 lg:px-16 bg-navy">
+    <section id="fleet" className="py-12 md:py-5 px-4 md:px-8 lg:px-16 bg-navy">
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-32 items-center mb-12 md:mb-16">
           <div>
@@ -1471,20 +1414,34 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {FLEET.map((f, i) => (
-            <div key={i} className="relative aspect-[3/4] rounded-3xl overflow-hidden group cursor-pointer shadow-2xl" onClick={() => openFleet(f)}>
-              <img src={f.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
-              <div className="absolute inset-0 bg-navy/20 group-hover:bg-navy/80 transition-colors duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-500" />
-              <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+            <div key={i} className="relative aspect-[3/4] rounded-3xl overflow-hidden group shadow-2xl">
+              {/* Card image + overlay — clicking the card body opens the modal */}
+              <div className="absolute inset-0 cursor-pointer" onClick={() => openFleet(f)}>
+                <img src={f.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                <div className="absolute inset-0 bg-navy/20 group-hover:bg-navy/80 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-500" />
+              </div>
+
+              {/* ↗ Arrow icon — navigates directly to /reservation with this vessel pre-selected */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToReservation(f.imgIndex, f.name);
+                }}
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#c9a227] flex items-center justify-center shadow-lg hover:scale-110 hover:shadow-[#c9a227]/40 transition-all"
+                aria-label={`Reserve ${f.name}`}
+              >
+                <ArrowUpRight className="w-5 h-5 text-[#040d1a]" />
+              </button>
+
+              {/* Card text content */}
+              <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10 pointer-events-none">
                 <div className="translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
                   <p className="font-bold text-lg md:text-xl mb-3 text-white group-hover:text-gold transition-colors">{f.name}</p>
                   <p className="text-sm text-white/0 group-hover:text-white/70 line-clamp-3 transition-colors duration-500 delay-100 mb-6">{f.desc}</p>
                 </div>
                 <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-200">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gold">View Details</span>
-                  <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-navy shadow-lg hover:scale-110 transition-transform">
-                    <ArrowUpRight className="w-5 h-5" />
-                  </div>
                 </div>
               </div>
             </div>
@@ -1530,10 +1487,7 @@ function CulinarySection() {
   };
 
   return (
-    <section 
-  id="culinary" 
-  className="py-6 md:py-14 bg-navy-light overflow-hidden relative border-t border-white/10"
->
+    <section id="culinary" className="py-6 md:py-14 bg-navy-light overflow-hidden relative border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 relative">
         <div className="flex items-center justify-between mb-10 md:mb-12">
           <div>
@@ -1626,15 +1580,9 @@ function DestinationsSection() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {DESTINATIONS.map((dest, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
               onClick={() => setSelected(dest)}
-              className="group relative rounded-3xl overflow-hidden cursor-pointer aspect-[4/3] shadow-2xl"
-            >
+              className="group relative rounded-3xl overflow-hidden cursor-pointer aspect-[4/3] shadow-2xl">
               <img src={dest.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={dest.name} />
               <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
               <div className="absolute top-4 left-4">
@@ -1655,7 +1603,6 @@ function DestinationsSection() {
           ))}
         </div>
       </motion.div>
-
       <AnimatePresence>
         {selected && (
           <Modal onClose={() => setSelected(null)}>
@@ -1687,7 +1634,7 @@ function DestinationsSection() {
   );
 }
 
-// --- PricingSection — full charter rates from image 4 ---
+// --- PricingSection ---
 function PricingSection() {
   const [showSpecial, setShowSpecial] = useState(false);
 
@@ -1706,27 +1653,13 @@ function PricingSection() {
           </h2>
           <p className="text-white/40 max-w-lg mx-auto text-sm leading-relaxed">Departing Tampa / St Petersburg. All rates include professional captain and crew. Charter rates are not inclusive of food/drink provisions, fuel, gratuity and/or expenses related to dockage or mooring fees at remote locations.</p>
         </div>
-
-        {/* Main Charter Rates */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 mb-10">
           {CHARTER_RATES.map((rate, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className={`relative rounded-[2rem] overflow-hidden border transition-all hover:scale-[1.01] ${
-                rate.popular
-                  ? "border-gold/40 bg-gradient-to-b from-gold/10 to-navy/50"
-                  : "border-white/10 bg-white/5 hover:border-white/20"
-              }`}
-            >
+            <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+              className={`relative rounded-[2rem] overflow-hidden border transition-all hover:scale-[1.01] ${rate.popular ? "border-gold/40 bg-gradient-to-b from-gold/10 to-navy/50" : "border-white/10 bg-white/5 hover:border-white/20"}`}>
               {rate.popular && (
                 <div className="absolute top-0 left-0 right-0 flex justify-center">
-                  <div className="bg-gold text-navy text-[10px] font-bold uppercase tracking-widest px-6 py-1.5 rounded-b-full">
-                    Most Popular
-                  </div>
+                  <div className="bg-gold text-navy text-[10px] font-bold uppercase tracking-widest px-6 py-1.5 rounded-b-full">Most Popular</div>
                 </div>
               )}
               <div className={`p-6 md:p-10 ${rate.popular ? "pt-10 md:pt-12" : ""}`}>
@@ -1736,52 +1669,30 @@ function PricingSection() {
                   <span className="text-white/30 text-sm mb-1">/ charter</span>
                 </div>
                 <div className="flex flex-wrap gap-2 md:gap-3 mb-6">
-                  <div className="flex items-center gap-1.5 text-white/40 text-xs">
-                    <Clock className="w-3.5 h-3.5 text-gold/60" /> {rate.duration}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-white/40 text-xs">
-                    <Users className="w-3.5 h-3.5 text-gold/60" /> {rate.guests}
-                  </div>
-                  {rate.nights !== "0" && (
-                    <div className="flex items-center gap-1.5 text-white/40 text-xs">
-                      <Anchor className="w-3.5 h-3.5 text-gold/60" /> {rate.nights} nights
-                    </div>
-                  )}
+                  <div className="flex items-center gap-1.5 text-white/40 text-xs"><Clock className="w-3.5 h-3.5 text-gold/60" /> {rate.duration}</div>
+                  <div className="flex items-center gap-1.5 text-white/40 text-xs"><Users className="w-3.5 h-3.5 text-gold/60" /> {rate.guests}</div>
+                  {rate.nights !== "0" && <div className="flex items-center gap-1.5 text-white/40 text-xs"><Anchor className="w-3.5 h-3.5 text-gold/60" /> {rate.nights} nights</div>}
                 </div>
                 <p className="text-sm text-white/50 leading-relaxed mb-6">{rate.desc}</p>
                 <div className="space-y-2.5 mb-8">
                   {rate.highlights.map((h, j) => (
                     <div key={j} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center shrink-0">
-                        <Check className="w-3 h-3 text-gold" />
-                      </div>
+                      <div className="w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-gold" /></div>
                       <span className="text-sm text-white/60">{h}</span>
                     </div>
                   ))}
                 </div>
-                <a href="#booking"
-                  className={`w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
-                    rate.popular
-                      ? "bg-gold text-navy hover:bg-gold-hover"
-                      : "border border-white/10 text-white/60 hover:border-gold/40 hover:text-gold"
-                  }`}>
+                <a href="#booking" className={`w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${rate.popular ? "bg-gold text-navy hover:bg-gold-hover" : "border border-white/10 text-white/60 hover:border-gold/40 hover:text-gold"}`}>
                   Book {rate.name} <ArrowUpRight className="w-4 h-4" />
                 </a>
               </div>
             </motion.div>
           ))}
         </div>
-
-        {/* Special Events toggle */}
         <div className="border border-white/10 rounded-3xl overflow-hidden">
-          <button
-            onClick={() => setShowSpecial(!showSpecial)}
-            className="w-full flex items-center justify-between p-6 md:p-8 hover:bg-white/5 transition-colors"
-          >
+          <button onClick={() => setShowSpecial(!showSpecial)} className="w-full flex items-center justify-between p-6 md:p-8 hover:bg-white/5 transition-colors">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
-                <Star className="w-4 h-4 text-gold" />
-              </div>
+              <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center"><Star className="w-4 h-4 text-gold" /></div>
               <div className="text-left">
                 <h3 className="text-lg md:text-xl font-serif">Special Events & Occasions</h3>
                 <p className="text-xs text-white/30 mt-0.5">Corporate events, celebrations & culinary experiences</p>
@@ -1791,13 +1702,7 @@ function PricingSection() {
           </button>
           <AnimatePresence>
             {showSpecial && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.35 }}
-                className="overflow-hidden"
-              >
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.35 }} className="overflow-hidden">
                 <div className="p-6 md:p-8 pt-0 grid grid-cols-1 md:grid-cols-3 gap-5">
                   {SPECIAL_RATES.map((r, i) => (
                     <div key={i} className="p-5 md:p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-gold/20 transition-all">
@@ -1806,9 +1711,7 @@ function PricingSection() {
                         <span className="text-gold font-bold text-lg md:text-xl font-serif shrink-0 ml-3">{r.price}</span>
                       </div>
                       <p className="text-xs md:text-sm text-white/50 leading-relaxed mb-5">{r.desc}</p>
-                      <a href="#booking" className="text-gold text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:gap-3 transition-all">
-                        Inquire <ArrowUpRight className="w-3 h-3" />
-                      </a>
+                      <a href="#booking" className="text-gold text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:gap-3 transition-all">Inquire <ArrowUpRight className="w-3 h-3" /></a>
                     </div>
                   ))}
                 </div>
@@ -1816,10 +1719,7 @@ function PricingSection() {
             )}
           </AnimatePresence>
         </div>
-
         <p className="text-center text-white/25 text-xs mt-8">*Pricing subject to availability. Contact us for custom itineraries and special packages.</p>
-
-        {/* Link to destinations */}
         <div className="mt-8 text-center">
           <a href="#destinations" className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gold/30 text-gold text-xs font-bold uppercase tracking-widest hover:bg-gold/10 transition-all">
             <MapPin className="w-4 h-4" /> Check Out Cool Destinations
@@ -1830,7 +1730,7 @@ function PricingSection() {
   );
 }
 
-// --- MechanicalSection — ENHANCED ---
+// --- MechanicalSection ---
 function MechanicalSection() {
   const [showAllSpecs, setShowAllSpecs] = useState(false);
   const [openSystem, setOpenSystem] = useState<number | null>(null);
@@ -1857,158 +1757,55 @@ function MechanicalSection() {
   ];
 
   const systems = [
-    {
-      title: "Propulsion",
-      icon: Gauge,
-      items: [
-        "Twin diesel inboard engines",
-        "Shaft drive — low engine hours",
-        "Bow thruster for precision docking",
-        "Hydraulic stabilizers underway",
-        "Anti-fouling bottom paint (2022)",
-      ],
-    },
-    {
-      title: "Electronics & Navigation",
-      icon: Settings,
-      items: [
-        "Garmin / Furuno chart plotter suite",
-        "Radar — open array",
-        "VHF radios (multiple)",
-        "GPS & AIS transponder",
-        "Satellite TV & high-speed WiFi",
-        "Full anchor windlass system",
-      ],
-    },
-    {
-      title: "Safety Systems",
-      icon: Activity,
-      items: [
-        "Life rafts — USCG certified",
-        "EPIRB & flares aboard",
-        "Fire suppression — engine room",
-        "Bilge pump system — automatic",
-        "CO detectors throughout",
-        "First aid & medical kit",
-      ],
-    },
-    {
-      title: "Onboard Systems",
-      icon: Wrench,
-      items: [
-        "Dual generators — full power at anchor",
-        "Watermaker / reverse osmosis",
-        "Full HVAC — all staterooms",
-        "Premium sound system",
-        "Washer / dryer aboard",
-        "Icemaker & commercial refrigeration",
-      ],
-    },
+    { title: "Propulsion", icon: Gauge, items: ["Twin diesel inboard engines","Shaft drive — low engine hours","Bow thruster for precision docking","Hydraulic stabilizers underway","Anti-fouling bottom paint (2022)"] },
+    { title: "Electronics & Navigation", icon: Settings, items: ["Garmin / Furuno chart plotter suite","Radar — open array","VHF radios (multiple)","GPS & AIS transponder","Satellite TV & high-speed WiFi","Full anchor windlass system"] },
+    { title: "Safety Systems", icon: Activity, items: ["Life rafts — USCG certified","EPIRB & flares aboard","Fire suppression — engine room","Bilge pump system — automatic","CO detectors throughout","First aid & medical kit"] },
+    { title: "Onboard Systems", icon: Wrench, items: ["Dual generators — full power at anchor","Watermaker / reverse osmosis","Full HVAC — all staterooms","Premium sound system","Washer / dryer aboard","Icemaker & commercial refrigeration"] },
   ];
 
   const visibleSpecs = showAllSpecs ? mechanicalSpecs : mechanicalSpecs.slice(0, 6);
 
   return (
     <section id="mechanical" className="py-16 md:py-24 px-6 lg:px-20 bg-navy relative overflow-hidden">
-
-      {/* glow background */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gold/5 blur-[120px]" />
-
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="max-w-6xl mx-auto relative z-10"
-      >
-
-        {/* HEADER */}
+      <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-6xl mx-auto relative z-10">
         <div className="mb-14 text-center">
-          <span className="text-[10px] tracking-[3px] uppercase text-gold/70">
-            Technical Overview
-          </span>
-
-          <h2 className="text-3xl md:text-5xl font-serif mt-4 leading-tight">
-            Mechanical <br />
-            <em className="text-gold italic">Excellence</em>
-          </h2>
-
-          <p className="text-white/40 max-w-xl mx-auto mt-4 text-sm">
-            SERENDIPITY is engineered for performance, reliability, and refined cruising comfort.
-          </p>
+          <span className="text-[10px] tracking-[3px] uppercase text-gold/70">Technical Overview</span>
+          <h2 className="text-3xl md:text-5xl font-serif mt-4 leading-tight">Mechanical <br /><em className="text-gold italic">Excellence</em></h2>
+          <p className="text-white/40 max-w-xl mx-auto mt-4 text-sm">SERENDIPITY is engineered for performance, reliability, and refined cruising comfort.</p>
         </div>
-
-        {/* SPECS (MINIMIZED) */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
           {visibleSpecs.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-gold/30 hover:bg-white/10 transition-all group"
-            >
+            <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+              className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-gold/30 hover:bg-white/10 transition-all group">
               <s.icon className="w-4 h-4 text-gold/60 mb-2 group-hover:text-gold" />
-              <p className="text-[9px] uppercase tracking-widest text-white/30 mb-1">
-                {s.label}
-              </p>
-              <p className="text-xs font-semibold text-white/80 leading-tight">
-                {s.value}
-              </p>
+              <p className="text-[9px] uppercase tracking-widest text-white/30 mb-1">{s.label}</p>
+              <p className="text-xs font-semibold text-white/80 leading-tight">{s.value}</p>
             </motion.div>
           ))}
         </div>
-
-        {/* SHOW MORE BUTTON */}
         <div className="text-center mb-14">
-          <button
-            onClick={() => setShowAllSpecs(!showAllSpecs)}
-            className="text-xs tracking-widest text-gold hover:text-gold-hover transition"
-          >
+          <button onClick={() => setShowAllSpecs(!showAllSpecs)} className="text-xs tracking-widest text-gold hover:text-gold-hover transition">
             {showAllSpecs ? "SHOW LESS" : "VIEW ALL SPECS"}
           </button>
         </div>
-
-        {/* SYSTEMS (ACCORDION STYLE) */}
         <div className="space-y-4">
           {systems.map((sys, i) => {
             const isOpen = openSystem === i;
-
             return (
-              <motion.div
-                key={i}
-                layout
-                className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden"
-              >
-                {/* HEADER */}
-                <button
-                  onClick={() => setOpenSystem(isOpen ? null : i)}
-                  className="w-full flex items-center justify-between p-5 hover:bg-white/5 transition"
-                >
+              <motion.div key={i} layout className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden">
+                <button onClick={() => setOpenSystem(isOpen ? null : i)} className="w-full flex items-center justify-between p-5 hover:bg-white/5 transition">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
-                      <sys.icon className="w-4 h-4 text-gold" />
-                    </div>
+                    <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center"><sys.icon className="w-4 h-4 text-gold" /></div>
                     <h4 className="font-serif text-lg">{sys.title}</h4>
                   </div>
-
-                  <span className="text-xs text-white/40 tracking-widest">
-                    {isOpen ? "CLOSE" : "VIEW"}
-                  </span>
+                  <span className="text-xs text-white/40 tracking-widest">{isOpen ? "CLOSE" : "VIEW"}</span>
                 </button>
-
-                {/* CONTENT */}
                 {isOpen && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="px-6 pb-6"
-                  >
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-6 pb-6">
                     <ul className="space-y-3 text-sm text-white/60">
                       {sys.items.map((item, j) => (
-                        <li key={j} className="flex gap-2">
-                          <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2" />
-                          {item}
-                        </li>
+                        <li key={j} className="flex gap-2"><span className="w-1.5 h-1.5 bg-gold rounded-full mt-2" />{item}</li>
                       ))}
                     </ul>
                   </motion.div>
@@ -2017,22 +1814,16 @@ function MechanicalSection() {
             );
           })}
         </div>
-
-        {/* CTA */}
         <div className="mt-16 text-center">
-          <a
-            href="#booking"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-navy font-semibold rounded-xl hover:scale-105 hover:bg-gold-hover transition"
-          >
-            Request Full Technical Docs
-            <ArrowUpRight className="w-4 h-4" />
+          <a href="#booking" className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-navy font-semibold rounded-xl hover:scale-105 hover:bg-gold-hover transition">
+            Request Full Technical Docs <ArrowUpRight className="w-4 h-4" />
           </a>
         </div>
-
       </motion.div>
     </section>
   );
 }
+
 // --- ReviewsSection ---
 function ReviewsSection() {
   const reviewsList = [
@@ -2086,13 +1877,7 @@ function ReviewsSection() {
 }
 
 // --- BookingSection ---
-function BookingSection({
-  addToast,
-  openPayment,
-}: {
-  addToast: (m: string, t: string, tp: string) => void;
-  openPayment: (data: { name: string; email: string; eventType: string }) => void;
-}) {
+function BookingSection({ addToast, openPayment }: { addToast: (m: string, t: string, tp: string) => void; openPayment: (data: { name: string; email: string; eventType: string }) => void }) {
   const [loading, setLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -2151,7 +1936,6 @@ function BookingSection({
             </div>
           </div>
         </div>
-
         <div className="p-6 md:p-10 lg:p-12 bg-navy-light/90 backdrop-blur-3xl border border-white/10 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl">
           <h3 className="text-2xl md:text-3xl font-serif mb-2">Inquire Now</h3>
           <p className="text-white/40 mb-8 text-sm">Tell us about your dream charter and we'll craft the perfect itinerary.</p>
@@ -2193,11 +1977,7 @@ function BookingSection({
             <button disabled={loading}
               className="w-full py-4 md:py-5 bg-gradient-to-r from-gold to-gold-hover text-navy font-bold rounded-2xl shadow-xl shadow-gold/20 hover:translate-y-[-2px] active:scale-[0.98] transition-all disabled:opacity-50 disabled:translate-y-0 flex items-center justify-center gap-3">
               {loading ? (
-                <>
-                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-5 h-5 border-2 border-navy/30 border-t-navy rounded-full" />
-                  Preparing Payment…
-                </>
+                <><motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-5 h-5 border-2 border-navy/30 border-t-navy rounded-full" />Preparing Payment…</>
               ) : (
                 <><CreditCard className="w-5 h-5" /> Proceed to Payment</>
               )}
@@ -2212,7 +1992,7 @@ function BookingSection({
   );
 }
 
-// --- Footer — Charter links clickable, real Facebook URL ---
+// --- Footer ---
 function Footer() {
   return (
     <footer className="bg-[#040810] py-16 md:py-20 px-4 md:px-8 lg:px-16 border-t border-white/5">
@@ -2224,7 +2004,6 @@ function Footer() {
             </div>
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs">A stunning 94' Lazzara Hardtop motor yacht based in Saint Petersburg, Florida.</p>
             <div className="flex gap-3">
-              {/* Real Facebook URL */}
               <a href="https://www.facebook.com/profile.php?id=61578530267044" target="_blank" rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-gold/50 transition-colors cursor-pointer text-white/50 hover:text-gold">
                 <Facebook className="w-4 h-4" />
@@ -2237,8 +2016,6 @@ function Footer() {
               </a>
             </div>
           </div>
-
-          {/* Charter links — all properly clickable */}
           <div>
             <h4 className="font-serif text-lg mb-6">Charter</h4>
             <ul className="space-y-3">
@@ -2249,7 +2026,6 @@ function Footer() {
               <li><a href="#pricing" className="text-sm text-white/30 hover:text-gold transition-colors cursor-pointer block">Special Occasions — $7,500</a></li>
             </ul>
           </div>
-
           <div>
             <h4 className="font-serif text-lg mb-6">Contact</h4>
             <ul className="space-y-3">
@@ -2260,7 +2036,6 @@ function Footer() {
               <li><a href="#vessel" className="text-sm text-white/30 hover:text-gold transition-colors cursor-pointer block">Full Specifications</a></li>
             </ul>
           </div>
-
           <div>
             <h4 className="font-serif text-lg mb-6">Location</h4>
             <ul className="space-y-3">
