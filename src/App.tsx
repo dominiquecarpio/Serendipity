@@ -195,7 +195,7 @@ const ROOMS: Room[] = [
 const FLEET: FleetVessel[] = [
   {
     img: "assets/occasion1.png",
-    name: "Serenity Wave",
+    name: "Sunset Cruises & Day Excursions",
     desc: "A sleek 94' masterpiece designed for those who appreciate the finer details of maritime luxury.",
     length: "94 ft",
     guests: "12",
@@ -209,7 +209,7 @@ const FLEET: FleetVessel[] = [
   },
   {
     img: "assets/occasion2.png",
-    name: "Ocean's Embrace",
+    name: "Birthday &Anniversary Celebrations",
     desc: "Experience unparalleled privacy and comfort on this expertly remodeled hardtop motor yacht.",
     length: "86 ft",
     guests: "10",
@@ -223,7 +223,7 @@ const FLEET: FleetVessel[] = [
   },
   {
     img: "assets/occasion3.png",
-    name: "Gulf Star",
+    name: "Corporate & Executive Events",
     desc: "The perfect vessel for exploring the stunning beaches and hidden sandbars of the Gulf Coast.",
     length: "78 ft",
     guests: "12",
@@ -237,7 +237,7 @@ const FLEET: FleetVessel[] = [
   },
   {
     img: "assets/occasion4.png",
-    name: "Azure Dream",
+    name: "Wellness Retreats on the Water",
     desc: "A floating resort offering a full suite of water sports gear for the ultimate aquatic adventure.",
     length: "90 ft",
     guests: "12",
