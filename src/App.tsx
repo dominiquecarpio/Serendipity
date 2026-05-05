@@ -668,7 +668,7 @@ export default function App() {
                             : "bg-white/5 border-white/15 text-white/50 hover:text-white hover:border-white/30 hover:bg-white/10"
                         }`}
                       >
-                        {tab === "interior" ? "🛋 " : "⚓ "}{tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        {tab === "interior" ? " " : " "}{tab.charAt(0).toUpperCase() + tab.slice(1)}
                       </button>
                     ))}
                   </div>
@@ -1071,34 +1071,44 @@ function VesselSection({ addToast, openGallery, openGalleryInterior, openAvail, 
   return (
     <section id="vessel" className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-navy-light relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-        <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group">
-          <div className="absolute -top-10 -left-10 w-32 h-32 border border-gold/20 rounded-full animate-spin-slow" />
-          <div className="shimmer-wrap rounded-[2rem] overflow-hidden relative">
-            <img
-              src="assets/gallerymain.png"
-              className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
-              alt="Serendipity Yacht"
-              onClick={openGallery}
-            />
-            <div className="absolute bottom-6 right-6 bg-navy/90 backdrop-blur-xl border border-gold/20 p-4 md:p-6 rounded-2xl">
-              <p className="text-3xl md:text-4xl font-serif text-gold font-bold">94'</p>
-              <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Lazzara Motor Yacht</p>
-            </div>
-          </div>
-          {/* Interior gallery CTA — clear path to interior photos */}
-          <button
-            onClick={openGalleryInterior}
-            className="mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-gold/20 text-gold hover:border-gold/50 hover:bg-gold/5 transition-all text-xs font-bold uppercase tracking-widest bg-gold/5 group/int"
-          >
-            <Camera className="w-4 h-4 group-hover/int:scale-110 transition-transform" />
-            View Interior Photos
-            <ArrowUpRight className="w-3 h-3" />
-          </button>
-          <button onClick={openSpecs}
-            className="mt-2 w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-white/10 text-white/40 hover:border-gold/40 hover:text-gold transition-all text-xs font-bold uppercase tracking-widest bg-white/5">
-            <Ship className="w-4 h-4" /> View Full Specifications
-          </button>
-        </motion.div>
+        <motion.div 
+  initial={{ opacity: 0, x: -50 }} 
+  whileInView={{ opacity: 1, x: 0 }} 
+  viewport={{ once: true }} 
+  className="relative group"
+>
+  <div className="absolute -top-10 -left-10 w-32 h-32 border border-gold/20 rounded-full animate-spin-slow" />
+  
+  <div className="shimmer-wrap rounded-[2rem] overflow-hidden relative">
+    <img
+      src="assets/gallerymain.png"
+      className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
+      alt="Serendipity Yacht"
+      onClick={openGallery}
+    />
+    <div className="absolute bottom-6 right-6 bg-navy/90 backdrop-blur-xl border border-gold/20 p-4 md:p-6 rounded-2xl">
+      <p className="text-3xl md:text-4xl font-serif text-gold font-bold">94'</p>
+      <p className="text-xs text-white/40 uppercase tracking-widest mt-1">
+        Lazzara Motor Yacht
+      </p>
+    </div>
+  </div>
+
+  {/* Interior gallery CTA */}
+  <button
+    onClick={openGalleryInterior}
+    className="mt-3 w-full flex items-center justify-center py-3 rounded-2xl border border-gold/20 text-gold hover:border-gold/50 hover:bg-gold/5 transition-all text-xs font-bold uppercase tracking-widest bg-gold/5"
+  >
+    View Interior Photos
+  </button>
+
+  <button
+    onClick={openSpecs}
+    className="mt-2 w-full flex items-center justify-center py-3 rounded-2xl border border-white/10 text-white/40 hover:border-gold/40 hover:text-gold transition-all text-xs font-bold uppercase tracking-widest bg-white/5"
+  >
+    View Full Specifications
+  </button>
+</motion.div>
         <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-[1.5px] bg-gold" />
