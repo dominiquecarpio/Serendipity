@@ -40,6 +40,12 @@ import {
   Activity,
   Camera,
   Eye,
+  Tag,
+  Grid,
+  LayoutGrid,
+  Layers,
+  SlidersHorizontal,
+  Sparkles,
 } from "lucide-react";
 
 // --- Types ---
@@ -67,13 +73,26 @@ interface FleetVessel {
   length: string;
   guests: string;
   cabins: string;
-  imgIndex: number; // ← index matching VESSEL_IMAGES in reservation.tsx
+  imgIndex: number;
 }
 
 interface GalleryImage {
   src: string;
   tab: "exterior" | "interior";
   label: string;
+}
+
+// --- Feature Gallery Types ---
+interface FeatureProduct {
+  img: string;
+  category: "leisure" | "celebration" | "corporate" | "wellness" | "culinary" | "vip";
+  categoryLabel: string;
+  name: string;
+  subtitle: string;
+  price: string;
+  originalPrice?: string;
+  badge?: string;
+  featured?: boolean;
 }
 
 // --- Navigation helper ---
@@ -202,11 +221,6 @@ const ROOMS: Room[] = [
   },
 ];
 
-// imgIndex maps to VESSEL_IMAGES in reservation.tsx:
-//   0 → assets/occasion1.png
-//   1 → assets/occasion2.png
-//   2 → assets/occasion3.png
-//   3 → assets/occasion4.png
 const FLEET: FleetVessel[] = [
   {
     img: "assets/occasion1.png",
@@ -382,6 +396,146 @@ const SPECIAL_RATES = [
   },
 ];
 
+// --- Feature Gallery Data ---
+const FEATURE_PRODUCTS: FeatureProduct[] = [
+  {
+    img: "assets/occasion1.png",
+    category: "leisure",
+    categoryLabel: "Leisure",
+    name: "Sunset Cruise Package",
+    subtitle: "4-Hour Gulf Coast Escape",
+    price: "$1,200",
+    originalPrice: "$1,800",
+    badge: "SAVE 33%",
+    featured: false,
+  },
+  {
+    img: "assets/occasion2.png",
+    category: "celebration",
+    categoryLabel: "Celebration",
+    name: "Birthday & Anniversary",
+    subtitle: "6-Hour Private Charter",
+    price: "$7,500",
+    badge: "POPULAR",
+    featured: true,
+  },
+  {
+    img: "assets/occasion3.png",
+    category: "corporate",
+    categoryLabel: "Corporate",
+    name: "Executive Retreat",
+    subtitle: "Full-Day Corporate Charter",
+    price: "$15,000",
+    badge: "EXCLUSIVE",
+    featured: false,
+  },
+  {
+    img: "assets/occasion4.png",
+    category: "wellness",
+    categoryLabel: "Wellness",
+    name: "Wellness Retreat",
+    subtitle: "Half-Day Mindfulness Journey",
+    price: "$3,500",
+    originalPrice: "$4,500",
+    badge: "SAVE 22%",
+    featured: false,
+  },
+  {
+    img: "assets/occasion5.png",
+    category: "vip",
+    categoryLabel: "VIP Suite",
+    name: "Master Stateroom Night",
+    subtitle: "Overnight King Suite",
+    price: "$2,800",
+    badge: "LUXURY",
+    featured: false,
+  },
+  {
+    img: "assets/occasion6.png",
+    category: "culinary",
+    categoryLabel: "Culinary",
+    name: "Chef's Table Experience",
+    subtitle: "Private 5-Course Dinner",
+    price: "$450",
+    originalPrice: "$600",
+    badge: "PER GUEST",
+    featured: false,
+  },
+  {
+    img: "assets/cheryl_foods.jpeg",
+    category: "culinary",
+    categoryLabel: "Culinary",
+    name: "Fine Dining Charter",
+    subtitle: "Chef Cheryl Signature Menu",
+    price: "$7,500",
+    badge: "CHEF'S CHOICE",
+    featured: false,
+  },
+  {
+    img: "assets/gallerymain.png",
+    category: "vip",
+    categoryLabel: "VIP Suite",
+    name: "Weekend Stateroom Package",
+    subtitle: "2 Nights · 4 Private Suites",
+    price: "$20,000",
+    badge: "BEST VALUE",
+    featured: true,
+  },
+  {
+    img: "assets/hero1.png",
+    category: "leisure",
+    categoryLabel: "Leisure",
+    name: "Day Excursion",
+    subtitle: "Island Hopping · Jet Skis",
+    price: "$10,000",
+    badge: "TOP RATED",
+    featured: false,
+  },
+  {
+    img: "assets/hero2.png",
+    category: "wellness",
+    categoryLabel: "Wellness",
+    name: "Sunrise Yoga Cruise",
+    subtitle: "3-Hour Morning Retreat",
+    price: "$1,800",
+    originalPrice: "$2,200",
+    badge: "SAVE 18%",
+    featured: false,
+  },
+  {
+    img: "assets/egmont_key.jpg",
+    category: "leisure",
+    categoryLabel: "Leisure",
+    name: "Egmont Key Expedition",
+    subtitle: "History & Wildlife Tour",
+    price: "$2,400",
+    badge: "GUIDED",
+    featured: false,
+  },
+  {
+    img: "assets/cheryl_foods2.jpeg",
+    category: "culinary",
+    categoryLabel: "Culinary",
+    name: "Wine & Cheese Evening",
+    subtitle: "Curated Tasting at Sea",
+    price: "$7,500",
+    badge: "CURATED",
+    featured: false,
+  },
+];
+
+type FeatureCategory = "all" | "leisure" | "celebration" | "corporate" | "wellness" | "culinary" | "vip";
+
+const CATEGORY_FILTERS: { key: FeatureCategory; label: string }[] = [
+  { key: "all", label: "ALL" },
+  { key: "leisure", label: "LEISURE" },
+  { key: "celebration", label: "CELEBRATION" },
+  { key: "corporate", label: "CORPORATE" },
+  { key: "wellness", label: "WELLNESS" },
+  { key: "culinary", label: "CULINARY" },
+  { key: "vip", label: "VIP SUITE" },
+];
+
 // --- Calendar Component ---
 function CalendarComponent({ onSelect }: { onSelect: (date: string) => void }) {
   const [currentDate, setCurrentDate] = useState(new Date(2025, 4, 1));
@@ -458,6 +612,7 @@ export default function App() {
   const [showFab, setShowFab] = useState(false);
   const [isStickyRoute, setIsStickyRoute] = useState(false);
   const [toasts, setToasts] = useState<{ id: number; msg: string; title: string; type: string }[]>([]);
+  const [featureProduct, setFeatureProduct] = useState<FeatureProduct | null>(null);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -554,6 +709,11 @@ export default function App() {
         />
         <ExperiencesSection openExp={setSelectedExp} />
         <FleetSection openFleet={setSelectedFleet} />
+        {/* ── NEW Feature Gallery Section ── */}
+        <FeatureGallerySection
+          onSelect={setFeatureProduct}
+          addToast={addToast}
+        />
         <AccommodationsSection openRoom={setSelectedRoom} openGalleryInterior={openGalleryInterior} />
         <CulinarySection />
         <DestinationsSection />
@@ -619,7 +779,6 @@ export default function App() {
           </Modal>
         )}
 
-        {/* Fleet Modal — "Inquire About This Vessel" now navigates to reservation.tsx */}
         {selectedFleet && (
           <Modal onClose={() => setSelectedFleet(null)}>
             <div className="max-w-2xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
@@ -656,13 +815,56 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-                {/* ↓ WIRED: navigates to /reservation with this vessel's img and name */}
                 <button
                   onClick={() => goToReservation(selectedFleet.imgIndex, selectedFleet.name)}
                   className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
                 >
                   Inquire About This Vessel <ArrowUpRight className="w-4 h-4" />
                 </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
+        {/* Feature Product Modal */}
+        {featureProduct && (
+          <Modal onClose={() => setFeatureProduct(null)}>
+            <div className="max-w-2xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
+              <div className="relative h-72">
+                <img src={featureProduct.img} alt={featureProduct.name} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-light via-navy/30 to-transparent" />
+                {featureProduct.badge && (
+                  <div className="absolute top-5 left-5">
+                    <span className="px-3 py-1.5 bg-gold text-navy text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg">
+                      {featureProduct.badge}
+                    </span>
+                  </div>
+                )}
+                <div className="absolute bottom-6 left-6 right-6">
+                  <span className="text-[10px] font-bold tracking-[2px] uppercase text-gold/80 block mb-1">{featureProduct.categoryLabel}</span>
+                  <h2 className="text-2xl md:text-3xl font-serif">{featureProduct.name}</h2>
+                  <p className="text-white/50 text-sm mt-1">{featureProduct.subtitle}</p>
+                </div>
+              </div>
+              <div className="p-6 md:p-10">
+                <div className="flex items-center gap-4 mb-8">
+                  <span className="text-3xl font-serif text-gold font-bold">{featureProduct.price}</span>
+                  {featureProduct.originalPrice && (
+                    <span className="text-white/30 text-lg line-through">{featureProduct.originalPrice}</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3 mb-8">
+                  {["Professional crew & captain","Personalized itinerary","All safety equipment","On-water support"].map((f, i) => (
+                    <div key={i} className="flex items-center gap-2 p-3 bg-white/5 border border-white/10 rounded-xl">
+                      <Check className="w-3.5 h-3.5 text-gold shrink-0" />
+                      <span className="text-xs text-white/60">{f}</span>
+                    </div>
+                  ))}
+                </div>
+                <a href="#booking" onClick={() => setFeatureProduct(null)}
+                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2">
+                  Book This Package <ArrowUpRight className="w-4 h-4" />
+                </a>
               </div>
             </div>
           </Modal>
@@ -933,6 +1135,381 @@ export default function App() {
         </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// FEATURE GALLERY SECTION (NEW)
+// ─────────────────────────────────────────────
+function FeatureGallerySection({
+  onSelect,
+  addToast,
+}: {
+  onSelect: (p: FeatureProduct) => void;
+  addToast: (m: string, t: string, tp: string) => void;
+}) {
+  const [activeFilter, setActiveFilter] = useState<FeatureCategory>("all");
+  const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc">("featured");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const [showCount, setShowCount] = useState(8);
+
+  const sortMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (sortMenuRef.current && !sortMenuRef.current.contains(e.target as Node)) {
+        setShowSortMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const parsePrice = (p: string) =>
+    parseFloat(p.replace(/[^0-9.]/g, ""));
+
+  const filtered = useMemo(() => {
+    let list = [...FEATURE_PRODUCTS];
+    if (activeFilter !== "all") list = list.filter((p) => p.category === activeFilter);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.subtitle.toLowerCase().includes(q) ||
+          p.categoryLabel.toLowerCase().includes(q)
+      );
+    }
+    if (sortBy === "price-asc") list.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+    else if (sortBy === "price-desc") list.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+    else list.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+    return list;
+  }, [activeFilter, sortBy, searchQuery]);
+
+  const visible = filtered.slice(0, showCount);
+  const hasMore = filtered.length > showCount;
+
+  const sortLabels: Record<string, string> = {
+    featured: "Best Selling",
+    "price-asc": "Price: Low → High",
+    "price-desc": "Price: High → Low",
+  };
+
+  return (
+    <section id="feature-gallery" className="py-16 md:py-24 bg-[#040d1a] relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-gold/4 blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-800/10 blur-[120px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 relative z-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mb-10 md:mb-14"
+        >
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-[1.5px] bg-gold" />
+                <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">Charter Packages</span>
+                <Sparkles className="w-3.5 h-3.5 text-gold/50" />
+              </div>
+              <h2 className="text-3xl md:text-5xl font-serif leading-tight">
+                Browse All
+                <br />
+                <em className="text-gold italic font-serif">Experiences & Packages</em>
+              </h2>
+            </div>
+            <p className="text-white/40 max-w-sm text-sm leading-relaxed md:text-right">
+              Every package includes professional crew, captain, and unmatched Gulf Coast luxury aboard Serendipity.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Controls bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8"
+        >
+          {/* Sort dropdown */}
+          <div className="relative" ref={sortMenuRef}>
+            <button
+              onClick={() => setShowSortMenu((v) => !v)}
+              className="flex items-center gap-2 px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:border-gold/30 hover:text-white transition-all whitespace-nowrap"
+            >
+              <SlidersHorizontal className="w-4 h-4 text-gold/60" />
+              Sort by: <span className="font-bold text-white">{sortLabels[sortBy]}</span>
+              <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${showSortMenu ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {showSortMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full left-0 mt-2 w-52 bg-navy-light border border-white/10 rounded-2xl shadow-2xl z-50 py-2 overflow-hidden"
+                >
+                  {(["featured", "price-asc", "price-desc"] as const).map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => { setSortBy(s); setShowSortMenu(false); }}
+                      className={`w-full text-left px-5 py-3 text-sm transition-colors ${sortBy === s ? "text-gold bg-gold/10" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+                    >
+                      {sortLabels[s]}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Filter pill */}
+          <button
+            onClick={() => {}}
+            className="flex items-center gap-2 px-5 py-3 bg-gold text-navy font-bold rounded-xl text-sm hover:bg-gold/90 transition-colors whitespace-nowrap"
+          >
+            <Tag className="w-4 h-4" /> FILTER
+          </button>
+
+          {/* Search */}
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              placeholder="Search packages..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-gold/40 transition-colors pr-10"
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Results count */}
+          <div className="text-[11px] text-white/30 uppercase tracking-widest whitespace-nowrap self-center">
+            Showing {visible.length} of {filtered.length} packages
+          </div>
+        </motion.div>
+
+        {/* Category pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="flex flex-wrap gap-2 mb-10"
+        >
+          {CATEGORY_FILTERS.map((f) => (
+            <button
+              key={f.key}
+              onClick={() => { setActiveFilter(f.key); setShowCount(8); }}
+              className={`px-5 py-2.5 rounded-full text-[11px] font-bold tracking-[1.5px] uppercase transition-all border ${
+                activeFilter === f.key
+                  ? "bg-white text-navy border-white shadow-lg"
+                  : "bg-transparent border-white/15 text-white/50 hover:border-white/40 hover:text-white"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Grid */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeFilter + sortBy + searchQuery}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5"
+          >
+            {visible.map((product, i) => (
+              <FeatureCard
+                key={`${product.name}-${i}`}
+                product={product}
+                index={i}
+                isHovered={hoveredIndex === i}
+                onHover={() => setHoveredIndex(i)}
+                onLeave={() => setHoveredIndex(null)}
+                onSelect={() => onSelect(product)}
+                onBook={() => {
+                  addToast(`${product.name} added`, "Package Selected", "gold");
+                  window.location.hash = "booking";
+                }}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Empty state */}
+        {filtered.length === 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-24 text-center">
+            <p className="text-white/20 text-lg font-serif mb-2">No packages found</p>
+            <p className="text-white/10 text-sm">Try adjusting your search or filter</p>
+            <button onClick={() => { setSearchQuery(""); setActiveFilter("all"); }} className="mt-6 px-6 py-3 border border-white/10 rounded-xl text-gold text-sm hover:border-gold/30 transition-colors">
+              Clear Filters
+            </button>
+          </motion.div>
+        )}
+
+        {/* Load more */}
+        {hasMore && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-10 text-center"
+          >
+            <button
+              onClick={() => setShowCount((c) => c + 8)}
+              className="px-10 py-4 border border-white/10 rounded-2xl text-white/50 text-sm font-bold uppercase tracking-widest hover:border-gold/40 hover:text-gold transition-all"
+            >
+              Load More ({filtered.length - showCount} remaining)
+            </button>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ─── Feature Card ───
+function FeatureCard({
+  product,
+  index,
+  isHovered,
+  onHover,
+  onLeave,
+  onSelect,
+  onBook,
+}: {
+  product: FeatureProduct;
+  index: number;
+  isHovered: boolean;
+  onHover: () => void;
+  onLeave: () => void;
+  onSelect: () => void;
+  onBook: () => void;
+}) {
+  const categoryColors: Record<string, string> = {
+    leisure: "text-sky-400",
+    celebration: "text-pink-400",
+    corporate: "text-blue-400",
+    wellness: "text-emerald-400",
+    culinary: "text-amber-400",
+    vip: "text-gold",
+  };
+
+  const badgeColors: Record<string, string> = {
+    "POPULAR": "bg-gold text-navy",
+    "EXCLUSIVE": "bg-blue-500/20 text-blue-300 border border-blue-500/30",
+    "TOP RATED": "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
+    "LUXURY": "bg-purple-500/20 text-purple-300 border border-purple-500/30",
+    "BEST VALUE": "bg-gold/20 text-gold border border-gold/30",
+  };
+
+  const badgeCls = product.badge ? (badgeColors[product.badge] ?? "bg-white/10 text-white/70") : "";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: Math.min(index * 0.05, 0.4), duration: 0.5 }}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      className="group relative rounded-2xl overflow-hidden bg-[#071525] border border-white/8 hover:border-gold/25 transition-all duration-500 cursor-pointer"
+      style={{ boxShadow: isHovered ? "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,162,39,0.12)" : "none" }}
+    >
+      {/* Image */}
+      <div className="relative overflow-hidden aspect-[3/3.5]" onClick={onSelect}>
+        <img
+          src={product.img}
+          alt={product.name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071525] via-[#071525]/30 to-transparent" />
+        <div className={`absolute inset-0 bg-gradient-to-t from-[#071525]/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+        {/* Badge top-left */}
+        {product.badge && (
+          <div className="absolute top-3 left-3">
+            <span className={`inline-block px-2.5 py-1 rounded-md text-[9px] font-bold tracking-widest uppercase ${badgeCls}`}>
+              {product.badge}
+            </span>
+          </div>
+        )}
+
+        {/* Original price badge top-right */}
+        {product.originalPrice && (
+          <div className="absolute top-3 right-3 bg-navy/70 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
+            <span className="text-[9px] text-white/40 line-through">{product.originalPrice}</span>
+          </div>
+        )}
+
+        {/* Hover: zoom icon */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.8 }}
+          transition={{ duration: 0.2 }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        >
+          <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
+            <ZoomIn className="w-5 h-5 text-white" />
+          </div>
+        </motion.div>
+
+        {/* Book button — slides up on hover */}
+        <motion.div
+          initial={{ y: 16, opacity: 0 }}
+          animate={{ y: isHovered ? 0 : 16, opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.25 }}
+          className="absolute bottom-4 left-3 right-3"
+          onClick={(e) => { e.stopPropagation(); onBook(); }}
+        >
+          <button className="w-full py-2.5 bg-gold text-navy font-bold rounded-xl text-[11px] tracking-widest uppercase hover:bg-gold/90 transition-colors flex items-center justify-center gap-1.5 shadow-xl shadow-gold/20">
+            Book Now <ArrowUpRight className="w-3.5 h-3.5" />
+          </button>
+        </motion.div>
+      </div>
+
+      {/* Info */}
+      <div className="p-3 md:p-4" onClick={onSelect}>
+        <span className={`text-[9px] font-bold tracking-[2px] uppercase ${categoryColors[product.category] ?? "text-gold"}`}>
+          {product.categoryLabel}
+        </span>
+        <h3 className="text-sm md:text-base font-semibold text-white mt-1 leading-snug group-hover:text-gold transition-colors line-clamp-1">
+          {product.name}
+        </h3>
+        <p className="text-[11px] text-white/40 mt-0.5 line-clamp-1">{product.subtitle}</p>
+        <div className="flex items-center justify-between mt-3">
+          <div className="flex items-baseline gap-2">
+            <span className="text-base font-serif font-bold text-gold">{product.price}</span>
+            {product.originalPrice && (
+              <span className="text-[11px] text-white/25 line-through">{product.originalPrice}</span>
+            )}
+          </div>
+          <motion.div
+            animate={{ x: isHovered ? 0 : -4, opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ArrowUpRight className="w-4 h-4 text-gold/60" />
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -1394,7 +1971,7 @@ function AccommodationsSection({ openRoom, openGalleryInterior }: { openRoom: (r
   );
 }
 
-// --- FleetSection — ↗ arrow icon on each card navigates to reservation.tsx ---
+// --- FleetSection ---
 function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
   return (
     <section id="fleet" className="py-12 md:py-5 px-4 md:px-8 lg:px-16 bg-navy">
@@ -1415,14 +1992,11 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {FLEET.map((f, i) => (
             <div key={i} className="relative aspect-[3/4] rounded-3xl overflow-hidden group shadow-2xl">
-              {/* Card image + overlay — clicking the card body opens the modal */}
               <div className="absolute inset-0 cursor-pointer" onClick={() => openFleet(f)}>
                 <img src={f.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                 <div className="absolute inset-0 bg-navy/20 group-hover:bg-navy/80 transition-colors duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-500" />
               </div>
-
-              {/* ↗ Arrow icon — navigates directly to /reservation with this vessel pre-selected */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -1433,8 +2007,6 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
               >
                 <ArrowUpRight className="w-5 h-5 text-[#040d1a]" />
               </button>
-
-              {/* Card text content */}
               <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10 pointer-events-none">
                 <div className="translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
                   <p className="font-bold text-lg md:text-xl mb-3 text-white group-hover:text-gold transition-colors">{f.name}</p>
