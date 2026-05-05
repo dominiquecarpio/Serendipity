@@ -917,7 +917,12 @@ export default function App() {
 }
 
 // --- Navbar ---
+// --- Navbar ---
 function Navbar({ isScrolled, setMobileMenuOpen, openAvail }: { isScrolled: boolean; setMobileMenuOpen: (o: boolean) => void; openAvail: () => void }) {
+  // Split links into main nav and dropdown
+  const mainLinks = ["Vessel", "Experiences", "Destinations", "Pricing"];
+  const dropdownLinks = ["Accommodations", "Fleet", "Culinary", "Mechanical", "Reviews"];
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 px-4 md:px-8 lg:px-16 ${isScrolled ? "bg-navy/90 backdrop-blur-2xl py-3 shadow-xl" : "py-6 md:py-8"}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -932,14 +937,32 @@ function Navbar({ isScrolled, setMobileMenuOpen, openAvail }: { isScrolled: bool
             <span className="text-[10px] font-bold text-white/40 tracking-[2px] uppercase group-hover/avail:text-gold transition-colors">Live Availability</span>
           </button>
         </div>
-        <div className="hidden lg:flex items-center gap-0.5 xl:gap-1">
-          {["Vessel","Experiences","Accommodations","Fleet","Culinary","Destinations","Pricing","Mechanical","Reviews"].map((l) => (
-            <a key={l} href={`#${l.toLowerCase()}`} className="px-2 xl:px-3 py-2 text-[11px] xl:text-xs font-medium text-white/70 hover:text-white transition-colors relative group">
+        
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-2 xl:gap-4">
+          {/* Main Links */}
+          {mainLinks.map((l) => (
+            <a key={l} href={`#${l.toLowerCase()}`} className="px-3 py-2 text-sm xl:text-base font-medium text-white/70 hover:text-white transition-colors relative group">
               {l}
               <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-1/2" />
             </a>
           ))}
+
+          {/* Dropdown Menu */}
+          <div className="relative group/dropdown py-2">
+            <button className="flex items-center gap-1 px-3 py-2 text-sm xl:text-base font-medium text-white/70 group-hover/dropdown:text-white transition-colors cursor-pointer">
+              Explore <ChevronDown className="w-4 h-4 transition-transform group-hover/dropdown:rotate-180" />
+            </button>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-navy-light/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-300 flex flex-col overflow-hidden py-2">
+              {dropdownLinks.map((l) => (
+                <a key={l} href={`#${l.toLowerCase()}`} className="px-5 py-3 text-sm font-medium text-white/70 hover:text-gold hover:bg-white/5 transition-colors relative">
+                  {l}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
+
         <div className="flex items-center gap-3">
           <a href="#booking" className="hidden md:flex bg-gold px-5 xl:px-8 py-2.5 xl:py-3 rounded-full text-navy font-bold text-xs xl:text-sm hover:translate-y-[-2px] transition-all shadow-lg shadow-gold/20 hover:shadow-gold/30">Book Now</a>
           <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden p-2 text-white hover:bg-white/5 rounded-lg transition-colors">
