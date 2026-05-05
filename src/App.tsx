@@ -40,12 +40,6 @@ import {
   Activity,
   Camera,
   Eye,
-  Tag,
-  Grid,
-  LayoutGrid,
-  Layers,
-  SlidersHorizontal,
-  Sparkles,
 } from "lucide-react";
 
 // --- Types ---
@@ -80,19 +74,6 @@ interface GalleryImage {
   src: string;
   tab: "exterior" | "interior";
   label: string;
-}
-
-// --- Feature Gallery Types ---
-interface FeatureProduct {
-  img: string;
-  category: "leisure" | "celebration" | "corporate" | "wellness" | "culinary" | "vip";
-  categoryLabel: string;
-  name: string;
-  subtitle: string;
-  price: string;
-  originalPrice?: string;
-  badge?: string;
-  featured?: boolean;
 }
 
 // --- Navigation helper ---
@@ -396,145 +377,44 @@ const SPECIAL_RATES = [
   },
 ];
 
-// --- Feature Gallery Data ---
-const FEATURE_PRODUCTS: FeatureProduct[] = [
-  {
-    img: "assets/occasion1.png",
-    category: "leisure",
-    categoryLabel: "Leisure",
-    name: "Sunset Cruise Package",
-    subtitle: "4-Hour Gulf Coast Escape",
-    price: "$1,200",
-    originalPrice: "$1,800",
-    badge: "SAVE 33%",
-    featured: false,
-  },
-  {
-    img: "assets/occasion2.png",
-    category: "celebration",
-    categoryLabel: "Celebration",
-    name: "Birthday & Anniversary",
-    subtitle: "6-Hour Private Charter",
-    price: "$7,500",
-    badge: "POPULAR",
-    featured: true,
-  },
-  {
-    img: "assets/occasion3.png",
-    category: "corporate",
-    categoryLabel: "Corporate",
-    name: "Executive Retreat",
-    subtitle: "Full-Day Corporate Charter",
-    price: "$15,000",
-    badge: "EXCLUSIVE",
-    featured: false,
-  },
-  {
-    img: "assets/occasion4.png",
-    category: "wellness",
-    categoryLabel: "Wellness",
-    name: "Wellness Retreat",
-    subtitle: "Half-Day Mindfulness Journey",
-    price: "$3,500",
-    originalPrice: "$4,500",
-    badge: "SAVE 22%",
-    featured: false,
-  },
-  {
-    img: "assets/occasion5.png",
-    category: "vip",
-    categoryLabel: "VIP Suite",
-    name: "Master Stateroom Night",
-    subtitle: "Overnight King Suite",
-    price: "$2,800",
-    badge: "LUXURY",
-    featured: false,
-  },
-  {
-    img: "assets/occasion6.png",
-    category: "culinary",
-    categoryLabel: "Culinary",
-    name: "Chef's Table Experience",
-    subtitle: "Private 5-Course Dinner",
-    price: "$450",
-    originalPrice: "$600",
-    badge: "PER GUEST",
-    featured: false,
-  },
-  {
-    img: "assets/cheryl_foods.jpeg",
-    category: "culinary",
-    categoryLabel: "Culinary",
-    name: "Fine Dining Charter",
-    subtitle: "Chef Cheryl Signature Menu",
-    price: "$7,500",
-    badge: "CHEF'S CHOICE",
-    featured: false,
-  },
-  {
-    img: "assets/gallerymain.png",
-    category: "vip",
-    categoryLabel: "VIP Suite",
-    name: "Weekend Stateroom Package",
-    subtitle: "2 Nights · 4 Private Suites",
-    price: "$20,000",
-    badge: "BEST VALUE",
-    featured: true,
-  },
-  {
-    img: "assets/hero1.png",
-    category: "leisure",
-    categoryLabel: "Leisure",
-    name: "Day Excursion",
-    subtitle: "Island Hopping · Jet Skis",
-    price: "$10,000",
-    badge: "TOP RATED",
-    featured: false,
-  },
-  {
-    img: "assets/hero2.png",
-    category: "wellness",
-    categoryLabel: "Wellness",
-    name: "Sunrise Yoga Cruise",
-    subtitle: "3-Hour Morning Retreat",
-    price: "$1,800",
-    originalPrice: "$2,200",
-    badge: "SAVE 18%",
-    featured: false,
-  },
-  {
-    img: "assets/egmont_key.jpg",
-    category: "leisure",
-    categoryLabel: "Leisure",
-    name: "Egmont Key Expedition",
-    subtitle: "History & Wildlife Tour",
-    price: "$2,400",
-    badge: "GUIDED",
-    featured: false,
-  },
-  {
-    img: "assets/cheryl_foods2.jpeg",
-    category: "culinary",
-    categoryLabel: "Culinary",
-    name: "Wine & Cheese Evening",
-    subtitle: "Curated Tasting at Sea",
-    price: "$7,500",
-    badge: "CURATED",
-    featured: false,
-  },
+// ─── Photo Gallery Data ────────────────────────────────────────────────────────
+interface PhotoGalleryItem {
+  src: string;
+  label: string;
+  glowColor: "gold" | "blue" | "teal" | "rose";
+  tall?: boolean;
+}
+
+const PHOTO_COL_1: PhotoGalleryItem[] = [
+  { src: "assets/occasion1.png",      label: "Sunset Cruise",        glowColor: "gold", tall: true  },
+  { src: "assets/occasion2.png",      label: "Anniversary Charter",  glowColor: "teal", tall: false },
+  { src: "assets/hero1.png",          label: "Gulf Waters",          glowColor: "blue", tall: true  },
+  { src: "assets/cheryl_foods.jpeg",  label: "Fine Dining",          glowColor: "rose", tall: false },
+  { src: "assets/occasion4.png",      label: "Wellness Retreat",     glowColor: "teal", tall: true  },
 ];
 
-type FeatureCategory = "all" | "leisure" | "celebration" | "corporate" | "wellness" | "culinary" | "vip";
-
-const CATEGORY_FILTERS: { key: FeatureCategory; label: string }[] = [
-  { key: "all", label: "ALL" },
-  { key: "leisure", label: "LEISURE" },
-  { key: "celebration", label: "CELEBRATION" },
-  { key: "corporate", label: "CORPORATE" },
-  { key: "wellness", label: "WELLNESS" },
-  { key: "culinary", label: "CULINARY" },
-  { key: "vip", label: "VIP SUITE" },
+const PHOTO_COL_2: PhotoGalleryItem[] = [
+  { src: "assets/hero2.png",          label: "Open Sea",             glowColor: "blue", tall: false },
+  { src: "assets/gallerymain.png",    label: "Master Stateroom",     glowColor: "gold", tall: true  },
+  { src: "assets/occasion3.png",      label: "Corporate Event",      glowColor: "teal", tall: false },
+  { src: "assets/cheryl_foods1.jpeg", label: "Culinary Artistry",    glowColor: "rose", tall: true  },
+  { src: "assets/occasion5.png",      label: "VIP Suite",            glowColor: "blue", tall: false },
 ];
+
+const PHOTO_COL_3: PhotoGalleryItem[] = [
+  { src: "assets/cheryl_foods2.jpeg", label: "Chef's Table",         glowColor: "rose", tall: true  },
+  { src: "assets/hero3.png",          label: "Starboard View",       glowColor: "blue", tall: false },
+  { src: "assets/occasion6.png",      label: "Chef's Kitchen",       glowColor: "gold", tall: true  },
+  { src: "assets/occasion1.png",      label: "Island Hopping",       glowColor: "teal", tall: false },
+  { src: "assets/gallerymain.png",    label: "Luxury Interior",      glowColor: "gold", tall: true  },
+];
+
+const GLOW_MAP: Record<PhotoGalleryItem["glowColor"], string> = {
+  gold:  "linear-gradient(90deg, transparent, #c9a227, transparent)",
+  blue:  "linear-gradient(90deg, transparent, #3b82f6, transparent)",
+  teal:  "linear-gradient(90deg, transparent, #14b8a6, transparent)",
+  rose:  "linear-gradient(90deg, transparent, #f43f5e, transparent)",
+};
 
 // --- Calendar Component ---
 function CalendarComponent({ onSelect }: { onSelect: (date: string) => void }) {
@@ -594,6 +474,160 @@ function CalendarComponent({ onSelect }: { onSelect: (date: string) => void }) {
   );
 }
 
+// ─── Photo Gallery Column ─────────────────────────────────────────────────────
+function PhotoScrollColumn({
+  items,
+  speed,
+  direction,
+  topOffset = 0,
+  onZoom,
+}: {
+  items: PhotoGalleryItem[];
+  speed: number;
+  direction: 1 | -1;
+  topOffset?: number;
+  onZoom: (src: string) => void;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(0);
+  const rafRef = useRef<number>(0);
+  const dragRef = useRef<{ startY: number; startOffset: number } | null>(null);
+  const pausedRef = useRef(false);
+  const doubled = [...items, ...items];
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    function loop() {
+      if (!pausedRef.current && dragRef.current === null) {
+        offsetRef.current += speed * direction;
+        const half = el!.scrollHeight / 2;
+        if (direction === 1 && offsetRef.current > half) offsetRef.current -= half;
+        if (direction === -1 && offsetRef.current < -half) offsetRef.current += half;
+      }
+      el!.style.transform = `translateY(${-offsetRef.current}px)`;
+      rafRef.current = requestAnimationFrame(loop);
+    }
+    rafRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [speed, direction]);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      if (!dragRef.current || !trackRef.current) return;
+      const delta = dragRef.current.startY - e.clientY;
+      const half = trackRef.current.scrollHeight / 2;
+      let next = dragRef.current.startOffset + delta;
+      if (next > half) next -= half;
+      if (next < 0) next += half;
+      offsetRef.current = next;
+    };
+    const onUp = () => { dragRef.current = null; };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+
+  return (
+    <div
+      className="relative overflow-hidden"
+      style={{ height: 680 }}
+      onMouseEnter={() => { pausedRef.current = true; }}
+      onMouseLeave={() => { pausedRef.current = false; }}
+      onMouseDown={(e) => {
+        dragRef.current = { startY: e.clientY, startOffset: offsetRef.current };
+      }}
+      onTouchStart={(e) => {
+        dragRef.current = { startY: e.touches[0].clientY, startOffset: offsetRef.current };
+      }}
+      onTouchMove={(e) => {
+        if (!dragRef.current || !trackRef.current) return;
+        const delta = dragRef.current.startY - e.touches[0].clientY;
+        const half = trackRef.current.scrollHeight / 2;
+        let next = dragRef.current.startOffset + delta;
+        if (next > half) next -= half;
+        if (next < 0) next += half;
+        offsetRef.current = next;
+      }}
+      onTouchEnd={() => { dragRef.current = null; }}
+    >
+      {/* Fade masks */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 z-10" style={{ height: 100, background: "linear-gradient(to bottom, #040d1a, transparent)" }} />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10" style={{ height: 100, background: "linear-gradient(to top, #040d1a, transparent)" }} />
+
+      <div
+        ref={trackRef}
+        className="flex flex-col gap-4 cursor-grab active:cursor-grabbing select-none"
+        style={{ marginTop: topOffset, willChange: "transform" }}
+      >
+        {doubled.map((item, i) => (
+          <PhotoGalleryCard key={`${i}-${item.src}`} item={item} onZoom={onZoom} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Photo Gallery Card ───────────────────────────────────────────────────────
+function PhotoGalleryCard({ item, onZoom }: { item: PhotoGalleryItem; onZoom: (src: string) => void }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
+      style={{
+        border: hovered ? "1px solid rgba(201,162,39,0.3)" : "1px solid rgba(255,255,255,0.06)",
+        transition: "border-color 0.3s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+        transform: hovered ? "scale(1.03)" : "scale(1)",
+        background: "#061020",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => onZoom(item.src)}
+    >
+      {/* Top glow line */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 2,
+        background: GLOW_MAP[item.glowColor],
+        opacity: hovered ? 1 : 0,
+        transition: "opacity 0.3s",
+        zIndex: 5,
+      }} />
+
+      <img
+        src={item.src}
+        alt={item.label}
+        draggable={false}
+        className="w-full block object-cover"
+        style={{
+          aspectRatio: item.tall ? "3/4" : "16/9",
+          transition: "transform 0.7s cubic-bezier(0.19,1,0.22,1)",
+          transform: hovered ? "scale(1.08)" : "scale(1)",
+        }}
+      />
+
+      {/* Hover overlay */}
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "linear-gradient(to top, rgba(4,13,26,0.9) 0%, rgba(4,13,26,0.1) 60%, transparent 100%)",
+        opacity: hovered ? 1 : 0,
+        transition: "opacity 0.4s",
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        padding: "14px 16px",
+      }}>
+        <span style={{ fontSize: 10, letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", fontWeight: 600 }}>
+          {item.label}
+        </span>
+        <ZoomIn style={{ width: 15, height: 15, color: "rgba(255,255,255,0.5)" }} />
+      </div>
+    </div>
+  );
+}
+
 // --- Main App ---
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -612,7 +646,6 @@ export default function App() {
   const [showFab, setShowFab] = useState(false);
   const [isStickyRoute, setIsStickyRoute] = useState(false);
   const [toasts, setToasts] = useState<{ id: number; msg: string; title: string; type: string }[]>([]);
-  const [featureProduct, setFeatureProduct] = useState<FeatureProduct | null>(null);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -709,15 +742,14 @@ export default function App() {
         />
         <ExperiencesSection openExp={setSelectedExp} />
         <FleetSection openFleet={setSelectedFleet} />
-        {/* ── NEW Feature Gallery Section ── */}
-        <FeatureGallerySection
-          onSelect={setFeatureProduct}
-          addToast={addToast}
-        />
         <AccommodationsSection openRoom={setSelectedRoom} openGalleryInterior={openGalleryInterior} />
         <CulinarySection />
         <DestinationsSection />
         <PricingSection />
+
+        {/* ─── NEW: Photo Gallery Section ─── */}
+        <PhotoGallerySection onLightbox={setLightboxImg} />
+
         <MechanicalSection />
         <ReviewsSection />
         <BookingSection addToast={addToast} openPayment={navigateToPayment} />
@@ -826,50 +858,6 @@ export default function App() {
           </Modal>
         )}
 
-        {/* Feature Product Modal */}
-        {featureProduct && (
-          <Modal onClose={() => setFeatureProduct(null)}>
-            <div className="max-w-2xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
-              <div className="relative h-72">
-                <img src={featureProduct.img} alt={featureProduct.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-light via-navy/30 to-transparent" />
-                {featureProduct.badge && (
-                  <div className="absolute top-5 left-5">
-                    <span className="px-3 py-1.5 bg-gold text-navy text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg">
-                      {featureProduct.badge}
-                    </span>
-                  </div>
-                )}
-                <div className="absolute bottom-6 left-6 right-6">
-                  <span className="text-[10px] font-bold tracking-[2px] uppercase text-gold/80 block mb-1">{featureProduct.categoryLabel}</span>
-                  <h2 className="text-2xl md:text-3xl font-serif">{featureProduct.name}</h2>
-                  <p className="text-white/50 text-sm mt-1">{featureProduct.subtitle}</p>
-                </div>
-              </div>
-              <div className="p-6 md:p-10">
-                <div className="flex items-center gap-4 mb-8">
-                  <span className="text-3xl font-serif text-gold font-bold">{featureProduct.price}</span>
-                  {featureProduct.originalPrice && (
-                    <span className="text-white/30 text-lg line-through">{featureProduct.originalPrice}</span>
-                  )}
-                </div>
-                <div className="grid grid-cols-2 gap-3 mb-8">
-                  {["Professional crew & captain","Personalized itinerary","All safety equipment","On-water support"].map((f, i) => (
-                    <div key={i} className="flex items-center gap-2 p-3 bg-white/5 border border-white/10 rounded-xl">
-                      <Check className="w-3.5 h-3.5 text-gold shrink-0" />
-                      <span className="text-xs text-white/60">{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <a href="#booking" onClick={() => setFeatureProduct(null)}
-                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2">
-                  Book This Package <ArrowUpRight className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </Modal>
-        )}
-
         {/* Gallery Modal */}
         {isGalleryOpen && (
           <Modal onClose={() => setIsGalleryOpen(false)}>
@@ -921,7 +909,7 @@ export default function App() {
                         className="aspect-[4/3] rounded-2xl overflow-hidden border border-white/8 group relative cursor-pointer"
                         onClick={() => setLightboxImg(img.src)}
                       >
-                        <img src={img.src} className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700" alt={img.label} />
+                        <img src={img.src} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={img.label} />
                         <div className="absolute inset-0 bg-navy/10 group-hover:bg-navy/50 transition-colors duration-400 flex items-center justify-center">
                           <ZoomIn className="w-9 h-9 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
                         </div>
@@ -945,6 +933,7 @@ export default function App() {
             exit={{ opacity: 0 }}
             onClick={() => setLightboxImg(null)}
             className="fixed inset-0 bg-black/96 z-[10003] flex items-center justify-center p-4"
+            style={{ backdropFilter: "blur(12px)" }}
           >
             <button onClick={() => setLightboxImg(null)} className="absolute top-6 right-6 p-2 text-white/50 hover:text-white">
               <X className="w-8 h-8" />
@@ -1138,384 +1127,135 @@ export default function App() {
   );
 }
 
-// ─────────────────────────────────────────────
-// FEATURE GALLERY SECTION (NEW)
-// ─────────────────────────────────────────────
-function FeatureGallerySection({
-  onSelect,
-  addToast,
-}: {
-  onSelect: (p: FeatureProduct) => void;
-  addToast: (m: string, t: string, tp: string) => void;
-}) {
-  const [activeFilter, setActiveFilter] = useState<FeatureCategory>("all");
-  const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc">("featured");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [showSortMenu, setShowSortMenu] = useState(false);
-  const [showCount, setShowCount] = useState(8);
-
-  const sortMenuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (sortMenuRef.current && !sortMenuRef.current.contains(e.target as Node)) {
-        setShowSortMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  const parsePrice = (p: string) =>
-    parseFloat(p.replace(/[^0-9.]/g, ""));
-
-  const filtered = useMemo(() => {
-    let list = [...FEATURE_PRODUCTS];
-    if (activeFilter !== "all") list = list.filter((p) => p.category === activeFilter);
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      list = list.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.subtitle.toLowerCase().includes(q) ||
-          p.categoryLabel.toLowerCase().includes(q)
-      );
-    }
-    if (sortBy === "price-asc") list.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
-    else if (sortBy === "price-desc") list.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
-    else list.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-    return list;
-  }, [activeFilter, sortBy, searchQuery]);
-
-  const visible = filtered.slice(0, showCount);
-  const hasMore = filtered.length > showCount;
-
-  const sortLabels: Record<string, string> = {
-    featured: "Best Selling",
-    "price-asc": "Price: Low → High",
-    "price-desc": "Price: High → Low",
-  };
-
+// ─── Photo Gallery Section ────────────────────────────────────────────────────
+function PhotoGallerySection({ onLightbox }: { onLightbox: (src: string) => void }) {
   return (
-    <section id="feature-gallery" className="py-16 md:py-24 bg-[#040d1a] relative overflow-hidden">
-      {/* Ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-gold/4 blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-800/10 blur-[120px] pointer-events-none" />
+    <section
+      id="gallery"
+      style={{
+        background: "#040d1a",
+        padding: "80px 0 64px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Ambient glow blobs */}
+      <div style={{
+        position: "absolute", top: -100, left: "8%",
+        width: 500, height: 500,
+        background: "radial-gradient(circle, rgba(201,162,39,0.05) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", bottom: -60, right: "10%",
+        width: 400, height: 400,
+        background: "radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-10 md:mb-14"
+      {/* Divider line */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 1,
+        background: "linear-gradient(90deg, transparent, rgba(201,162,39,0.15), transparent)",
+      }} />
+
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        style={{ textAlign: "center", marginBottom: 52, padding: "0 24px" }}
+      >
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          gap: 14, marginBottom: 18,
+        }}>
+          <div style={{ width: 48, height: 1, background: "rgba(201,162,39,0.4)" }} />
+          <span style={{
+            fontSize: 10, letterSpacing: "5px", textTransform: "uppercase",
+            color: "rgba(201,162,39,0.7)", fontWeight: 700,
+          }}>
+            Photo Gallery
+          </span>
+          <div style={{ width: 48, height: 1, background: "rgba(201,162,39,0.4)" }} />
+        </div>
+
+        <h2 style={{
+          fontSize: "clamp(30px, 5vw, 54px)",
+          fontFamily: "serif",
+          fontWeight: 300,
+          color: "#fff",
+          lineHeight: 1.1,
+          letterSpacing: "-0.5px",
+          margin: 0,
+        }}>
+          The Moments,{" "}
+          <em style={{ color: "#c9a227", fontStyle: "italic" }}>The Memories.</em>
+        </h2>
+
+        <p style={{
+          marginTop: 14, fontSize: 13,
+          color: "rgba(255,255,255,0.3)", letterSpacing: "1px",
+        }}>
+          Drag · Swipe · Click to enlarge
+        </p>
+      </motion.div>
+
+      {/* Three-column scroll grid */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        gap: 16,
+        padding: "0 24px",
+        maxWidth: 1400,
+        margin: "0 auto",
+      }}>
+        <PhotoScrollColumn items={PHOTO_COL_1} speed={0.45} direction={1}  topOffset={0}   onZoom={onLightbox} />
+        <PhotoScrollColumn items={PHOTO_COL_2} speed={0.35} direction={-1} topOffset={-60} onZoom={onLightbox} />
+        <PhotoScrollColumn items={PHOTO_COL_3} speed={0.40} direction={1}  topOffset={-30} onZoom={onLightbox} />
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "center",
+        gap: 32, marginTop: 52, padding: "0 24px", flexWrap: "wrap",
+      }}>
+        <span style={{
+          fontSize: 10, letterSpacing: "2.5px", textTransform: "uppercase",
+          color: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", gap: 8,
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M8 9l4-4 4 4M8 15l4 4 4-4"/>
+          </svg>
+          Drag to explore
+        </span>
+
+        <a
+          href="#booking"
+          className="px-10 py-3.5 border border-gold/40 text-gold font-bold text-[10px] tracking-[4px] uppercase rounded-sm hover:bg-gold hover:text-navy transition-all"
+          style={{ textDecoration: "none" }}
         >
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-[1.5px] bg-gold" />
-                <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">Charter Packages</span>
-                <Sparkles className="w-3.5 h-3.5 text-gold/50" />
-              </div>
-              <h2 className="text-3xl md:text-5xl font-serif leading-tight">
-                Browse All
-                <br />
-                <em className="text-gold italic font-serif">Experiences & Packages</em>
-              </h2>
-            </div>
-            <p className="text-white/40 max-w-sm text-sm leading-relaxed md:text-right">
-              Every package includes professional crew, captain, and unmatched Gulf Coast luxury aboard Serendipity.
-            </p>
-          </div>
-        </motion.div>
+          Book Your Charter
+        </a>
 
-        {/* Controls bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8"
-        >
-          {/* Sort dropdown */}
-          <div className="relative" ref={sortMenuRef}>
-            <button
-              onClick={() => setShowSortMenu((v) => !v)}
-              className="flex items-center gap-2 px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:border-gold/30 hover:text-white transition-all whitespace-nowrap"
-            >
-              <SlidersHorizontal className="w-4 h-4 text-gold/60" />
-              Sort by: <span className="font-bold text-white">{sortLabels[sortBy]}</span>
-              <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${showSortMenu ? "rotate-180" : ""}`} />
-            </button>
-            <AnimatePresence>
-              {showSortMenu && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 mt-2 w-52 bg-navy-light border border-white/10 rounded-2xl shadow-2xl z-50 py-2 overflow-hidden"
-                >
-                  {(["featured", "price-asc", "price-desc"] as const).map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => { setSortBy(s); setShowSortMenu(false); }}
-                      className={`w-full text-left px-5 py-3 text-sm transition-colors ${sortBy === s ? "text-gold bg-gold/10" : "text-white/60 hover:text-white hover:bg-white/5"}`}
-                    >
-                      {sortLabels[s]}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Filter pill */}
-          <button
-            onClick={() => {}}
-            className="flex items-center gap-2 px-5 py-3 bg-gold text-navy font-bold rounded-xl text-sm hover:bg-gold/90 transition-colors whitespace-nowrap"
-          >
-            <Tag className="w-4 h-4" /> FILTER
-          </button>
-
-          {/* Search */}
-          <div className="flex-1 relative">
-            <input
-              type="text"
-              placeholder="Search packages..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-gold/40 transition-colors pr-10"
-            />
-            {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors">
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Results count */}
-          <div className="text-[11px] text-white/30 uppercase tracking-widest whitespace-nowrap self-center">
-            Showing {visible.length} of {filtered.length} packages
-          </div>
-        </motion.div>
-
-        {/* Category pills */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex flex-wrap gap-2 mb-10"
-        >
-          {CATEGORY_FILTERS.map((f) => (
-            <button
-              key={f.key}
-              onClick={() => { setActiveFilter(f.key); setShowCount(8); }}
-              className={`px-5 py-2.5 rounded-full text-[11px] font-bold tracking-[1.5px] uppercase transition-all border ${
-                activeFilter === f.key
-                  ? "bg-white text-navy border-white shadow-lg"
-                  : "bg-transparent border-white/15 text-white/50 hover:border-white/40 hover:text-white"
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeFilter + sortBy + searchQuery}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5"
-          >
-            {visible.map((product, i) => (
-              <FeatureCard
-                key={`${product.name}-${i}`}
-                product={product}
-                index={i}
-                isHovered={hoveredIndex === i}
-                onHover={() => setHoveredIndex(i)}
-                onLeave={() => setHoveredIndex(null)}
-                onSelect={() => onSelect(product)}
-                onBook={() => {
-                  addToast(`${product.name} added`, "Package Selected", "gold");
-                  window.location.hash = "booking";
-                }}
-              />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Empty state */}
-        {filtered.length === 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-24 text-center">
-            <p className="text-white/20 text-lg font-serif mb-2">No packages found</p>
-            <p className="text-white/10 text-sm">Try adjusting your search or filter</p>
-            <button onClick={() => { setSearchQuery(""); setActiveFilter("all"); }} className="mt-6 px-6 py-3 border border-white/10 rounded-xl text-gold text-sm hover:border-gold/30 transition-colors">
-              Clear Filters
-            </button>
-          </motion.div>
-        )}
-
-        {/* Load more */}
-        {hasMore && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-10 text-center"
-          >
-            <button
-              onClick={() => setShowCount((c) => c + 8)}
-              className="px-10 py-4 border border-white/10 rounded-2xl text-white/50 text-sm font-bold uppercase tracking-widest hover:border-gold/40 hover:text-gold transition-all"
-            >
-              Load More ({filtered.length - showCount} remaining)
-            </button>
-          </motion.div>
-        )}
+        <span style={{
+          fontSize: 10, letterSpacing: "2.5px", textTransform: "uppercase",
+          color: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", gap: 8,
+        }}>
+          Swipe on mobile
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+        </span>
       </div>
     </section>
   );
 }
 
-// ─── Feature Card ───
-function FeatureCard({
-  product,
-  index,
-  isHovered,
-  onHover,
-  onLeave,
-  onSelect,
-  onBook,
-}: {
-  product: FeatureProduct;
-  index: number;
-  isHovered: boolean;
-  onHover: () => void;
-  onLeave: () => void;
-  onSelect: () => void;
-  onBook: () => void;
-}) {
-  const categoryColors: Record<string, string> = {
-    leisure: "text-sky-400",
-    celebration: "text-pink-400",
-    corporate: "text-blue-400",
-    wellness: "text-emerald-400",
-    culinary: "text-amber-400",
-    vip: "text-gold",
-  };
-
-  const badgeColors: Record<string, string> = {
-    "POPULAR": "bg-gold text-navy",
-    "EXCLUSIVE": "bg-blue-500/20 text-blue-300 border border-blue-500/30",
-    "TOP RATED": "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
-    "LUXURY": "bg-purple-500/20 text-purple-300 border border-purple-500/30",
-    "BEST VALUE": "bg-gold/20 text-gold border border-gold/30",
-  };
-
-  const badgeCls = product.badge ? (badgeColors[product.badge] ?? "bg-white/10 text-white/70") : "";
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: Math.min(index * 0.05, 0.4), duration: 0.5 }}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-      className="group relative rounded-2xl overflow-hidden bg-[#071525] border border-white/8 hover:border-gold/25 transition-all duration-500 cursor-pointer"
-      style={{ boxShadow: isHovered ? "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,162,39,0.12)" : "none" }}
-    >
-      {/* Image */}
-      <div className="relative overflow-hidden aspect-[3/3.5]" onClick={onSelect}>
-        <img
-          src={product.img}
-          alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        />
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#071525] via-[#071525]/30 to-transparent" />
-        <div className={`absolute inset-0 bg-gradient-to-t from-[#071525]/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-        {/* Badge top-left */}
-        {product.badge && (
-          <div className="absolute top-3 left-3">
-            <span className={`inline-block px-2.5 py-1 rounded-md text-[9px] font-bold tracking-widest uppercase ${badgeCls}`}>
-              {product.badge}
-            </span>
-          </div>
-        )}
-
-        {/* Original price badge top-right */}
-        {product.originalPrice && (
-          <div className="absolute top-3 right-3 bg-navy/70 backdrop-blur-md border border-white/10 px-2 py-1 rounded-lg">
-            <span className="text-[9px] text-white/40 line-through">{product.originalPrice}</span>
-          </div>
-        )}
-
-        {/* Hover: zoom icon */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.8 }}
-          transition={{ duration: 0.2 }}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        >
-          <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
-            <ZoomIn className="w-5 h-5 text-white" />
-          </div>
-        </motion.div>
-
-        {/* Book button — slides up on hover */}
-        <motion.div
-          initial={{ y: 16, opacity: 0 }}
-          animate={{ y: isHovered ? 0 : 16, opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.25 }}
-          className="absolute bottom-4 left-3 right-3"
-          onClick={(e) => { e.stopPropagation(); onBook(); }}
-        >
-          <button className="w-full py-2.5 bg-gold text-navy font-bold rounded-xl text-[11px] tracking-widest uppercase hover:bg-gold/90 transition-colors flex items-center justify-center gap-1.5 shadow-xl shadow-gold/20">
-            Book Now <ArrowUpRight className="w-3.5 h-3.5" />
-          </button>
-        </motion.div>
-      </div>
-
-      {/* Info */}
-      <div className="p-3 md:p-4" onClick={onSelect}>
-        <span className={`text-[9px] font-bold tracking-[2px] uppercase ${categoryColors[product.category] ?? "text-gold"}`}>
-          {product.categoryLabel}
-        </span>
-        <h3 className="text-sm md:text-base font-semibold text-white mt-1 leading-snug group-hover:text-gold transition-colors line-clamp-1">
-          {product.name}
-        </h3>
-        <p className="text-[11px] text-white/40 mt-0.5 line-clamp-1">{product.subtitle}</p>
-        <div className="flex items-center justify-between mt-3">
-          <div className="flex items-baseline gap-2">
-            <span className="text-base font-serif font-bold text-gold">{product.price}</span>
-            {product.originalPrice && (
-              <span className="text-[11px] text-white/25 line-through">{product.originalPrice}</span>
-            )}
-          </div>
-          <motion.div
-            animate={{ x: isHovered ? 0 : -4, opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <ArrowUpRight className="w-4 h-4 text-gold/60" />
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 // --- Navbar ---
 function Navbar({ isScrolled, setMobileMenuOpen, openAvail }: { isScrolled: boolean; setMobileMenuOpen: (o: boolean) => void; openAvail: () => void }) {
-  const mainLinks = ["Vessel", "Experiences", "Destinations", "Pricing"];
+  const mainLinks = ["Vessel", "Experiences", "Gallery", "Destinations", "Pricing"];
   const dropdownLinks = ["Accommodations", "Fleet", "Culinary", "Mechanical", "Reviews"];
 
   return (
@@ -1574,7 +1314,7 @@ function MobileMenu({ setMobileMenuOpen, openAvail }: { setMobileMenuOpen: (o: b
         <X className="w-8 h-8" />
       </button>
       <div className="flex flex-col gap-5 text-center mb-10">
-        {["Home","Vessel","Experiences","Accommodations","Fleet","Culinary","Destinations","Pricing","Mechanical","Reviews","Contact"].map((l, i) => (
+        {["Home","Vessel","Experiences","Gallery","Accommodations","Fleet","Culinary","Destinations","Pricing","Mechanical","Reviews","Contact"].map((l, i) => (
           <motion.a key={l} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 + 0.1 }}
             href={`#${l === "Home" ? "home" : l === "Contact" ? "booking" : l.toLowerCase()}`}
             onClick={() => setMobileMenuOpen(false)}
@@ -1998,10 +1738,7 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-500" />
               </div>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goToReservation(f.imgIndex, f.name);
-                }}
+                onClick={(e) => { e.stopPropagation(); goToReservation(f.imgIndex, f.name); }}
                 className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#c9a227] flex items-center justify-center shadow-lg hover:scale-110 hover:shadow-[#c9a227]/40 transition-all"
                 aria-label={`Reserve ${f.name}`}
               >
@@ -2614,6 +2351,7 @@ function Footer() {
               <li className="text-sm text-white/30">Maximo Marina</li>
               <li className="text-sm text-white/30">3701 50 Ave S.</li>
               <li className="text-sm text-white/30">Saint Petersburg, FL 33371</li>
+              <li><a href="#gallery" className="text-sm text-white/30 hover:text-gold transition-colors cursor-pointer block">View Photo Gallery →</a></li>
               <li><a href="#destinations" className="text-sm text-white/30 hover:text-gold transition-colors cursor-pointer block">View Destinations →</a></li>
             </ul>
           </div>
