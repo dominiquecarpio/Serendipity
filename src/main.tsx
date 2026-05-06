@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
+import BookPage from './Book.tsx';
 import PaymentPage from './Payment.tsx';
 import ReservationPage from './reservation.tsx';
 import './index.css';
@@ -14,6 +15,10 @@ function Root() {
 
   if (path === '/reservation' || path === '/reservation/') {
     return <ReservationPage />;
+  }
+
+  if (path === '/book' || path === '/book/') {
+    return <BookPage />;
   }
 
   return <App />;
