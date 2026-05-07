@@ -3138,7 +3138,7 @@ function ScrollVideoSection() {
     >
       <video
         ref={videoRef}
-        className="w-full h-full object-cover bg-black"
+        className="w-full h-full object-contain bg-black"
         muted
         playsInline
         preload="metadata"
