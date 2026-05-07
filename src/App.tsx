@@ -1291,6 +1291,7 @@ function MobileGalleryStrip({ onZoom }: { onZoom: (src: string) => void }) {
 // --- Main App ---
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isInBoatSection, setIsInBoatSection] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroIdx, setHeroIdx] = useState(0);
   const [selectedExp, setSelectedExp] = useState<Experience | null>(null);
@@ -1324,6 +1325,7 @@ export default function App() {
       setShowFab(window.scrollY > 600);
       const vesselSection = document.getElementById("vessel");
       const experiencesSection = document.getElementById("experiences");
+      const boatSection = document.getElementById("boat-rotation");
       if (vesselSection && experiencesSection) {
         const vesselTop = vesselSection.offsetTop;
         const experiencesBottom =
@@ -1332,8 +1334,19 @@ export default function App() {
           window.scrollY > vesselTop && window.scrollY < experiencesBottom,
         );
       }
+      if (boatSection) {
+        const rect = boatSection.getBoundingClientRect();
+        const approachStart = window.innerHeight * 0.2;
+        const isApproachingOrInside =
+          rect.top <= window.innerHeight - approachStart &&
+          rect.bottom >= approachStart;
+        setIsInBoatSection(isApproachingOrInside);
+      } else {
+        setIsInBoatSection(false);
+      }
     };
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -1366,6 +1379,7 @@ export default function App() {
 
       <Navbar
         isScrolled={isScrolled}
+        isHidden={isInBoatSection}
         setMobileMenuOpen={setMobileMenuOpen}
         openAvail={() => setIsAvailOpen(true)}
       />
@@ -1430,6 +1444,7 @@ export default function App() {
           openSpecs={() => setIsSpecsOpen(true)}
         />
         <ExperiencesSection openExp={setSelectedExp} />
+        <ScrollVideoSection />
         <FleetSection openFleet={setSelectedFleet} />
         <AccommodationsSection
           openRoom={setSelectedRoom}
@@ -2180,10 +2195,12 @@ function PhotoGallerySection({
 // --- Navbar ---
 function Navbar({
   isScrolled,
+  isHidden,
   setMobileMenuOpen,
   openAvail,
 }: {
   isScrolled: boolean;
+  isHidden: boolean;
   setMobileMenuOpen: (o: boolean) => void;
   openAvail: () => void;
 }) {
@@ -2204,7 +2221,7 @@ function Navbar({
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 px-4 md:px-8 lg:px-16 ${isScrolled ? "bg-navy/90 backdrop-blur-2xl py-2 md:py-3 shadow-xl" : "py-4 md:py-8"}`}
+      className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 px-6 md:px-16 ${isScrolled ? "bg-navy/90 backdrop-blur-2xl py-4 shadow-xl" : "py-8"} ${isHidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3 md:gap-8">
@@ -3028,6 +3045,105 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
           Explore Destinations <ChevronRight className="w-4 h-4" />
         </a>
       </div>
+    </section>
+  );
+}
+
+function ScrollVideoSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const section = sectionRef.current;
+    const video = videoRef.current;
+    if (!section || !video) return;
+
+    const activateVideo = () => {
+      void video.play().catch(() => {});
+      video.pause();
+    };
+
+    const once = (
+      el: EventTarget,
+      event: string,
+      fn: (event: Event) => void,
+    ) => {
+      const handler = (e: Event) => {
+        el.removeEventListener(event, handler);
+        fn(e);
+      };
+      el.addEventListener(event, handler, { passive: true });
+      return handler;
+    };
+
+    once(document.documentElement, "touchstart", activateVideo);
+    video.pause();
+    video.currentTime = 0;
+
+    let scrubTween: gsap.core.Tween | null = null;
+
+    const setupScrollScrub = () => {
+      if (scrubTween) {
+        scrubTween.kill();
+        scrubTween = null;
+      }
+
+      scrubTween = gsap.fromTo(
+        video,
+        { currentTime: 0 },
+        {
+          currentTime: Math.max(video.duration || 1, 1),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.5,
+            pin: true,
+          },
+        },
+      );
+    };
+
+    const onLoadedMetadata = () => {
+      setupScrollScrub();
+    };
+
+    if (video.readyState >= 1) {
+      setupScrollScrub();
+    } else {
+      video.addEventListener("loadedmetadata", onLoadedMetadata, {
+        once: true,
+      });
+    }
+
+    return () => {
+      video.removeEventListener("loadedmetadata", onLoadedMetadata);
+      scrubTween?.kill();
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.trigger === section) {
+          trigger.kill();
+        }
+      });
+    };
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="boat-rotation"
+      className="relative bg-navy overflow-hidden h-screen"
+    >
+      <video
+        ref={videoRef}
+        className="w-full h-full object-cover bg-black"
+        muted
+        playsInline
+        preload="metadata"
+        src="/assets/boat-rotate.mp4"
+      />
     </section>
   );
 }
