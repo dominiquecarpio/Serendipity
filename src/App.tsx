@@ -436,102 +436,27 @@ interface PhotoGalleryItem {
 }
 
 const PHOTO_COL_1: PhotoGalleryItem[] = [
-  {
-    src: "assets/occasion1.png",
-    label: "Sunset Cruise",
-    glowColor: "gold",
-    tall: true,
-  },
-  {
-    src: "assets/occasion2.png",
-    label: "Anniversary Charter",
-    glowColor: "teal",
-    tall: false,
-  },
-  {
-    src: "assets/hero1.png",
-    label: "Gulf Waters",
-    glowColor: "blue",
-    tall: true,
-  },
-  {
-    src: "assets/cheryl_foods.jpeg",
-    label: "Fine Dining",
-    glowColor: "rose",
-    tall: false,
-  },
-  {
-    src: "assets/occasion4.png",
-    label: "Wellness Retreat",
-    glowColor: "teal",
-    tall: true,
-  },
+  { src: "assets/occasion1.png", label: "Sunset Cruise", glowColor: "gold", tall: true },
+  { src: "assets/occasion2.png", label: "Anniversary Charter", glowColor: "teal", tall: false },
+  { src: "assets/hero1.png", label: "Gulf Waters", glowColor: "blue", tall: true },
+  { src: "assets/cheryl_foods.jpeg", label: "Fine Dining", glowColor: "rose", tall: false },
+  { src: "assets/occasion4.png", label: "Wellness Retreat", glowColor: "teal", tall: true },
 ];
 
 const PHOTO_COL_2: PhotoGalleryItem[] = [
-  {
-    src: "assets/hero2.png",
-    label: "Open Sea",
-    glowColor: "blue",
-    tall: false,
-  },
-  {
-    src: "assets/gallerymain.png",
-    label: "Master Stateroom",
-    glowColor: "gold",
-    tall: true,
-  },
-  {
-    src: "assets/occasion3.png",
-    label: "Corporate Event",
-    glowColor: "teal",
-    tall: false,
-  },
-  {
-    src: "assets/cheryl_foods1.jpeg",
-    label: "Culinary Artistry",
-    glowColor: "rose",
-    tall: true,
-  },
-  {
-    src: "assets/occasion5.png",
-    label: "VIP Suite",
-    glowColor: "blue",
-    tall: false,
-  },
+  { src: "assets/hero2.png", label: "Open Sea", glowColor: "blue", tall: false },
+  { src: "assets/gallerymain.png", label: "Master Stateroom", glowColor: "gold", tall: true },
+  { src: "assets/occasion3.png", label: "Corporate Event", glowColor: "teal", tall: false },
+  { src: "assets/cheryl_foods1.jpeg", label: "Culinary Artistry", glowColor: "rose", tall: true },
+  { src: "assets/occasion5.png", label: "VIP Suite", glowColor: "blue", tall: false },
 ];
 
 const PHOTO_COL_3: PhotoGalleryItem[] = [
-  {
-    src: "assets/cheryl_foods2.jpeg",
-    label: "Chef's Table",
-    glowColor: "rose",
-    tall: true,
-  },
-  {
-    src: "assets/hero3.png",
-    label: "Starboard View",
-    glowColor: "blue",
-    tall: false,
-  },
-  {
-    src: "assets/occasion6.png",
-    label: "Chef's Kitchen",
-    glowColor: "gold",
-    tall: true,
-  },
-  {
-    src: "assets/occasion1.png",
-    label: "Island Hopping",
-    glowColor: "teal",
-    tall: false,
-  },
-  {
-    src: "assets/gallerymain.png",
-    label: "Luxury Interior",
-    glowColor: "gold",
-    tall: true,
-  },
+  { src: "assets/cheryl_foods2.jpeg", label: "Chef's Table", glowColor: "rose", tall: true },
+  { src: "assets/hero3.png", label: "Starboard View", glowColor: "blue", tall: false },
+  { src: "assets/occasion6.png", label: "Chef's Kitchen", glowColor: "gold", tall: true },
+  { src: "assets/occasion1.png", label: "Island Hopping", glowColor: "teal", tall: false },
+  { src: "assets/gallerymain.png", label: "Luxury Interior", glowColor: "gold", tall: true },
 ];
 
 const GLOW_MAP: Record<PhotoGalleryItem["glowColor"], string> = {
@@ -935,18 +860,8 @@ function CalendarComponent({ onSelect }: { onSelect: (date: string) => void }) {
   const bookedDays = [3, 7, 8, 14, 21, 22, 27];
 
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December",
   ];
   const daysHeader = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
@@ -1032,130 +947,6 @@ function CalendarComponent({ onSelect }: { onSelect: (date: string) => void }) {
   );
 }
 
-// ─── Photo Gallery Column ─────────────────────────────────────────────────────
-function PhotoScrollColumn({
-  items,
-  speed,
-  direction,
-  topOffset = 0,
-  onZoom,
-}: {
-  items: PhotoGalleryItem[];
-  speed: number;
-  direction: 1 | -1;
-  topOffset?: number;
-  onZoom: (src: string) => void;
-}) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const offsetRef = useRef(0);
-  const rafRef = useRef<number>(0);
-  const dragRef = useRef<{ startY: number; startOffset: number } | null>(null);
-  const pausedRef = useRef(false);
-  const doubled = [...items, ...items];
-
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    function loop() {
-      if (!pausedRef.current && dragRef.current === null) {
-        offsetRef.current += speed * direction;
-        const half = el!.scrollHeight / 2;
-        if (direction === 1 && offsetRef.current > half)
-          offsetRef.current -= half;
-        if (direction === -1 && offsetRef.current < -half)
-          offsetRef.current += half;
-      }
-      el!.style.transform = `translateY(${-offsetRef.current}px)`;
-      rafRef.current = requestAnimationFrame(loop);
-    }
-    rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, direction]);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      if (!dragRef.current || !trackRef.current) return;
-      const delta = dragRef.current.startY - e.clientY;
-      const half = trackRef.current.scrollHeight / 2;
-      let next = dragRef.current.startOffset + delta;
-      if (next > half) next -= half;
-      if (next < 0) next += half;
-      offsetRef.current = next;
-    };
-    const onUp = () => {
-      dragRef.current = null;
-    };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
-    };
-  }, []);
-
-  return (
-    <div
-      className="relative overflow-hidden"
-      style={{ height: 680 }}
-      onMouseEnter={() => {
-        pausedRef.current = true;
-      }}
-      onMouseLeave={() => {
-        pausedRef.current = false;
-      }}
-      onMouseDown={(e) => {
-        dragRef.current = { startY: e.clientY, startOffset: offsetRef.current };
-      }}
-      onTouchStart={(e) => {
-        dragRef.current = {
-          startY: e.touches[0].clientY,
-          startOffset: offsetRef.current,
-        };
-      }}
-      onTouchMove={(e) => {
-        if (!dragRef.current || !trackRef.current) return;
-        const delta = dragRef.current.startY - e.touches[0].clientY;
-        const half = trackRef.current.scrollHeight / 2;
-        let next = dragRef.current.startOffset + delta;
-        if (next > half) next -= half;
-        if (next < 0) next += half;
-        offsetRef.current = next;
-      }}
-      onTouchEnd={() => {
-        dragRef.current = null;
-      }}
-    >
-      <div
-        className="pointer-events-none absolute top-0 left-0 right-0 z-10"
-        style={{
-          height: 100,
-          background: "linear-gradient(to bottom, #040d1a, transparent)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10"
-        style={{
-          height: 100,
-          background: "linear-gradient(to top, #040d1a, transparent)",
-        }}
-      />
-      <div
-        ref={trackRef}
-        className="flex flex-col gap-4 cursor-grab active:cursor-grabbing select-none"
-        style={{ marginTop: topOffset, willChange: "transform" }}
-      >
-        {doubled.map((item, i) => (
-          <PhotoGalleryCard
-            key={`${i}-${item.src}`}
-            item={item}
-            onZoom={onZoom}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ─── Photo Gallery Card ───────────────────────────────────────────────────────
 function PhotoGalleryCard({
   item,
@@ -1165,22 +956,28 @@ function PhotoGalleryCard({
   onZoom: (src: string) => void;
 }) {
   const [hovered, setHovered] = useState(false);
+
   return (
     <div
-      className="relative rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
+      className="relative rounded-2xl overflow-hidden flex-shrink-0"
       style={{
         border: hovered
           ? "1px solid rgba(201,162,39,0.3)"
           : "1px solid rgba(255,255,255,0.06)",
-        transition:
-          "border-color 0.3s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+        transition: "border-color 0.3s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
         transform: hovered ? "scale(1.03)" : "scale(1)",
         background: "#061020",
+        cursor: "pointer",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => onZoom(item.src)}
+      // Use onPointerUp so it fires even after a drag gesture is resolved
+      onPointerUp={(e) => {
+        e.stopPropagation();
+        onZoom(item.src);
+      }}
     >
+      {/* glow accent line */}
       <div
         style={{
           position: "absolute",
@@ -1203,8 +1000,11 @@ function PhotoGalleryCard({
           aspectRatio: item.tall ? "3/4" : "16/9",
           transition: "transform 0.7s cubic-bezier(0.19,1,0.22,1)",
           transform: hovered ? "scale(1.08)" : "scale(1)",
+          // prevent the image itself from absorbing pointer events
+          pointerEvents: "none",
         }}
       />
+      {/* hover overlay */}
       <div
         style={{
           position: "absolute",
@@ -1217,6 +1017,7 @@ function PhotoGalleryCard({
           alignItems: "flex-end",
           justifyContent: "space-between",
           padding: "14px 16px",
+          pointerEvents: "none",
         }}
       >
         <span
@@ -1230,9 +1031,119 @@ function PhotoGalleryCard({
         >
           {item.label}
         </span>
-        <ZoomIn
-          style={{ width: 15, height: 15, color: "rgba(255,255,255,0.5)" }}
-        />
+        <ZoomIn style={{ width: 15, height: 15, color: "rgba(255,255,255,0.5)" }} />
+      </div>
+    </div>
+  );
+}
+
+// ─── Photo Scroll Column ──────────────────────────────────────────────────────
+// FIX: stable onZoomRef so the doubled array never captures a stale callback.
+//      drag detection: only fire zoom when the pointer didn't travel > 6px.
+function PhotoScrollColumn({
+  items,
+  speed,
+  direction,
+  topOffset = 0,
+  onZoom,
+}: {
+  items: PhotoGalleryItem[];
+  speed: number;
+  direction: 1 | -1;
+  topOffset?: number;
+  onZoom: (src: string) => void;
+}) {
+  const trackRef   = useRef<HTMLDivElement>(null);
+  const offsetRef  = useRef(0);
+  const rafRef     = useRef<number>(0);
+  const pausedRef  = useRef(false);
+  const dragRef    = useRef<{ startY: number; startOffset: number } | null>(null);
+  const onZoomRef  = useRef(onZoom);
+  useEffect(() => { onZoomRef.current = onZoom; }, [onZoom]);
+
+  const doubled = useMemo(() => [...items, ...items], [items]);
+
+  // RAF loop — pure DOM, no React re-renders
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    function loop() {
+      if (!pausedRef.current && dragRef.current === null) {
+        offsetRef.current += speed * direction;
+        const half = track!.scrollHeight / 2;
+        if (direction === 1  && offsetRef.current >  half) offsetRef.current -= half;
+        if (direction === -1 && offsetRef.current < -half) offsetRef.current += half;
+      }
+      track!.style.transform = `translateY(${-offsetRef.current}px)`;
+      rafRef.current = requestAnimationFrame(loop);
+    }
+    rafRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [speed, direction]);
+
+  // Global mouse-move / mouse-up for drag
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      if (!dragRef.current || !trackRef.current) return;
+      const delta = dragRef.current.startY - e.clientY;
+      const half  = trackRef.current.scrollHeight / 2;
+      let next    = dragRef.current.startOffset + delta;
+      if (next >  half) next -= half;
+      if (next < 0)     next += half;
+      offsetRef.current = next;
+    };
+    const onUp = () => { dragRef.current = null; };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup",   onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup",   onUp);
+    };
+  }, []);
+
+  return (
+    <div
+      className="relative overflow-hidden"
+      style={{ height: 680 }}
+      onMouseEnter={() => { pausedRef.current = true; }}
+      onMouseLeave={() => { pausedRef.current = false; dragRef.current = null; }}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        dragRef.current = { startY: e.clientY, startOffset: offsetRef.current };
+      }}
+      onTouchStart={(e) => {
+        dragRef.current = { startY: e.touches[0].clientY, startOffset: offsetRef.current };
+      }}
+      onTouchMove={(e) => {
+        if (!dragRef.current || !trackRef.current) return;
+        const delta = dragRef.current.startY - e.touches[0].clientY;
+        const half  = trackRef.current.scrollHeight / 2;
+        let next    = dragRef.current.startOffset + delta;
+        if (next >  half) next -= half;
+        if (next < 0)     next += half;
+        offsetRef.current = next;
+      }}
+      onTouchEnd={() => { dragRef.current = null; }}
+    >
+      {/* fade top/bottom */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 z-10"
+        style={{ height: 100, background: "linear-gradient(to bottom, #040d1a, transparent)" }} />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10"
+        style={{ height: 100, background: "linear-gradient(to top, #040d1a, transparent)" }} />
+
+      <div
+        ref={trackRef}
+        className="flex flex-col gap-4 select-none"
+        style={{ marginTop: topOffset, willChange: "transform", cursor: "grab" }}
+      >
+        {doubled.map((item, i) => (
+          <PhotoGalleryCard
+            key={`${item.src}__${i}`}
+            item={item}
+            onZoom={(src) => onZoomRef.current(src)}
+          />
+        ))}
       </div>
     </div>
   );
@@ -1285,6 +1196,352 @@ function MobileGalleryStrip({ onZoom }: { onZoom: (src: string) => void }) {
         </motion.div>
       ))}
     </div>
+  );
+}
+
+// ─── Photo Gallery Section ────────────────────────────────────────────────────
+function PhotoGallerySection({
+  onLightbox,
+}: {
+  onLightbox: (src: string) => void;
+}) {
+  // Stable callback ref so column RAF loop never captures a stale closure
+  const handleZoom = useCallback(
+    (src: string) => { onLightbox(src); },
+    [onLightbox],
+  );
+
+  return (
+    <section
+      id="gallery"
+      style={{
+        background: "#040d1a",
+        padding: "64px 0 56px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute", top: -100, left: "8%", width: 500, height: 500,
+          background: "radial-gradient(circle, rgba(201,162,39,0.05) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute", bottom: -60, right: "10%", width: 400, height: 400,
+          background: "radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 1,
+          background: "linear-gradient(90deg, transparent, rgba(201,162,39,0.15), transparent)",
+        }}
+      />
+
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        style={{ textAlign: "center", marginBottom: 40, padding: "0 24px" }}
+      >
+        <div
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            gap: 14, marginBottom: 16,
+          }}
+        >
+          <div style={{ width: 40, height: 1, background: "rgba(201,162,39,0.4)" }} />
+          <span
+            style={{
+              fontSize: 10, letterSpacing: "5px", textTransform: "uppercase",
+              color: "rgba(201,162,39,0.7)", fontWeight: 700,
+            }}
+          >
+            Photo Gallery
+          </span>
+          <div style={{ width: 40, height: 1, background: "rgba(201,162,39,0.4)" }} />
+        </div>
+        <h2
+          style={{
+            fontSize: "clamp(28px, 5vw, 54px)", fontFamily: "serif", fontWeight: 300,
+            color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px", margin: 0,
+          }}
+        >
+          The Moments,{" "}
+          <em style={{ color: "#c9a227", fontStyle: "italic" }}>The Memories.</em>
+        </h2>
+        <p
+          style={{
+            marginTop: 12, fontSize: 12, color: "rgba(255,255,255,0.3)", letterSpacing: "1px",
+          }}
+        >
+          Drag · Swipe · Click to enlarge
+        </p>
+      </motion.div>
+
+      {/* Mobile */}
+      <div className="block lg:hidden px-4">
+        <MobileGalleryStrip onZoom={handleZoom} />
+      </div>
+
+      {/* Desktop 3-column scroll */}
+      <div
+        className="hidden lg:grid"
+        style={{
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gap: 16,
+          padding: "0 24px",
+          maxWidth: 1400,
+          margin: "0 auto",
+        }}
+      >
+        <PhotoScrollColumn items={PHOTO_COL_1} speed={0.45} direction={1}  topOffset={0}   onZoom={handleZoom} />
+        <PhotoScrollColumn items={PHOTO_COL_2} speed={0.35} direction={-1} topOffset={-60} onZoom={handleZoom} />
+        <PhotoScrollColumn items={PHOTO_COL_3} speed={0.4}  direction={1}  topOffset={-30} onZoom={handleZoom} />
+      </div>
+
+      <div
+        style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          gap: 24, marginTop: 40, padding: "0 24px", flexWrap: "wrap",
+        }}
+      >
+        <a
+          href="/book"
+          className="px-8 py-3 border border-gold/40 text-gold font-bold text-[10px] tracking-[4px] uppercase rounded-sm hover:bg-gold hover:text-navy transition-all"
+          style={{ textDecoration: "none" }}
+        >
+          Book Your Charter
+        </a>
+      </div>
+    </section>
+  );
+}
+
+// ─── Scroll Video Section (3D Boat) ───────────────────────────────────────────
+// FIX: robust metadata-ready check + scoped ScrollTrigger cleanup + cinematic UI
+function ScrollVideoSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef   = useRef<HTMLVideoElement>(null);
+  const tweenRef   = useRef<gsap.core.Tween | null>(null);
+  const stRef      = useRef<ScrollTrigger | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const section = sectionRef.current;
+    const video   = videoRef.current;
+    if (!section || !video) return;
+
+    // Ensure the video is paused and at frame 0
+    video.pause();
+    video.currentTime = 0;
+
+    // iOS/Safari requires a user-gesture to unlock video seek
+    const unlock = () => {
+      video.play().then(() => video.pause()).catch(() => {});
+    };
+    document.addEventListener("touchstart", unlock, { once: true, passive: true });
+    document.addEventListener("mousedown",  unlock, { once: true });
+
+    const setupScrub = () => {
+      const dur = video.duration;
+      if (!dur || isNaN(dur)) return;
+
+      // Kill previous instances that belong to this section only
+      tweenRef.current?.kill();
+      stRef.current?.kill();
+
+      tweenRef.current = gsap.fromTo(
+        video,
+        { currentTime: 0 },
+        {
+          currentTime: dur,
+          ease: "none",
+          scrollTrigger: {
+            id: "boat-scrub",
+            trigger: section,
+            start: "top top",
+            end: "+=300%",   // 3× viewport = full video spread over generous scroll
+            scrub: 0.6,
+            pin: true,
+            anticipatePin: 1,
+            onUpdate:  (self) => setProgress(self.progress),
+            onToggle:  (self) => setIsActive(self.isActive),
+          },
+        },
+      );
+      stRef.current = ScrollTrigger.getById("boat-scrub") ?? null;
+    };
+
+    if (video.readyState >= 1) {
+      setupScrub();
+    } else {
+      video.addEventListener("loadedmetadata", setupScrub, { once: true });
+    }
+
+    return () => {
+      document.removeEventListener("touchstart", unlock);
+      document.removeEventListener("mousedown",  unlock);
+      tweenRef.current?.kill();
+      stRef.current?.kill();
+    };
+  }, []);
+
+  const pct = Math.round(progress * 100);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="boat-rotation"
+      className="relative overflow-hidden h-screen"
+      style={{ backgroundColor: "#020201" }}
+    >
+      {/* ── Video ── */}
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-contain"
+        muted
+        playsInline
+        preload="auto"
+        src="/assets/fast.mp4"
+        style={{ backgroundColor: "#020201" }}
+      />
+
+      {/* ── Cinematic scanline ── */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px)",
+          mixBlendMode: "overlay",
+        }}
+      />
+
+      {/* ── Vignette top / bottom ── */}
+      <div
+        className="pointer-events-none absolute top-0 left-0 right-0 h-40"
+        style={{ background: "linear-gradient(to bottom, #020201 0%, transparent 100%)" }}
+      />
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40"
+        style={{ background: "linear-gradient(to top, #020201 0%, transparent 100%)" }}
+      />
+
+      {/* ── Thin gold progress bar ── */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 z-20">
+        <div
+          style={{
+            height: "100%",
+            width: `${pct}%`,
+            background: "linear-gradient(90deg, #c9a227, #f0c040)",
+            boxShadow: "0 0 8px rgba(201,162,39,0.55)",
+            transition: "width 0.05s linear",
+          }}
+        />
+      </div>
+
+      {/* ── Brand label — top-left ── */}
+      <div className="absolute top-8 left-8 pointer-events-none z-10">
+        <motion.div
+          initial={{ opacity: 0, x: -16 }}
+          animate={{ opacity: isActive ? 1 : 0.35, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <span className="block text-[9px] font-bold tracking-[4px] uppercase text-gold/60 mb-1">
+            Serendipity
+          </span>
+          <span className="block text-[10px] tracking-[2px] text-white/20 uppercase">
+            94′ Lazzara Motor Yacht
+          </span>
+        </motion.div>
+      </div>
+
+      {/* ── Progress counter — top-right ── */}
+      <div className="absolute top-8 right-8 pointer-events-none text-right z-10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isActive ? 1 : 0.25 }}
+          transition={{ duration: 0.4 }}
+        >
+          <span
+            className="font-serif text-5xl leading-none"
+            style={{ color: "rgba(201,162,39,0.75)", fontVariantNumeric: "tabular-nums" }}
+          >
+            {String(pct).padStart(2, "0")}
+          </span>
+          <span className="block text-[9px] tracking-[2px] uppercase text-white/20 mt-1">
+            Scroll
+          </span>
+        </motion.div>
+      </div>
+
+      {/* ── Floating spec card — bottom-right ── */}
+      <AnimatePresence>
+        {isActive && (
+          <motion.div
+            key="spec-card"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="absolute bottom-10 right-8 pointer-events-none z-10"
+          >
+            <div
+              className="px-5 py-4 rounded-2xl flex gap-6"
+              style={{
+                background: "rgba(4,13,26,0.72)",
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)",
+                border: "1px solid rgba(201,162,39,0.14)",
+              }}
+            >
+              {[
+                { val: "94′", label: "LOA" },
+                { val: "22 kt", label: "Cruise" },
+                { val: "12", label: "Guests" },
+              ].map((s) => (
+                <div key={s.label} className="text-center">
+                  <p className="font-serif text-lg text-gold leading-none">{s.val}</p>
+                  <p className="text-[8px] uppercase tracking-[2px] text-white/30 mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Scroll hint (fades out after 10% progress) ── */}
+      <AnimatePresence>
+        {progress < 0.1 && (
+          <motion.div
+            key="scroll-hint"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.4 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-10"
+          >
+            <span className="text-[9px] font-bold tracking-[3px] uppercase text-white/30">
+              Scroll to rotate
+            </span>
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              className="w-4 h-7 rounded-full border border-white/20 flex items-start justify-center pt-1"
+            >
+              <div className="w-1 h-2 rounded-full bg-gold/60" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
   );
 }
 
@@ -1369,6 +1626,11 @@ export default function App() {
     setIsGalleryOpen(true);
   };
 
+  // Stable lightbox opener so PhotoGallerySection never re-renders columns
+  const openLightbox = useCallback((src: string) => {
+    setLightboxImg(src);
+  }, []);
+
   return (
     <div className="min-h-screen selection:bg-gold selection:text-white">
       {/* Scroll Progress */}
@@ -1417,11 +1679,7 @@ export default function App() {
             <div className="flex flex-col items-center gap-4">
               <motion.div
                 animate={{ y: [0, -3, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
                 <MapPin className="w-3.5 h-3.5 text-gold/60 group-hover:text-gold transition-colors" />
               </motion.div>
@@ -1453,10 +1711,9 @@ export default function App() {
         <CulinarySection />
         <DestinationsSection />
         <PricingSection />
-        <PhotoGallerySection onLightbox={setLightboxImg} />
+        <PhotoGallerySection onLightbox={openLightbox} />
         <MechanicalSection />
         <ReviewsSection />
-        {/* Inquiry section — no payment, just send a message */}
         <InquirySection addToast={addToast} />
       </main>
 
@@ -1476,10 +1733,7 @@ export default function App() {
                 <div className="absolute top-4 left-4 md:hidden">
                   <span
                     className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full"
-                    style={{
-                      background: "rgba(201,162,39,0.85)",
-                      color: "#040d1a",
-                    }}
+                    style={{ background: "rgba(201,162,39,0.85)", color: "#040d1a" }}
                   >
                     {selectedExp.tag}
                   </span>
@@ -1571,9 +1825,7 @@ export default function App() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-light via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-5 md:bottom-6 md:left-6">
-                  <h2 className="text-xl md:text-3xl font-serif">
-                    {selectedFleet.name}
-                  </h2>
+                  <h2 className="text-xl md:text-3xl font-serif">{selectedFleet.name}</h2>
                 </div>
               </div>
               <div className="p-5 md:p-10">
@@ -1582,21 +1834,9 @@ export default function App() {
                 </p>
                 <div className="grid grid-cols-3 gap-3 mb-6">
                   {[
-                    {
-                      label: "Length",
-                      value: selectedFleet.length,
-                      icon: Ship,
-                    },
-                    {
-                      label: "Max Guests",
-                      value: selectedFleet.guests,
-                      icon: Users,
-                    },
-                    {
-                      label: "Staterooms",
-                      value: selectedFleet.cabins,
-                      icon: Anchor,
-                    },
+                    { label: "Length", value: selectedFleet.length, icon: Ship },
+                    { label: "Max Guests", value: selectedFleet.guests, icon: Users },
+                    { label: "Staterooms", value: selectedFleet.cabins, icon: Anchor },
                   ].map((s, i) => (
                     <div
                       key={i}
@@ -1614,15 +1854,10 @@ export default function App() {
                 </div>
                 <div className="grid grid-cols-2 gap-2.5 mb-6">
                   {selectedFleet.specs.map((s, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-2.5 p-3 bg-white/5 rounded-xl"
-                    >
+                    <div key={i} className="flex items-center gap-2.5 p-3 bg-white/5 rounded-xl">
                       <Check className="w-3 h-3 text-gold shrink-0" />
                       <div>
-                        <p className="text-[9px] text-white/30 uppercase tracking-widest">
-                          {s.label}
-                        </p>
+                        <p className="text-[9px] text-white/30 uppercase tracking-widest">{s.label}</p>
                         <p className="text-xs text-white/70">{s.value}</p>
                       </div>
                     </div>
@@ -1647,12 +1882,8 @@ export default function App() {
               <div className="sticky top-0 bg-navy-light/95 backdrop-blur-xl border-b border-white/10 z-10 p-5 md:p-10 pb-4">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-3">
                   <div>
-                    <h2 className="text-xl md:text-4xl font-serif mb-1">
-                      The Collection
-                    </h2>
-                    <p className="text-white/40 text-xs">
-                      Serendipity — 94' Lazzara Hardtop Motor Yacht
-                    </p>
+                    <h2 className="text-xl md:text-4xl font-serif mb-1">The Collection</h2>
+                    <p className="text-white/40 text-xs">Serendipity — 94' Lazzara Hardtop Motor Yacht</p>
                   </div>
                   <div className="flex gap-2">
                     {(["exterior", "interior"] as const).map((tab) => (
@@ -1700,9 +1931,7 @@ export default function App() {
                             <ZoomIn className="w-7 h-7 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
                           </div>
                           <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-navy/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-400">
-                            <p className="text-[10px] font-semibold text-white/90">
-                              {img.label}
-                            </p>
+                            <p className="text-[10px] font-semibold text-white/90">{img.label}</p>
                           </div>
                         </motion.div>
                       ),
@@ -1816,53 +2045,33 @@ export default function App() {
                     Exclusive Itinerary
                   </span>
                 </div>
-                <h2 className="text-2xl md:text-3xl font-serif mb-3">
-                  The Island Hopper
-                </h2>
+                <h2 className="text-2xl md:text-3xl font-serif mb-3">The Island Hopper</h2>
                 <p className="text-xs md:text-sm text-white/60 mb-6 leading-relaxed">
-                  Navigate the crown jewels of Florida's coast. From pristine
-                  sandbars of Egmont Key to the bohemian charm of Pass-A-Grille.
+                  Navigate the crown jewels of Florida's coast. From pristine sandbars of Egmont Key to the bohemian charm of Pass-A-Grille.
                 </p>
                 <div className="space-y-4">
                   {[
-                    {
-                      t: "Egmont Key State Park",
-                      d: "Visit the historic lighthouse and explore hidden ruins.",
-                    },
-                    {
-                      t: "Shell Key Preserve",
-                      d: "Anchor in crystal turquoise waters for shelling and paddleboarding.",
-                    },
-                    {
-                      t: "Pass-A-Grille Historic District",
-                      d: "Enjoy a legendary sunset with a curated beach picnic.",
-                    },
+                    { t: "Egmont Key State Park", d: "Visit the historic lighthouse and explore hidden ruins." },
+                    { t: "Shell Key Preserve", d: "Anchor in crystal turquoise waters for shelling and paddleboarding." },
+                    { t: "Pass-A-Grille Historic District", d: "Enjoy a legendary sunset with a curated beach picnic." },
                   ].map((item, idx) => (
                     <div key={idx} className="flex gap-4 group">
                       <div className="flex flex-col items-center">
                         <div className="w-6 h-6 rounded-full border border-gold/30 flex items-center justify-center text-[10px] text-gold font-bold transition-all group-hover:bg-gold group-hover:text-navy shrink-0">
                           {idx + 1}
                         </div>
-                        {idx < 2 && (
-                          <div className="w-px h-full bg-white/10 my-1" />
-                        )}
+                        {idx < 2 && <div className="w-px h-full bg-white/10 my-1" />}
                       </div>
                       <div className="pb-3">
-                        <h4 className="font-bold text-xs mb-0.5 group-hover:text-gold transition-colors">
-                          {item.t}
-                        </h4>
-                        <p className="text-[10px] text-white/40 leading-relaxed">
-                          {item.d}
-                        </p>
+                        <h4 className="font-bold text-xs mb-0.5 group-hover:text-gold transition-colors">{item.t}</h4>
+                        <p className="text-[10px] text-white/40 leading-relaxed">{item.d}</p>
                       </div>
                     </div>
                   ))}
                 </div>
                 <div className="mt-6 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div>
-                    <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">
-                      Duration
-                    </p>
+                    <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">Duration</p>
                     <p className="font-serif text-gold text-lg">4 - 8 Hours</p>
                   </div>
                   <a
@@ -1889,9 +2098,7 @@ export default function App() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-light to-transparent" />
                 <div className="absolute bottom-4 left-5 md:bottom-6 md:left-6">
-                  <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold mb-1">
-                    Full Specifications
-                  </p>
+                  <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold mb-1">Full Specifications</p>
                   <h2 className="text-2xl font-serif">SERENDIPITY</h2>
                 </div>
               </div>
@@ -1900,10 +2107,7 @@ export default function App() {
                   Lazzara Single Model Built With The 106' Hardtop
                 </p>
                 <p className="text-sm text-white/60 leading-relaxed mb-5">
-                  SERENDIPITY is the best layout of any Lazzara. With a
-                  Bahamas-friendly draft, the yacht is in turnkey condition.
-                  Boasting incredibly low engine hours, an open flybridge for
-                  socializing and an on-deck jacuzzi.
+                  SERENDIPITY is the best layout of any Lazzara. With a Bahamas-friendly draft, the yacht is in turnkey condition. Boasting incredibly low engine hours, an open flybridge for socializing and an on-deck jacuzzi.
                 </p>
                 <div className="grid grid-cols-2 gap-2.5 mb-5">
                   {[
@@ -1920,38 +2124,21 @@ export default function App() {
                     { label: "Crew Cabins", value: "2" },
                     { label: "Cruising Speed", value: "18–22 knots" },
                   ].map((s, i) => (
-                    <div
-                      key={i}
-                      className="p-3 md:p-4 bg-white/5 border border-white/10 rounded-xl"
-                    >
-                      <p className="text-[9px] uppercase tracking-widest text-white/30 mb-0.5">
-                        {s.label}
-                      </p>
-                      <p className="text-sm font-semibold text-white/80">
-                        {s.value}
-                      </p>
+                    <div key={i} className="p-3 md:p-4 bg-white/5 border border-white/10 rounded-xl">
+                      <p className="text-[9px] uppercase tracking-widest text-white/30 mb-0.5">{s.label}</p>
+                      <p className="text-sm font-semibold text-white/80">{s.value}</p>
                     </div>
                   ))}
                 </div>
                 <div className="p-5 bg-gold/5 border border-gold/20 rounded-2xl mb-5">
-                  <h4 className="font-serif text-base mb-3">
-                    Flybridge Features
-                  </h4>
+                  <h4 className="font-serif text-base mb-3">Flybridge Features</h4>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      "Hot/Cold Jacuzzi",
-                      "Oversized sun lounges",
-                      "Al fresco dining",
-                      "Professional wet bar",
-                      "Surround sound",
-                      "LED ambient lighting",
-                      "Water sports gear",
-                      "Jet Ski launch",
+                      "Hot/Cold Jacuzzi","Oversized sun lounges","Al fresco dining",
+                      "Professional wet bar","Surround sound","LED ambient lighting",
+                      "Water sports gear","Jet Ski launch",
                     ].map((f, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2 text-xs text-white/60"
-                      >
+                      <div key={i} className="flex items-center gap-2 text-xs text-white/60">
                         <Check className="w-3 h-3 text-gold shrink-0" /> {f}
                       </div>
                     ))}
@@ -2007,188 +2194,13 @@ export default function App() {
               </div>
               <div>
                 <p className="text-xs font-bold">{t.title}</p>
-                <span className="text-[10px] text-white/40 block mt-0.5">
-                  {t.msg}
-                </span>
+                <span className="text-[10px] text-white/40 block mt-0.5">{t.msg}</span>
               </div>
             </motion.div>
           ))}
         </AnimatePresence>
       </div>
     </div>
-  );
-}
-
-// ─── Photo Gallery Section ────────────────────────────────────────────────────
-function PhotoGallerySection({
-  onLightbox,
-}: {
-  onLightbox: (src: string) => void;
-}) {
-  return (
-    <section
-      id="gallery"
-      style={{
-        background: "#040d1a",
-        padding: "64px 0 56px",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: -100,
-          left: "8%",
-          width: 500,
-          height: 500,
-          background:
-            "radial-gradient(circle, rgba(201,162,39,0.05) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: -60,
-          right: "10%",
-          width: 400,
-          height: 400,
-          background:
-            "radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 1,
-          background:
-            "linear-gradient(90deg, transparent, rgba(201,162,39,0.15), transparent)",
-        }}
-      />
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        style={{ textAlign: "center", marginBottom: 40, padding: "0 24px" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 14,
-            marginBottom: 16,
-          }}
-        >
-          <div
-            style={{ width: 40, height: 1, background: "rgba(201,162,39,0.4)" }}
-          />
-          <span
-            style={{
-              fontSize: 10,
-              letterSpacing: "5px",
-              textTransform: "uppercase",
-              color: "rgba(201,162,39,0.7)",
-              fontWeight: 700,
-            }}
-          >
-            Photo Gallery
-          </span>
-          <div
-            style={{ width: 40, height: 1, background: "rgba(201,162,39,0.4)" }}
-          />
-        </div>
-        <h2
-          style={{
-            fontSize: "clamp(28px, 5vw, 54px)",
-            fontFamily: "serif",
-            fontWeight: 300,
-            color: "#fff",
-            lineHeight: 1.1,
-            letterSpacing: "-0.5px",
-            margin: 0,
-          }}
-        >
-          The Moments,{" "}
-          <em style={{ color: "#c9a227", fontStyle: "italic" }}>
-            The Memories.
-          </em>
-        </h2>
-        <p
-          style={{
-            marginTop: 12,
-            fontSize: 12,
-            color: "rgba(255,255,255,0.3)",
-            letterSpacing: "1px",
-          }}
-        >
-          Drag · Swipe · Click to enlarge
-        </p>
-      </motion.div>
-
-      <div className="block lg:hidden px-4">
-        <MobileGalleryStrip onZoom={onLightbox} />
-      </div>
-      <div
-        className="hidden lg:grid"
-        style={{
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gap: 16,
-          padding: "0 24px",
-          maxWidth: 1400,
-          margin: "0 auto",
-        }}
-      >
-        <PhotoScrollColumn
-          items={PHOTO_COL_1}
-          speed={0.45}
-          direction={1}
-          topOffset={0}
-          onZoom={onLightbox}
-        />
-        <PhotoScrollColumn
-          items={PHOTO_COL_2}
-          speed={0.35}
-          direction={-1}
-          topOffset={-60}
-          onZoom={onLightbox}
-        />
-        <PhotoScrollColumn
-          items={PHOTO_COL_3}
-          speed={0.4}
-          direction={1}
-          topOffset={-30}
-          onZoom={onLightbox}
-        />
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 24,
-          marginTop: 40,
-          padding: "0 24px",
-          flexWrap: "wrap",
-        }}
-      >
-        <a
-          href="/book"
-          className="px-8 py-3 border border-gold/40 text-gold font-bold text-[10px] tracking-[4px] uppercase rounded-sm hover:bg-gold hover:text-navy transition-all"
-          style={{ textDecoration: "none" }}
-        >
-          Book Your Charter
-        </a>
-      </div>
-    </section>
   );
 }
 
@@ -2204,20 +2216,8 @@ function Navbar({
   setMobileMenuOpen: (o: boolean) => void;
   openAvail: () => void;
 }) {
-  const mainLinks = [
-    "Vessel",
-    "Experiences",
-    "Gallery",
-    "Destinations",
-    "Pricing",
-  ];
-  const dropdownLinks = [
-    "Accommodations",
-    "Fleet",
-    "Culinary",
-    "Mechanical",
-    "Reviews",
-  ];
+  const mainLinks = ["Vessel","Experiences","Gallery","Destinations","Pricing"];
+  const dropdownLinks = ["Accommodations","Fleet","Culinary","Mechanical","Reviews"];
 
   return (
     <nav
@@ -2273,7 +2273,6 @@ function Navbar({
               ))}
             </div>
           </div>
-          {/* Separate Inquire and Book Now buttons */}
           <a
             href="#contact"
             className="hidden md:flex border border-gold/40 px-5 xl:px-6 py-2.5 xl:py-3 rounded-full text-gold font-bold text-xs xl:text-sm hover:bg-gold/10 transition-all"
@@ -2330,18 +2329,8 @@ function MobileMenu({
       <div className="flex-1 overflow-y-auto px-6 py-6">
         <div className="flex flex-col gap-1">
           {[
-            "Home",
-            "Vessel",
-            "Experiences",
-            "Gallery",
-            "Accommodations",
-            "Fleet",
-            "Culinary",
-            "Destinations",
-            "Pricing",
-            "Mechanical",
-            "Reviews",
-            "Inquire",
+            "Home","Vessel","Experiences","Gallery","Accommodations","Fleet",
+            "Culinary","Destinations","Pricing","Mechanical","Reviews","Inquire",
           ].map((l, i) => (
             <motion.a
               key={l}
@@ -2372,10 +2361,7 @@ function MobileMenu({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          onClick={() => {
-            setMobileMenuOpen(false);
-            openAvail();
-          }}
+          onClick={() => { setMobileMenuOpen(false); openAvail(); }}
           className="flex items-center justify-center gap-3 w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-gold text-xs font-bold uppercase tracking-[2px]"
         >
           <div className="w-2 h-2 rounded-full bg-green-400 relative">
@@ -2437,10 +2423,7 @@ function Hero({
   ];
 
   return (
-    <section
-      id="home"
-      className="relative h-[100svh] min-h-[600px] overflow-hidden"
-    >
+    <section id="home" className="relative h-[100svh] min-h-[600px] overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           key={heroIdx}
@@ -2460,7 +2443,7 @@ function Hero({
         </motion.div>
       </AnimatePresence>
 
-      {/* MOBILE hero layout */}
+      {/* MOBILE */}
       <div className="lg:hidden relative h-full flex flex-col justify-end z-10">
         <div className="px-5 pb-4">
           <motion.div
@@ -2478,14 +2461,11 @@ function Hero({
             <h1 className="text-[32px] font-serif leading-[1.08] tracking-tight mb-3">
               {slides[heroIdx].line1}
               <br />
-              <em className="text-gold italic font-serif">
-                {slides[heroIdx].line2}
-              </em>
+              <em className="text-gold italic font-serif">{slides[heroIdx].line2}</em>
             </h1>
             <p className="text-sm text-white/65 mb-5 leading-relaxed max-w-xs">
               {slides[heroIdx].desc}
             </p>
-
             <div className="flex gap-3 mb-5">
               <a
                 href="/book"
@@ -2500,7 +2480,6 @@ function Hero({
                 <Play className="w-4 h-4 fill-current text-white ml-0.5" />
               </button>
             </div>
-
             <div
               className="rounded-2xl overflow-hidden mb-4"
               style={{
@@ -2511,7 +2490,6 @@ function Hero({
             >
               <MobileHeroStats />
             </div>
-
             <MobileQuickActions
               openAvail={openAvail}
               openVideo={openVideo}
@@ -2519,7 +2497,6 @@ function Hero({
             />
           </motion.div>
         </div>
-
         <div className="flex justify-center gap-2 pb-24 pt-3">
           {[0, 1, 2].map((i) => (
             <button
@@ -2531,7 +2508,7 @@ function Hero({
         </div>
       </div>
 
-      {/* DESKTOP hero layout */}
+      {/* DESKTOP */}
       <div className="hidden lg:flex relative h-full max-w-7xl mx-auto px-16 flex-col justify-end pb-32 z-10">
         <motion.div
           key={heroIdx + "desktop"}
@@ -2548,9 +2525,7 @@ function Hero({
           <h1 className="text-[62px] font-serif leading-[1.08] tracking-tight mb-6">
             {slides[heroIdx].line1}
             <br />
-            <em className="text-gold italic font-serif">
-              {slides[heroIdx].line2}
-            </em>
+            <em className="text-gold italic font-serif">{slides[heroIdx].line2}</em>
           </h1>
           <p className="text-xl text-white/70 mb-10 leading-relaxed max-w-lg">
             {slides[heroIdx].desc}
@@ -2599,9 +2574,7 @@ function Hero({
           </div>
         </div>
         <div className="flex items-center justify-between mb-1 pointer-events-none">
-          <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
-            Popular Route
-          </span>
+          <span className="text-[10px] font-bold text-gold tracking-widest uppercase">Popular Route</span>
           <div className="flex items-center gap-1">
             <Star className="w-3 h-3 fill-gold text-gold" />
             <span className="text-[10px] font-bold text-white/80">4.9</span>
@@ -2614,9 +2587,7 @@ function Hero({
           Egmont Key, Shell Key & hidden sandbars
         </p>
         <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between pointer-events-none">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-white/30">
-            From $1,200
-          </span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-white/30">From $1,200</span>
           <div className="flex items-center gap-2 text-gold text-[10px] font-bold uppercase tracking-widest">
             Itinerary <ArrowUpRight className="w-3 h-3" />
           </div>
@@ -2676,12 +2647,8 @@ function VesselSection({
               onClick={openGallery}
             />
             <div className="absolute bottom-4 right-4 bg-navy/90 backdrop-blur-xl border border-gold/20 p-3 md:p-6 rounded-2xl">
-              <p className="text-2xl md:text-4xl font-serif text-gold font-bold">
-                94'
-              </p>
-              <p className="text-[9px] md:text-xs text-white/40 uppercase tracking-widest mt-1">
-                Lazzara Motor Yacht
-              </p>
+              <p className="text-2xl md:text-4xl font-serif text-gold font-bold">94'</p>
+              <p className="text-[9px] md:text-xs text-white/40 uppercase tracking-widest mt-1">Lazzara Motor Yacht</p>
             </div>
           </div>
           <div className="mt-2.5 grid grid-cols-2 gap-2">
@@ -2707,9 +2674,7 @@ function VesselSection({
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-[1.5px] bg-gold" />
-            <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-              About Serendipity
-            </span>
+            <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">About Serendipity</span>
           </div>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif leading-tight mb-6">
             Experience the Ocean
@@ -2718,45 +2683,22 @@ function VesselSection({
           </h2>
           <div className="space-y-4 text-white/60 leading-relaxed text-base pb-8">
             <p>
-              Welcome aboard to Serendipity, an extraordinary charter
-              experience. Based in Saint Petersburg, Florida, Serendipity is an
-              expertly remodeled, stunning 94' Lazzara Hardtop motor yacht.
+              Welcome aboard to Serendipity, an extraordinary charter experience. Based in Saint Petersburg, Florida, Serendipity is an expertly remodeled, stunning 94' Lazzara Hardtop motor yacht.
             </p>
             <p>
-              Located between Tampa and Sarasota on Florida's Gulf Coast,
-              Serendipity offers rare access to secret inlets and calm
-              anchorages that few yachts of this size can reach.
+              Located between Tampa and Sarasota on Florida's Gulf Coast, Serendipity offers rare access to secret inlets and calm anchorages that few yachts of this size can reach.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-2.5 md:gap-4">
             {[
+              { val: "94 ft", label: "Yacht Length", icon: Wind, action: openSpecs },
               {
-                val: "94 ft",
-                label: "Yacht Length",
-                icon: Wind,
-                action: openSpecs,
+                val: "12", label: "Max Guests", icon: Users,
+                action: () => addToast("Up to 12 guests for day charters", "Max Guests", "gold"),
               },
+              { val: "20+", label: "Destinations", icon: MapPin, action: openAvail },
               {
-                val: "12",
-                label: "Max Guests",
-                icon: Users,
-                action: () =>
-                  addToast(
-                    "Up to 12 guests for day charters",
-                    "Max Guests",
-                    "gold",
-                  ),
-              },
-              {
-                val: "20+",
-                label: "Destinations",
-                icon: MapPin,
-                action: openAvail,
-              },
-              {
-                val: "5.0",
-                label: "Guest Rating",
-                icon: Star,
+                val: "5.0", label: "Guest Rating", icon: Star,
                 action: () => {
                   const el = document.getElementById("reviews");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -2769,27 +2711,18 @@ function VesselSection({
                 className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-gold/30 transition-all cursor-pointer group"
               >
                 <s.icon className="w-5 h-5 text-gold mb-2.5 group-hover:scale-110 transition-transform" />
-                <p className="text-2xl md:text-3xl font-serif text-gold font-bold">
-                  {s.val}
-                </p>
+                <p className="text-2xl md:text-3xl font-serif text-gold font-bold">{s.val}</p>
                 {i === 3 ? (
                   <>
                     <div className="flex gap-0.5 mt-1.5 mb-1">
-                      {[1, 2, 3, 4, 5].map((j) => (
-                        <Star
-                          key={j}
-                          className="w-2.5 h-2.5 fill-gold text-gold"
-                        />
+                      {[1,2,3,4,5].map((j) => (
+                        <Star key={j} className="w-2.5 h-2.5 fill-gold text-gold" />
                       ))}
                     </div>
-                    <p className="text-[9px] text-white/40 uppercase tracking-widest">
-                      {s.label}
-                    </p>
+                    <p className="text-[9px] text-white/40 uppercase tracking-widest">{s.label}</p>
                   </>
                 ) : (
-                  <p className="text-[9px] text-white/40 uppercase tracking-widest mt-1">
-                    {s.label}
-                  </p>
+                  <p className="text-[9px] text-white/40 uppercase tracking-widest mt-1">{s.label}</p>
                 )}
               </div>
             ))}
@@ -2912,10 +2845,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
     ((idx % EXPERIENCES.length) + EXPERIENCES.length) % EXPERIENCES.length;
 
   return (
-    <section
-      id="experiences"
-      className="py-10 md:py-8 bg-navy overflow-hidden relative"
-    >
+    <section id="experiences" className="py-10 md:py-8 bg-navy overflow-hidden relative">
       <div className="hidden xl:block absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
       <div className="hidden md:block absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-navy via-navy/90 to-transparent z-20 pointer-events-none" />
 
@@ -2930,9 +2860,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-[1.5px] bg-gold" />
-              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-                Curated Experiences
-              </span>
+              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Curated Experiences</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-serif leading-tight">
               A Floating Resort for
@@ -2942,9 +2870,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
           </div>
           <div className="flex items-center gap-2 md:hidden">
             <ChevronLeft className="w-4 h-4 text-gold/40" />
-            <span className="text-[10px] text-white/30 uppercase tracking-widest">
-              Swipe to explore
-            </span>
+            <span className="text-[10px] text-white/30 uppercase tracking-widest">Swipe to explore</span>
             <ChevronRight className="w-4 h-4 text-gold/40" />
           </div>
         </div>
@@ -2992,19 +2918,14 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
               <div className="absolute top-4 left-4 pointer-events-none">
                 <span
                   className="text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-                  style={{
-                    background: "rgba(201,162,39,0.8)",
-                    color: "#040d1a",
-                  }}
+                  style={{ background: "rgba(201,162,39,0.8)", color: "#040d1a" }}
                 >
                   {e.tag}
                 </span>
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8 z-10 pointer-events-none">
                 <div className="mb-2 w-6 h-[1px] bg-gold" />
-                <h3 className="text-base md:text-2xl font-serif text-white">
-                  {e.title}
-                </h3>
+                <h3 className="text-base md:text-2xl font-serif text-white">{e.title}</h3>
                 <div className="flex items-center gap-2 text-gold text-[9px] font-bold uppercase tracking-[2px] mt-3 opacity-70">
                   Discover More <ArrowUpRight className="w-3 h-3" />
                 </div>
@@ -3031,12 +2952,9 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
       <div className="max-w-7xl mx-auto px-4 md:px-16 mt-8 md:mt-16 pt-6 md:pt-10 border-t border-white/10 flex flex-col md:flex-row flex-wrap items-start md:items-center justify-between gap-6 md:gap-10 relative z-20">
         <div className="max-w-lg">
           <p className="text-white/40 mb-2 text-sm">
-            With spa-inspired amenities, elegant interiors, and professional
-            crew, Serendipity is designed to impress.
+            With spa-inspired amenities, elegant interiors, and professional crew, Serendipity is designed to impress.
           </p>
-          <p className="text-gold font-bold">
-            Plan your private event with us today.
-          </p>
+          <p className="text-gold font-bold">Plan your private event with us today.</p>
         </div>
         <a
           href="#destinations"
@@ -3045,107 +2963,6 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
           Explore Destinations <ChevronRight className="w-4 h-4" />
         </a>
       </div>
-    </section>
-  );
-}
-
-function ScrollVideoSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const section = sectionRef.current;
-    const video = videoRef.current;
-    if (!section || !video) return;
-
-    const activateVideo = () => {
-      void video.play().catch(() => {});
-      video.pause();
-    };
-
-    const once = (
-      el: EventTarget,
-      event: string,
-      fn: (event: Event) => void,
-    ) => {
-      const handler = (e: Event) => {
-        el.removeEventListener(event, handler);
-        fn(e);
-      };
-      el.addEventListener(event, handler, { passive: true });
-      return handler;
-    };
-
-    once(document.documentElement, "touchstart", activateVideo);
-    video.pause();
-    video.currentTime = 0;
-
-    let scrubTween: gsap.core.Tween | null = null;
-
-    const setupScrollScrub = () => {
-      if (scrubTween) {
-        scrubTween.kill();
-        scrubTween = null;
-      }
-
-      scrubTween = gsap.fromTo(
-        video,
-        { currentTime: 0 },
-        {
-          currentTime: Math.max(video.duration || 1, 1),
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.3,
-            pin: true,
-          },
-        },
-      );
-    };
-
-    const onLoadedMetadata = () => {
-      setupScrollScrub();
-    };
-
-    if (video.readyState >= 1) {
-      setupScrollScrub();
-    } else {
-      video.addEventListener("loadedmetadata", onLoadedMetadata, {
-        once: true,
-      });
-    }
-
-    return () => {
-      video.removeEventListener("loadedmetadata", onLoadedMetadata);
-      scrubTween?.kill();
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.trigger === section) {
-          trigger.kill();
-        }
-      });
-    };
-  }, []);
-
-  return (
-    <section
-      ref={sectionRef}
-      id="boat-rotation"
-      className="relative overflow-hidden h-screen"
-      style={{ backgroundColor: "#020201" }}
-    >
-      <video
-        ref={videoRef}
-        className="w-full h-full object-contain"
-        muted
-        playsInline
-        preload="auto"
-        src="/assets/fast.mp4"
-        style={{ backgroundColor: "#020201" }}
-      />
     </section>
   );
 }
@@ -3177,20 +2994,15 @@ function AccommodationsSection({
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-[1px] bg-gradient-to-r from-gold to-transparent" />
-              <span className="text-[10px] tracking-[0.35em] uppercase text-gold/80">
-                Luxury Living
-              </span>
+              <span className="text-[10px] tracking-[0.35em] uppercase text-gold/80">Luxury Living</span>
             </div>
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif leading-[1.05]">
               Elegant Accommodations
-              <span className="block text-gold italic mt-1">
-                for up to 12 guests
-              </span>
+              <span className="block text-gold italic mt-1">for up to 12 guests</span>
             </h2>
           </div>
           <p className="text-white/50 text-base max-w-md">
-            Four private suites designed for absolute comfort, privacy, and
-            quiet ocean living.
+            Four private suites designed for absolute comfort, privacy, and quiet ocean living.
           </p>
         </div>
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-start">
@@ -3203,26 +3015,19 @@ function AccommodationsSection({
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 bg-black/40 backdrop-blur-xl border border-white/10 px-4 py-3 rounded-xl">
                 <p className="text-2xl font-serif text-gold leading-none">4</p>
-                <p className="text-[9px] tracking-widest text-white/40 mt-0.5">
-                  Private Suites
-                </p>
+                <p className="text-[9px] tracking-widest text-white/40 mt-0.5">Private Suites</p>
               </div>
               <button
                 onClick={openGalleryInterior}
                 className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-gold/30 text-gold text-[10px] tracking-widest uppercase hover:bg-gold hover:text-black transition flex items-center gap-1"
               >
-                <Eye className="w-3 h-3" />
-                Interior
+                <Eye className="w-3 h-3" /> Interior
               </button>
             </div>
           </div>
           <div className="flex flex-col">
             {ROOMS.map((r, i) => (
-              <div
-                key={i}
-                onClick={() => openRoom(r)}
-                className="group cursor-pointer"
-              >
+              <div key={i} onClick={() => openRoom(r)} className="group cursor-pointer">
                 <div className="flex items-center justify-between p-4 border-b border-white/5 hover:border-gold/30 hover:bg-white/5 transition-all rounded-xl">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-lg overflow-hidden hidden sm:block">
@@ -3232,9 +3037,7 @@ function AccommodationsSection({
                       />
                     </div>
                     <div>
-                      <h4 className="font-serif text-base group-hover:text-gold transition">
-                        {r.title}
-                      </h4>
+                      <h4 className="font-serif text-base group-hover:text-gold transition">{r.title}</h4>
                       <p className="text-[10px] text-white/40">{r.sub}</p>
                     </div>
                   </div>
@@ -3243,18 +3046,9 @@ function AccommodationsSection({
               </div>
             ))}
             <div className="mt-5 p-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
-              <h3 className="text-base font-serif mb-3 text-gold">
-                Flybridge Experience
-              </h3>
+              <h3 className="text-base font-serif mb-3 text-gold">Flybridge Experience</h3>
               <div className="grid grid-cols-2 gap-y-2.5 gap-x-4">
-                {[
-                  "Jacuzzi",
-                  "Sun Lounge",
-                  "Dining Deck",
-                  "Wet Bar",
-                  "Audio System",
-                  "LED Ambience",
-                ].map((a, i) => (
+                {["Jacuzzi","Sun Lounge","Dining Deck","Wet Bar","Audio System","LED Ambience"].map((a, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Check className="w-3 h-3 text-gold" />
                     <span className="text-xs text-white/60">{a}</span>
@@ -3284,9 +3078,7 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-[1.5px] bg-gold" />
-              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-                Our Exclusive Fleet
-              </span>
+              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Our Exclusive Fleet</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-serif leading-tight">
               Plan Your Yacht
@@ -3295,8 +3087,7 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
             </h2>
           </div>
           <p className="text-white/50 text-base leading-relaxed">
-            From romantic cruises off Anna Maria Island to corporate retreats in
-            Tampa Bay, adventure meets luxury.
+            From romantic cruises off Anna Maria Island to corporate retreats in Tampa Bay, adventure meets luxury.
           </p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
@@ -3306,10 +3097,7 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
               className="relative rounded-3xl overflow-hidden group shadow-2xl"
               style={{ aspectRatio: "3/4" }}
             >
-              <div
-                className="absolute inset-0 cursor-pointer"
-                onClick={() => openFleet(f)}
-              >
+              <div className="absolute inset-0 cursor-pointer" onClick={() => openFleet(f)}>
                 <img
                   src={f.img}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -3319,10 +3107,7 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-500" />
               </div>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goToReservation(f.imgIndex, f.name);
-                }}
+                onClick={(e) => { e.stopPropagation(); goToReservation(f.imgIndex, f.name); }}
                 className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-gold flex items-center justify-center shadow-lg hover:scale-110 transition-all"
                 aria-label={`Reserve ${f.name}`}
               >
@@ -3389,11 +3174,7 @@ function CulinarySection() {
         "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=600",
       ],
       icon: (
-        <svg
-          className="w-4 h-4 text-gold"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 24 24">
           <path d="M7.5,7L5.5,5H18.5L16.5,7M11,13V19H6V21H18V19H13V13L21,5V3H3V5L11,13Z" />
         </svg>
       ),
@@ -3403,7 +3184,7 @@ function CulinarySection() {
   const slideVariants = {
     enter: (d: number) => ({ x: d > 0 ? 1000 : -1000, opacity: 0 }),
     center: { zIndex: 1, x: 0, opacity: 1 },
-    exit: (d: number) => ({ zIndex: 0, x: d < 0 ? 1000 : -1000, opacity: 0 }),
+    exit:  (d: number) => ({ zIndex: 0, x: d < 0 ? 1000 : -1000, opacity: 0 }),
   };
 
   return (
@@ -3416,9 +3197,7 @@ function CulinarySection() {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-[1.5px] bg-gold" />
-              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-                Culinary & Mixology
-              </span>
+              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Culinary & Mixology</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-serif">
               Epicurean <em className="text-gold italic font-serif">Journey</em>
@@ -3426,19 +3205,13 @@ function CulinarySection() {
           </div>
           <div className="flex gap-2 md:gap-4">
             <button
-              onClick={() => {
-                setDirection(-1);
-                setActiveSlide((p) => (p - 1 + slides.length) % slides.length);
-              }}
+              onClick={() => { setDirection(-1); setActiveSlide((p) => (p - 1 + slides.length) % slides.length); }}
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={() => {
-                setDirection(1);
-                setActiveSlide((p) => (p + 1) % slides.length);
-              }}
+              onClick={() => { setDirection(1); setActiveSlide((p) => (p + 1) % slides.length); }}
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy transition-all"
             >
               <ChevronRight className="w-4 h-4" />
@@ -3481,9 +3254,7 @@ function CulinarySection() {
                         </div>
                       </div>
                       <div>
-                        <h3 className="text-lg md:text-2xl font-serif">
-                          {slides[activeSlide].name}
-                        </h3>
+                        <h3 className="text-lg md:text-2xl font-serif">{slides[activeSlide].name}</h3>
                         <p className="text-gold text-[9px] uppercase tracking-widest mt-1 font-bold opacity-80">
                           {slides[activeSlide].role}
                         </p>
@@ -3491,9 +3262,7 @@ function CulinarySection() {
                     </div>
                     <h2 className="text-xl md:text-4xl font-serif mb-5 leading-snug">
                       {slides[activeSlide].titleLine1}
-                      <em className="text-gold italic font-serif">
-                        {slides[activeSlide].titleItalic}
-                      </em>
+                      <em className="text-gold italic font-serif">{slides[activeSlide].titleItalic}</em>
                       {slides[activeSlide].titleLine2}
                     </h2>
                     <p className="text-white/50 text-sm leading-relaxed">
@@ -3535,10 +3304,7 @@ function CulinarySection() {
           {slides.map((_, i) => (
             <button
               key={i}
-              onClick={() => {
-                setDirection(i > activeSlide ? 1 : -1);
-                setActiveSlide(i);
-              }}
+              onClick={() => { setDirection(i > activeSlide ? 1 : -1); setActiveSlide(i); }}
               className={`h-1.5 transition-all duration-500 rounded-full ${activeSlide === i ? "w-8 bg-gold" : "w-4 bg-white/20"}`}
             />
           ))}
@@ -3550,15 +3316,10 @@ function CulinarySection() {
 
 // --- DestinationsSection ---
 function DestinationsSection() {
-  const [selected, setSelected] = useState<(typeof DESTINATIONS)[0] | null>(
-    null,
-  );
+  const [selected, setSelected] = useState<(typeof DESTINATIONS)[0] | null>(null);
 
   return (
-    <section
-      id="destinations"
-      className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy"
-    >
+    <section id="destinations" className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -3570,9 +3331,7 @@ function DestinationsSection() {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-[1.5px] bg-gold" />
-              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-                Gulf Coast Destinations
-              </span>
+              <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Gulf Coast Destinations</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-serif leading-tight">
               Choose Great Day
@@ -3590,11 +3349,7 @@ function DestinationsSection() {
           style={{ scrollSnapType: "x mandatory" }}
         >
           {DESTINATIONS.map((dest, i) => (
-            <MobileDestCard
-              key={i}
-              dest={dest}
-              onTap={() => setSelected(dest)}
-            />
+            <MobileDestCard key={i} dest={dest} onTap={() => setSelected(dest)} />
           ))}
         </div>
 
@@ -3661,12 +3416,8 @@ function DestinationsSection() {
                     {selected.distance} from marina
                   </span>
                 </div>
-                <h2 className="text-2xl md:text-3xl font-serif mb-3">
-                  {selected.name}
-                </h2>
-                <p className="text-sm text-white/60 leading-relaxed mb-6">
-                  {selected.desc}
-                </p>
+                <h2 className="text-2xl md:text-3xl font-serif mb-3">{selected.name}</h2>
+                <p className="text-sm text-white/60 leading-relaxed mb-6">{selected.desc}</p>
                 <a
                   href="/book"
                   onClick={() => setSelected(null)}
@@ -3688,10 +3439,7 @@ function PricingSection() {
   const [showSpecial, setShowSpecial] = useState(false);
 
   return (
-    <section
-      id="pricing"
-      className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy-light"
-    >
+    <section id="pricing" className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy-light">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -3702,9 +3450,7 @@ function PricingSection() {
         <div className="text-center mb-8 md:mb-16">
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="w-10 h-[1.5px] bg-gold" />
-            <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-              Charter Rates
-            </span>
+            <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Charter Rates</span>
             <div className="w-10 h-[1.5px] bg-gold" />
           </div>
           <h2 className="text-3xl md:text-5xl font-serif mb-3">
@@ -3713,10 +3459,7 @@ function PricingSection() {
             <em className="text-gold italic font-serif">& Price List</em>
           </h2>
           <p className="text-white/40 max-w-lg mx-auto text-sm leading-relaxed">
-            Departing Tampa / St Petersburg. All rates include professional
-            captain and crew. Charter rates are not inclusive of food/drink
-            provisions, fuel, gratuity and/or expenses related to dockage or
-            mooring fees at remote locations.
+            Departing Tampa / St Petersburg. All rates include professional captain and crew. Charter rates are not inclusive of food/drink provisions, fuel, gratuity and/or expenses related to dockage or mooring fees at remote locations.
           </p>
         </div>
 
@@ -3746,36 +3489,26 @@ function PricingSection() {
                   </div>
                 </div>
               )}
-              <div
-                className={`p-6 md:p-10 ${rate.popular ? "pt-10 md:pt-12" : ""}`}
-              >
-                <h3 className="text-xl md:text-2xl font-serif mb-1">
-                  {rate.name}
-                </h3>
+              <div className={`p-6 md:p-10 ${rate.popular ? "pt-10 md:pt-12" : ""}`}>
+                <h3 className="text-xl md:text-2xl font-serif mb-1">{rate.name}</h3>
                 <div className="flex items-end gap-2 mb-3">
-                  <span className="text-3xl md:text-4xl font-serif text-gold font-bold">
-                    {rate.price}
-                  </span>
+                  <span className="text-3xl md:text-4xl font-serif text-gold font-bold">{rate.price}</span>
                   <span className="text-white/30 text-sm mb-1">/ charter</span>
                 </div>
                 <div className="flex flex-wrap gap-2 md:gap-3 mb-5">
                   <div className="flex items-center gap-1.5 text-white/40 text-xs">
-                    <Clock className="w-3.5 h-3.5 text-gold/60" />{" "}
-                    {rate.duration}
+                    <Clock className="w-3.5 h-3.5 text-gold/60" /> {rate.duration}
                   </div>
                   <div className="flex items-center gap-1.5 text-white/40 text-xs">
                     <Users className="w-3.5 h-3.5 text-gold/60" /> {rate.guests}
                   </div>
                   {rate.nights !== "0" && (
                     <div className="flex items-center gap-1.5 text-white/40 text-xs">
-                      <Anchor className="w-3.5 h-3.5 text-gold/60" />{" "}
-                      {rate.nights} nights
+                      <Anchor className="w-3.5 h-3.5 text-gold/60" /> {rate.nights} nights
                     </div>
                   )}
                 </div>
-                <p className="text-sm text-white/50 leading-relaxed mb-5">
-                  {rate.desc}
-                </p>
+                <p className="text-sm text-white/50 leading-relaxed mb-5">{rate.desc}</p>
                 <div className="space-y-2.5 mb-6">
                   {rate.highlights.map((h, j) => (
                     <div key={j} className="flex items-center gap-3">
@@ -3807,12 +3540,8 @@ function PricingSection() {
                 <Star className="w-4 h-4 text-gold" />
               </div>
               <div className="text-left">
-                <h3 className="text-base md:text-xl font-serif">
-                  Special Events & Occasions
-                </h3>
-                <p className="text-[10px] text-white/30 mt-0.5">
-                  Corporate events, celebrations & culinary experiences
-                </p>
+                <h3 className="text-base md:text-xl font-serif">Special Events & Occasions</h3>
+                <p className="text-[10px] text-white/30 mt-0.5">Corporate events, celebrations & culinary experiences</p>
               </div>
             </div>
             <ChevronDown
@@ -3835,16 +3564,10 @@ function PricingSection() {
                       className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-gold/20 transition-all"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-serif text-sm md:text-lg">
-                          {r.name}
-                        </h4>
-                        <span className="text-gold font-bold text-base md:text-xl font-serif shrink-0 ml-2">
-                          {r.price}
-                        </span>
+                        <h4 className="font-serif text-sm md:text-lg">{r.name}</h4>
+                        <span className="text-gold font-bold text-base md:text-xl font-serif shrink-0 ml-2">{r.price}</span>
                       </div>
-                      <p className="text-xs text-white/50 leading-relaxed mb-4">
-                        {r.desc}
-                      </p>
+                      <p className="text-xs text-white/50 leading-relaxed mb-4">{r.desc}</p>
                       <a
                         href="/book"
                         className="text-gold text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:gap-3 transition-all"
@@ -3859,8 +3582,7 @@ function PricingSection() {
           </AnimatePresence>
         </div>
         <p className="text-center text-white/25 text-xs mt-6">
-          *Pricing subject to availability. Contact us for custom itineraries
-          and special packages.
+          *Pricing subject to availability. Contact us for custom itineraries and special packages.
         </p>
         <div className="mt-6 text-center">
           <a
@@ -3897,11 +3619,7 @@ function MechanicalSection() {
     { label: "Fuel Capacity", value: "Large reserve tanks", icon: Fuel },
     { label: "Range", value: "Tampa to Key West", icon: MapPin },
     { label: "Generator", value: "Dual onboard", icon: Activity },
-    {
-      label: "Air Conditioning",
-      value: "Full vessel climate control",
-      icon: Wind,
-    },
+    { label: "Air Conditioning", value: "Full vessel climate control", icon: Wind },
     { label: "Navigation", value: "Full electronics suite", icon: Settings },
   ];
 
@@ -3955,9 +3673,7 @@ function MechanicalSection() {
     },
   ];
 
-  const visibleSpecs = showAllSpecs
-    ? mechanicalSpecs
-    : mechanicalSpecs.slice(0, 6);
+  const visibleSpecs = showAllSpecs ? mechanicalSpecs : mechanicalSpecs.slice(0, 6);
 
   return (
     <section
@@ -3972,16 +3688,13 @@ function MechanicalSection() {
         className="max-w-6xl mx-auto relative z-10"
       >
         <div className="mb-10 text-center">
-          <span className="text-[10px] tracking-[3px] uppercase text-gold/70">
-            Technical Overview
-          </span>
+          <span className="text-[10px] tracking-[3px] uppercase text-gold/70">Technical Overview</span>
           <h2 className="text-3xl md:text-5xl font-serif mt-3 leading-tight">
             Mechanical <br />
             <em className="text-gold italic">Excellence</em>
           </h2>
           <p className="text-white/40 max-w-xl mx-auto mt-3 text-sm">
-            SERENDIPITY is engineered for performance, reliability, and refined
-            cruising comfort.
+            SERENDIPITY is engineered for performance, reliability, and refined cruising comfort.
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
@@ -3994,12 +3707,8 @@ function MechanicalSection() {
               className="p-3.5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-gold/30 hover:bg-white/10 transition-all group"
             >
               <s.icon className="w-4 h-4 text-gold/60 mb-1.5 group-hover:text-gold" />
-              <p className="text-[9px] uppercase tracking-widest text-white/30 mb-0.5">
-                {s.label}
-              </p>
-              <p className="text-xs font-semibold text-white/80 leading-tight">
-                {s.value}
-              </p>
+              <p className="text-[9px] uppercase tracking-widest text-white/30 mb-0.5">{s.label}</p>
+              <p className="text-xs font-semibold text-white/80 leading-tight">{s.value}</p>
             </motion.div>
           ))}
         </div>
@@ -4028,9 +3737,7 @@ function MechanicalSection() {
                     <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center">
                       <sys.icon className="w-4 h-4 text-gold" />
                     </div>
-                    <h4 className="font-serif text-base md:text-lg">
-                      {sys.title}
-                    </h4>
+                    <h4 className="font-serif text-base md:text-lg">{sys.title}</h4>
                   </div>
                   <span className="text-[10px] text-white/40 tracking-widest">
                     {isOpen ? "CLOSE" : "VIEW"}
@@ -4112,26 +3819,20 @@ function ReviewsSection() {
   const infiniteReviews = [...reviewsList, ...reviewsList];
 
   return (
-    <section
-      id="reviews"
-      className="py-10 md:py-20 bg-navy-light relative overflow-hidden"
-    >
+    <section id="reviews" className="py-10 md:py-20 bg-navy-light relative overflow-hidden">
       <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px]" />
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 mb-8 md:mb-16">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-[1.5px] bg-gold" />
-          <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-            Guest Reviews
-          </span>
+          <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Guest Reviews</span>
         </div>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-5">
           <h2 className="text-3xl md:text-5xl font-serif leading-tight">
-            What Our Clients{" "}
-            <em className="text-gold italic font-serif">Say</em>
+            What Our Clients <em className="text-gold italic font-serif">Say</em>
           </h2>
           <div className="flex flex-col items-start md:items-end">
             <div className="flex items-center gap-1 mb-1">
-              {[1, 2, 3, 4, 5].map((i) => (
+              {[1,2,3,4,5].map((i) => (
                 <Star key={i} className="w-4 h-4 fill-gold text-gold" />
               ))}
             </div>
@@ -4151,31 +3852,23 @@ function ReviewsSection() {
               className="w-[280px] md:w-[420px] shrink-0 p-5 md:p-10 bg-navy/40 backdrop-blur-xl border border-white/10 rounded-[2rem] whitespace-normal group hover:border-gold/30 transition-all shadow-xl"
             >
               <div className="text-gold/20 mb-4 font-serif">
-                <svg
-                  className="w-7 md:w-10 h-7 md:h-10"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+                <svg className="w-7 md:w-10 h-7 md:h-10" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
               <div className="flex gap-0.5 mb-4">
-                {[1, 2, 3, 4, 5].map((j) => (
+                {[1,2,3,4,5].map((j) => (
                   <Star key={j} className="w-3 h-3 fill-gold text-gold" />
                 ))}
               </div>
-              <p className="text-sm text-white/80 leading-relaxed mb-5 italic">
-                "{r.text}"
-              </p>
+              <p className="text-sm text-white/80 leading-relaxed mb-5 italic">"{r.text}"</p>
               <div className="flex items-center gap-3 mt-auto">
                 <div className="w-10 h-10 bg-gold/10 border border-gold/20 rounded-full flex items-center justify-center font-bold text-gold text-xs group-hover:bg-gold group-hover:text-navy transition-all shrink-0">
                   {r.initial}
                 </div>
                 <div>
                   <h5 className="font-bold text-sm">{r.name}</h5>
-                  <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">
-                    {r.role}
-                  </p>
+                  <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">{r.role}</p>
                 </div>
               </div>
             </div>
@@ -4186,35 +3879,22 @@ function ReviewsSection() {
   );
 }
 
-// ─── InquirySection — Inquiry ONLY, no payment ───────────────────────────────
-function InquirySection({
-  addToast,
-}: {
-  addToast: (m: string, t: string, tp: string) => void;
-}) {
-  const [loading, setLoading] = useState(false);
+// ─── InquirySection ───────────────────────────────────────────────────────────
+function InquirySection({ addToast }: { addToast: (m: string, t: string, tp: string) => void }) {
+  const [loading, setLoading]     = useState(false);
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [lastName, setLastName]   = useState("");
+  const [email, setEmail]         = useState("");
   const [eventType, setEventType] = useState("Day Trip");
-  const [message, setMessage] = useState("");
+  const [message, setMessage]     = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate sending inquiry — no payment redirect
     setTimeout(() => {
       setLoading(false);
-      addToast(
-        "We'll be in touch within 24 hours!",
-        "Inquiry Sent!",
-        "success",
-      );
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setMessage("");
-      setEventType("Day Trip");
+      addToast("We'll be in touch within 24 hours!", "Inquiry Sent!", "success");
+      setFirstName(""); setLastName(""); setEmail(""); setMessage(""); setEventType("Day Trip");
     }, 900);
   };
 
@@ -4224,11 +3904,7 @@ function InquirySection({
       className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy relative overflow-hidden"
     >
       <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
-        <img
-          src="assets/hero1.png"
-          className="w-full h-full object-cover"
-          alt=""
-        />
+        <img src="assets/hero1.png" className="w-full h-full object-cover" alt="" />
       </div>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -4240,9 +3916,7 @@ function InquirySection({
         <div>
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-[1.5px] bg-gold" />
-            <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
-              Get in Touch
-            </span>
+            <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Get in Touch</span>
           </div>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif leading-tight mb-6">
             Questions or
@@ -4250,19 +3924,12 @@ function InquirySection({
             <em className="text-gold italic font-serif">Special Requests?</em>
           </h2>
           <p className="text-white/50 text-base mb-8 max-w-sm">
-            Have questions about our charter packages, availability, or want to
-            discuss a custom itinerary? Send us a message and we'll get back to
-            you within 24 hours.
+            Have questions about our charter packages, availability, or want to discuss a custom itinerary? Send us a message and we'll get back to you within 24 hours.
           </p>
-
-          {/* Ready to book CTA box */}
           <div className="p-5 mb-6 rounded-2xl border border-gold/20 bg-gold/5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">
               <p className="text-sm font-bold text-gold mb-1">Ready to Book?</p>
-              <p className="text-xs text-white/50">
-                Skip the inquiry and go straight to selecting your charter
-                package and making payment.
-              </p>
+              <p className="text-xs text-white/50">Skip the inquiry and go straight to selecting your charter package and making payment.</p>
             </div>
             <a
               href="/book"
@@ -4271,7 +3938,6 @@ function InquirySection({
               Book Now <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
-
           <div className="space-y-4">
             {[
               { icon: Phone, text: "Call Jake: 412-418-2968" },
@@ -4291,43 +3957,26 @@ function InquirySection({
         </div>
 
         <div className="p-5 md:p-10 lg:p-12 bg-navy-light/90 backdrop-blur-3xl border border-white/10 rounded-[2rem] shadow-2xl">
-          <h3 className="text-2xl md:text-3xl font-serif mb-2">
-            Send an Inquiry
-          </h3>
+          <h3 className="text-2xl md:text-3xl font-serif mb-2">Send an Inquiry</h3>
           <p className="text-white/40 mb-6 text-sm">
-            Tell us about your event and we'll get back to you within 24 hours.
-            To book directly,{" "}
-            <a
-              href="/book"
-              className="text-gold underline-offset-2 hover:underline"
-            >
-              click here
-            </a>
-            .
+            Tell us about your event and we'll get back to you within 24 hours. To book directly,{" "}
+            <a href="/book" className="text-gold underline-offset-2 hover:underline">click here</a>.
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">
-                  First Name
-                </label>
+                <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">First Name</label>
                 <input
-                  required
-                  type="text"
-                  value={firstName}
+                  required type="text" value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-gold transition-colors"
                   placeholder="John"
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">
-                  Last Name
-                </label>
+                <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">Last Name</label>
                 <input
-                  required
-                  type="text"
-                  value={lastName}
+                  required type="text" value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-gold transition-colors"
                   placeholder="Doe"
@@ -4335,64 +3984,34 @@ function InquirySection({
               </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">
-                Email Address
-              </label>
+              <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">Email Address</label>
               <input
-                required
-                type="email"
-                value={email}
+                required type="email" value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-gold transition-colors"
                 placeholder="john@example.com"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">
-                Charter Interest
-              </label>
+              <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">Charter Interest</label>
               <select
-                value={eventType}
-                onChange={(e) => setEventType(e.target.value)}
+                value={eventType} onChange={(e) => setEventType(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-gold transition-colors appearance-none cursor-pointer"
               >
-                <option className="bg-navy" value="Day Trip">
-                  Day Trip — $10,000
-                </option>
-                <option className="bg-navy" value="Weekend Getaway">
-                  Weekend Getaway — $20,000
-                </option>
-                <option className="bg-navy" value="Full Week">
-                  Full Week — $35,000
-                </option>
-                <option className="bg-navy" value="Corporate Events">
-                  Corporate Events — $15,000
-                </option>
-                <option className="bg-navy" value="Birthdays & Anniversaries">
-                  Birthdays & Anniversaries — $7,500
-                </option>
-                <option
-                  className="bg-navy"
-                  value="Culinary & Wine Cheese Events"
-                >
-                  Culinary & Wine Cheese — $7,500
-                </option>
-                <option className="bg-navy" value="Sunset Cruise">
-                  Sunset Cruise (Custom)
-                </option>
-                <option className="bg-navy" value="General Question">
-                  General Question
-                </option>
+                <option className="bg-navy" value="Day Trip">Day Trip — $10,000</option>
+                <option className="bg-navy" value="Weekend Getaway">Weekend Getaway — $20,000</option>
+                <option className="bg-navy" value="Full Week">Full Week — $35,000</option>
+                <option className="bg-navy" value="Corporate Events">Corporate Events — $15,000</option>
+                <option className="bg-navy" value="Birthdays & Anniversaries">Birthdays & Anniversaries — $7,500</option>
+                <option className="bg-navy" value="Culinary & Wine Cheese Events">Culinary & Wine Cheese — $7,500</option>
+                <option className="bg-navy" value="Sunset Cruise">Sunset Cruise (Custom)</option>
+                <option className="bg-navy" value="General Question">General Question</option>
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">
-                Message
-              </label>
+              <label className="text-[9px] font-bold text-white/30 tracking-widest uppercase">Message</label>
               <textarea
-                required
-                rows={4}
-                value={message}
+                required rows={4} value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-gold transition-colors resize-none"
                 placeholder="Tell us about your event, preferred dates, guest count, and any special requests..."
@@ -4406,27 +4025,18 @@ function InquirySection({
                 <>
                   <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     className="w-5 h-5 border-2 border-navy/30 border-t-navy rounded-full"
                   />
                   Sending Inquiry…
                 </>
               ) : (
-                <>
-                  <Send className="w-5 h-5" /> Send Inquiry
-                </>
+                <><Send className="w-5 h-5" /> Send Inquiry</>
               )}
             </button>
             <p className="text-center text-[10px] text-white/25">
               We respond within 24 hours. To book immediately,{" "}
-              <a href="/book" className="text-gold hover:underline">
-                use our booking page
-              </a>
-              .
+              <a href="/book" className="text-gold hover:underline">use our booking page</a>.
             </p>
           </form>
         </div>
@@ -4443,15 +4053,10 @@ function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
           <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <img
-                src="assets/logo.png"
-                alt="Serendipity Logo"
-                className="h-12 md:h-16 w-auto"
-              />
+              <img src="assets/logo.png" alt="Serendipity Logo" className="h-12 md:h-16 w-auto" />
             </div>
             <p className="text-white/40 text-sm leading-relaxed mb-5 max-w-xs">
-              A stunning 94' Lazzara Hardtop motor yacht based in Saint
-              Petersburg, Florida.
+              A stunning 94' Lazzara Hardtop motor yacht based in Saint Petersburg, Florida.
             </p>
             <div className="flex gap-3">
               <a
@@ -4462,16 +4067,10 @@ function Footer() {
               >
                 <Facebook className="w-4 h-4" />
               </a>
-              <a
-                href="#"
-                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-gold/50 transition-colors text-white/50 hover:text-gold"
-              >
+              <a href="#" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-gold/50 transition-colors text-white/50 hover:text-gold">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a
-                href="#"
-                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-gold/50 transition-colors text-white/50 hover:text-gold"
-              >
+              <a href="#" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-gold/50 transition-colors text-white/50 hover:text-gold">
                 <Twitter className="w-4 h-4" />
               </a>
             </div>
@@ -4479,38 +4078,14 @@ function Footer() {
           <div>
             <h4 className="font-serif text-base mb-4">Charter</h4>
             <ul className="space-y-2.5">
-              <li>
-                <a
-                  href="/book"
-                  className="text-sm text-white/30 hover:text-gold transition-colors"
-                >
-                  Day Trip — $10,000
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/book"
-                  className="text-sm text-white/30 hover:text-gold transition-colors"
-                >
-                  Weekend — $20,000
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/book"
-                  className="text-sm text-white/30 hover:text-gold transition-colors"
-                >
-                  Full Week — $35,000
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/book"
-                  className="text-sm text-white/30 hover:text-gold transition-colors"
-                >
-                  Corporate — $15,000
-                </a>
-              </li>
+              {[
+                ["Day Trip — $10,000","/book"],["Weekend — $20,000","/book"],
+                ["Full Week — $35,000","/book"],["Corporate — $15,000","/book"],
+              ].map(([label, href]) => (
+                <li key={label}>
+                  <a href={href} className="text-sm text-white/30 hover:text-gold transition-colors">{label}</a>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
@@ -4519,12 +4094,7 @@ function Footer() {
               <li className="text-sm text-white/30">Jake: 412-418-2968</li>
               <li className="text-sm text-white/30">Bryon: 727-644-9653</li>
               <li>
-                <a
-                  href="#contact"
-                  className="text-sm text-white/30 hover:text-gold transition-colors"
-                >
-                  Send Inquiry
-                </a>
+                <a href="#contact" className="text-sm text-white/30 hover:text-gold transition-colors">Send Inquiry</a>
               </li>
             </ul>
           </div>
@@ -4535,12 +4105,7 @@ function Footer() {
               <li className="text-sm text-white/30">3701 50 Ave S.</li>
               <li className="text-sm text-white/30">St. Petersburg, FL</li>
               <li>
-                <a
-                  href="#gallery"
-                  className="text-sm text-white/30 hover:text-gold transition-colors"
-                >
-                  Gallery →
-                </a>
+                <a href="#gallery" className="text-sm text-white/30 hover:text-gold transition-colors">Gallery →</a>
               </li>
             </ul>
           </div>
@@ -4548,10 +4113,8 @@ function Footer() {
         <div className="pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] font-medium text-white/20 tracking-widest uppercase">
           <p>© 2025 SERENDIPITY YACHT CHARTER. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-5 md:gap-8">
-            {["Privacy", "Terms", "Cookies"].map((l) => (
-              <a key={l} href="#" className="hover:text-gold transition-colors">
-                {l}
-              </a>
+            {["Privacy","Terms","Cookies"].map((l) => (
+              <a key={l} href="#" className="hover:text-gold transition-colors">{l}</a>
             ))}
           </div>
         </div>
@@ -4561,18 +4124,10 @@ function Footer() {
 }
 
 // --- Modal ---
-function Modal({
-  children,
-  onClose,
-}: {
-  children: React.ReactNode;
-  onClose: () => void;
-}) {
+function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
+    return () => { document.body.style.overflow = "unset"; };
   }, []);
 
   return (
