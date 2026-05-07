@@ -3100,7 +3100,7 @@ function ScrollVideoSection() {
             trigger: section,
             start: "top top",
             end: "bottom top",
-            scrub: 0.5,
+            scrub: 0.3,
             pin: true,
           },
         },
@@ -3134,15 +3134,17 @@ function ScrollVideoSection() {
     <section
       ref={sectionRef}
       id="boat-rotation"
-      className="relative bg-navy overflow-hidden h-screen"
+      className="relative overflow-hidden h-screen"
+      style={{ backgroundColor: "#020201" }}
     >
       <video
         ref={videoRef}
-        className="w-full h-full object-contain bg-black"
+        className="w-full h-full object-contain"
         muted
         playsInline
-        preload="metadata"
-        src="/assets/boat-rotate.mp4"
+        preload="auto"
+        src="/assets/fast.mp4"
+        style={{ backgroundColor: "#020201" }}
       />
     </section>
   );
