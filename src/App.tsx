@@ -2168,6 +2168,7 @@ function Hero({ heroIdx, setHeroIdx, openAvail, openVideo, openRoute }: { heroId
 }
 
 // --- VesselSection (Luxury Cinematic Redesign Fixed) ---
+// --- VesselSection (FINAL FIXED VERSION) ---
 function VesselSection({
   addToast,
   openGallery,
@@ -2189,11 +2190,11 @@ function VesselSection({
   >("overview");
 
   const specGroups = [
-    { id: "overview" as const, label: "Overview", icon: Ship },
-    { id: "amenities" as const, label: "Amenities", icon: Sparkles },
-    { id: "engine" as const, label: "Engine", icon: Gauge },
-    { id: "propulsion" as const, label: "Propulsion", icon: Zap },
-    { id: "water" as const, label: "Utility", icon: Droplets },
+    { id: "overview", label: "Overview", icon: Ship },
+    { id: "amenities", label: "Amenities", icon: Sparkles },
+    { id: "engine", label: "Engine", icon: Gauge },
+    { id: "propulsion", label: "Propulsion", icon: Zap },
+    { id: "water", label: "Utility", icon: Droplets },
   ];
 
   const getSpecContent = () => {
@@ -2202,23 +2203,22 @@ function VesselSection({
         return VESSEL_OVERVIEW_SPECS.map((s, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.04 }}
-            className="group flex items-center justify-between py-3 border-b border-white/5 last:border-0"
+            transition={{ delay: i * 0.03 }}
+            className="flex justify-between py-3 border-b border-white/5"
           >
-            <span className="text-[10px] uppercase tracking-[2px] text-white/35 group-hover:text-gold transition-colors">
+            <span className="text-[10px] uppercase tracking-[2px] text-white/30">
               {s.label}
             </span>
-
-            <span className="text-sm font-semibold text-white/80 text-right ml-4">
+            <span className="text-sm text-white/80 font-semibold">
               {s.value}
             </span>
           </motion.div>
         ));
 
       default:
-        const contentMap = {
+        const map = {
           amenities: KEY_AMENITIES,
           engine: ENGINE_SPECS,
           propulsion: PROPULSION_SPECS,
@@ -2226,22 +2226,17 @@ function VesselSection({
         };
 
         return (
-          <div className="grid grid-cols-1 gap-3">
-            {contentMap[activeSpecGroup]?.map((s, i) => (
+          <div className="grid gap-3">
+            {map[activeSpecGroup]?.map((s, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -8 }}
+                initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.04 }}
-                className="flex items-start gap-3 p-3 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-gold/[0.03] hover:border-gold/10 transition-all"
+                transition={{ delay: i * 0.03 }}
+                className="flex gap-3 p-3 rounded-xl bg-white/5 border border-white/10"
               >
-                <div className="mt-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_10px_rgba(201,162,39,0.8)]" />
-                </div>
-
-                <span className="text-sm leading-relaxed text-white/60">
-                  {s}
-                </span>
+                <div className="w-1.5 h-1.5 mt-2 rounded-full bg-gold" />
+                <span className="text-sm text-white/60">{s}</span>
               </motion.div>
             ))}
           </div>
@@ -2258,200 +2253,113 @@ function VesselSection({
           "radial-gradient(circle at top, rgba(201,162,39,0.08), transparent 25%), linear-gradient(180deg,#07111d 0%,#081524 40%,#091827 100%)",
       }}
     >
-      {/* Background Glow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* BACKGROUNDS */}
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-gold/5 blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-blue-500/5 blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-14 lg:gap-20 items-start">
-        {/* LEFT */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="lg:sticky lg:top-28"
-        >
-          {/* Tag */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-gold/15 bg-gold/[0.04] backdrop-blur-xl mb-6">
-            <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+      <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-14">
 
-            <span className="text-[10px] uppercase tracking-[3px] font-bold text-gold">
-              The Yacht Experience
-            </span>
-          </div>
+        {/* LEFT SIDE */}
+        <div className="lg:sticky lg:top-28">
 
-          {/* Heading */}
-          <div className="space-y-5">
-            <h2 className="text-4xl md:text-6xl xl:text-7xl leading-[0.95] tracking-tight font-serif text-white">
-              Meet <span className="italic text-gold">Serendipity</span>
-            </h2>
+          <h2 className="text-4xl md:text-6xl font-serif text-white">
+            Meet <span className="text-gold italic">Serendipity</span>
+          </h2>
 
-            <p className="max-w-xl text-white/55 text-base md:text-lg leading-relaxed">
-              A floating sanctuary engineered for luxury voyages along
-              Florida’s Gulf Coast. Elegant interiors, powerful performance,
-              and refined craftsmanship come together in one unforgettable
-              charter experience.
-            </p>
-          </div>
+          <p className="mt-5 text-white/60 max-w-xl">
+            A luxury yacht experience built for coastal voyages and elegance.
+          </p>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+          {/* STATS */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-10">
             {[
               { val: "94FT", label: "Length" },
-              { val: "25KT", label: "Max Speed" },
+              { val: "25KT", label: "Speed" },
               { val: "2022", label: "Refit" },
               { val: "12", label: "Guests" },
             ].map((s, i) => (
-              <motion.div
+              <div
                 key={i}
-                whileHover={{ y: -4 }}
-                className="rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 text-center"
+                className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center"
               >
-                <p className="text-2xl md:text-3xl text-gold">
-                  {s.val}
-                </p>
-
-                <p className="mt-1 text-[10px] uppercase tracking-[2px] text-white/35">
+                <div className="text-xl text-gold">{s.val}</div>
+                <div className="text-[10px] uppercase text-white/40">
                   {s.label}
-                </p>
-              </motion.div>
+                </div>
+              </div>
             ))}
           </div>
 
-          {/* OPEN SPECS BUTTON */}
-          <div className="mt-10">
-            <motion.button
-              onClick={() => setShowSpecsCard(!showSpecsCard)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="group flex items-center gap-4 px-6 py-4 rounded-3xl border border-gold/20 bg-gold/[0.05] backdrop-blur-xl w-full"
-            >
-              <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
-                {showSpecsCard ? (
-                  <ChevronUp className="w-5 h-5 text-gold" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gold" />
-                )}
-              </div>
+          {/* TOGGLE */}
+          <button
+            onClick={() => setShowSpecsCard(!showSpecsCard)}
+            className="mt-10 w-full flex justify-between px-5 py-4 rounded-2xl border border-gold/20 bg-gold/5 text-white"
+          >
+            <span>Technical Specifications</span>
+            <span>{showSpecsCard ? "−" : "+"}</span>
+          </button>
 
-              <div className="text-left">
-                <p className="text-[10px] uppercase tracking-[2px] text-white/35 font-bold">
-                  Technical Information
-                </p>
-
-                <h4 className="text-white font-semibold">
-                  {showSpecsCard
-                    ? "Hide Vessel Specifications"
-                    : "Explore Vessel Specifications"}
-                </h4>
-              </div>
-            </motion.button>
-          </div>
-
-          {/* COLLAPSIBLE SPECS */}
+          {/* SPECS */}
           <AnimatePresence>
             {showSpecsCard && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.45 }}
-                className="overflow-hidden"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden mt-5 rounded-3xl bg-white/5 border border-white/10"
               >
-                <div className="mt-6 rounded-[32px] border border-white/10 bg-white/[0.04] backdrop-blur-2xl overflow-hidden">
-                  {/* Tabs */}
-                  <div className="flex flex-wrap gap-2 p-5 border-b border-white/5">
-                    {specGroups
-                      .slice(0, showAllSpecs ? specGroups.length : 3)
-                      .map((g) => (
-                        <button
-                          key={g.id}
-                          onClick={() => setActiveSpecGroup(g.id)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] uppercase tracking-[2px] font-bold transition-all ${
-                            activeSpecGroup === g.id
-                              ? "text-gold border border-gold/30 bg-gold/[0.08]"
-                              : "text-white/35 border border-white/8 bg-white/[0.03]"
-                          }`}
-                        >
-                          <g.icon className="w-3.5 h-3.5" />
-                          {g.label}
-                        </button>
-                      ))}
-                  </div>
+                <div className="p-4 flex flex-wrap gap-2 border-b border-white/10">
+                  {specGroups.map((g) => (
+                    <button
+                      key={g.id}
+                      onClick={() => setActiveSpecGroup(g.id as any)}
+                      className={`px-3 py-1 rounded-full text-[10px] uppercase ${
+                        activeSpecGroup === g.id
+                          ? "bg-gold text-black"
+                          : "bg-white/5 text-white/50"
+                      }`}
+                    >
+                      {g.label}
+                    </button>
+                  ))}
+                </div>
 
-                  {/* Content */}
-                  <motion.div
-                    key={activeSpecGroup}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="p-6 min-h-[260px]"
+                <div className="p-4">{getSpecContent()}</div>
+
+                <div className="p-4 border-t border-white/10">
+                  <button
+                    onClick={openSpecsModal}
+                    className="text-gold text-xs uppercase"
                   >
-                    {getSpecContent()}
-                  </motion.div>
-
-                  {/* Footer */}
-                  <div className="flex flex-wrap gap-3 p-5 border-t border-white/5">
-                    <button
-                      onClick={() => setShowAllSpecs(!showAllSpecs)}
-                      className="flex items-center gap-2 px-5 py-3 rounded-full text-[10px] uppercase tracking-[2px] font-bold border border-white/10 bg-white/[0.03]"
-                    >
-                      {showAllSpecs ? (
-                        <>
-                          <ChevronUp className="w-3.5 h-3.5 text-gold" />
-                          <span className="text-gold">Collapse</span>
-                        </>
-                      ) : (
-                        <>
-                          <ChevronDown className="w-3.5 h-3.5 text-gold" />
-                          <span className="text-white/60">
-                            View All Specs
-                          </span>
-                        </>
-                      )}
-                    </button>
-
-                    <button
-                      onClick={openSpecsModal}
-                      className="flex items-center gap-2 px-5 py-3 rounded-full text-[10px] uppercase tracking-[2px] font-bold border border-gold/20 bg-gold/[0.06] text-gold"
-                    >
-                      <Settings className="w-3.5 h-3.5" />
-                      Full Specification
-                    </button>
-                  </div>
+                    Open Full Specs
+                  </button>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
-        {/* RIGHT GALLERY */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="relative"
-        >
-          <div className="relative rounded-[36px] overflow-hidden border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
-            <div className="hidden lg:block">
-              <VesselInlineGallery
-                onLightbox={openLightbox}
-                onOpenGallery={openGallery}
-              />
-            </div>
+        {/* RIGHT SIDE */}
+        <div className="rounded-[36px] overflow-hidden border border-white/10 bg-white/5">
 
-            <div className="lg:hidden p-3">
-              <MobileGalleryStrip onZoom={openLightbox} />
-            </div>
+          {/* DESKTOP */}
+          <div className="hidden lg:block">
+            <VesselInlineGallery
+              onLightbox={openLightbox}
+              onOpenGallery={openGallery}
+            />
           </div>
-        </motion.div>
+
+          {/* MOBILE SWIPE FIX (FINAL) */}
+          <div className="lg:hidden p-3">
+            <MobileGalleryStrip onZoom={openLightbox} />
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-
 // --- ExperiencesSection ---
 function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   const [idx, setIdx] = useState(EXPERIENCES.length);
