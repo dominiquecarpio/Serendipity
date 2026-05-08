@@ -24,7 +24,6 @@ import {
   Phone,
   Check,
   ArrowUpRight,
-  User,
   Users,
   Wind,
   Droplets,
@@ -33,8 +32,6 @@ import {
   Facebook,
   Instagram,
   Twitter,
-  CreditCard,
-  Lock,
   ChevronDown,
   ZoomIn,
   Anchor,
@@ -50,9 +47,12 @@ import {
   Eye,
   Home,
   Compass,
-  BookOpen,
   Waves,
   Send,
+  RotateCw,
+  Pause,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 // --- Types ---
@@ -64,14 +64,6 @@ interface Experience {
   features: string[];
 }
 
-interface Room {
-  img: string;
-  sub: string;
-  title: string;
-  desc: string;
-  amenities: string[];
-}
-
 interface HeroSlide {
   line1: string;
   line2: string;
@@ -79,6 +71,14 @@ interface HeroSlide {
   img: string;
   mobileImg?: string;
   tag: string;
+}
+
+interface Room {
+  img: string;
+  sub: string;
+  title: string;
+  desc: string;
+  amenities: string[];
 }
 
 interface FleetVessel {
@@ -392,7 +392,7 @@ const CHARTER_RATES = [
     duration: "Fri noon – Sun 3pm",
     nights: "2",
     guests: "Up to 8",
-    desc: "Departs at 12 noon on Friday and returns Sunday at 3pm. Enjoy 3 days and 2 overnights with up to 8 guests in four staterooms. Explore as far south as Sarasota/Long Boat Key Moorings and North to Tarpon Springs or Honeymoon Island.",
+    desc: "Departs at 12 noon on Friday and returns Sunday at 3pm. Enjoy 3 days and 2 overnights with up to 8 guests in four staterooms.",
     highlights: [
       "3 days / 2 nights",
       "4 private staterooms",
@@ -407,7 +407,7 @@ const CHARTER_RATES = [
     duration: "Mon noon – Sun 3pm",
     nights: "6",
     guests: "Up to 8",
-    desc: "Departs at 12 noon on Monday and returns Sunday at 3pm. Enjoy 7 days and 6 overnights with up to 8 guests in four staterooms. Explore as far south as Key West and as far north as Destin, Florida.",
+    desc: "Departs at 12 noon on Monday and returns Sunday at 3pm. Enjoy 7 days and 6 overnights with up to 8 guests in four staterooms.",
     highlights: [
       "7 days / 6 nights",
       "4 private staterooms",
@@ -422,17 +422,17 @@ const SPECIAL_RATES = [
   {
     name: "Corporate Events",
     price: "$15,000",
-    desc: "Catered by local waterfront restaurant destinations. Choose a public facility that can host parking and 100' vessel dockage. The vessel can accommodate up to 25 guests onboard for cocktails and hors d'oeuvres for 6-hour cruises. Includes 8 guests traveling with the vessel to/from on the day of the event.",
+    desc: "Catered by local waterfront restaurant destinations. The vessel can accommodate up to 25 guests onboard for cocktails and hors d'oeuvres for 6-hour cruises.",
   },
   {
     name: "Birthdays & Anniversaries",
     price: "$7,500",
-    desc: "Celebrate an intimate event with themed decor in honor of the special guest. Up to 10 people can be accommodated for a 6-hour sunset cruise and tour of the local waters. Enjoy your favorite cocktails and culinary choices with sea catering.",
+    desc: "Celebrate an intimate event with themed decor in honor of the special guest. Up to 10 people can be accommodated for a 6-hour sunset cruise.",
   },
   {
     name: "Culinary & Wine Cheese Events",
     price: "$7,500",
-    desc: "Enjoy a private chef-prepared meal prepared fresh in the country kitchen for up to 8 guests on a 6-hour dinner cruise and tour of the local waters.",
+    desc: "Enjoy a private chef-prepared meal prepared fresh in the country kitchen for up to 8 guests on a 6-hour dinner cruise.",
   },
 ];
 
@@ -550,6 +550,28 @@ const GLOW_MAP: Record<PhotoGalleryItem["glowColor"], string> = {
   rose: "linear-gradient(90deg, transparent, #f43f5e, transparent)",
 };
 
+// ─── Full Specs Data ──────────────────────────────────────────────────────────
+const FULL_SPECS = [
+  { label: "LOA", value: "94 ft / 28.65 m", icon: Ship },
+  { label: "Beam", value: "22 ft / 6.7 m", icon: Wind },
+  { label: "Draft", value: "Bahamas-friendly", icon: Droplets },
+  { label: "Year Built", value: "2000", icon: Clock },
+  { label: "Major Refit", value: "2022", icon: Wrench },
+  { label: "Builder", value: "Lazzara Yachts", icon: Settings },
+  { label: "Engine Hours", value: "Incredibly Low", icon: Gauge },
+  { label: "Guests Sleeping", value: "Up to 8", icon: Users },
+  { label: "Day Charter", value: "Up to 12", icon: Users },
+  { label: "Staterooms", value: "4 Private Suites", icon: Anchor },
+  { label: "Crew Cabins", value: "2", icon: Ship },
+  { label: "Cruise Speed", value: "18–22 knots", icon: Zap },
+  { label: "Max Speed", value: "26+ knots", icon: Zap },
+  { label: "Fuel Capacity", value: "Large reserve", icon: Fuel },
+  { label: "Range", value: "Tampa to Key West", icon: MapPin },
+  { label: "Generator", value: "Dual onboard", icon: Activity },
+  { label: "AC", value: "Full vessel", icon: Wind },
+  { label: "Navigation", value: "Full electronics", icon: Settings },
+];
+
 // ─── Mobile Bottom Nav ────────────────────────────────────────────────────────
 function MobileBottomNav({ openAvail }: { openAvail: () => void }) {
   const [active, setActive] = useState("home");
@@ -634,12 +656,6 @@ function MobileBottomNav({ openAvail }: { openAvail: () => void }) {
             >
               {item.label}
             </span>
-            {active === item.id && !item.isPrimary && (
-              <motion.div
-                layoutId="nav-dot"
-                className="absolute -bottom-0.5 w-1 h-1 rounded-full bg-gold"
-              />
-            )}
           </a>
         ))}
       </div>
@@ -647,7 +663,6 @@ function MobileBottomNav({ openAvail }: { openAvail: () => void }) {
   );
 }
 
-// ─── Mobile Hero Stats Strip ──────────────────────────────────────────────────
 function MobileHeroStats() {
   const stats = [
     { val: "94'", label: "Lazzara" },
@@ -655,7 +670,6 @@ function MobileHeroStats() {
     { val: "5.0★", label: "Rating" },
     { val: "20+", label: "Spots" },
   ];
-
   return (
     <div
       className="flex items-center overflow-x-auto gap-0 scrollbar-hide"
@@ -685,7 +699,6 @@ function MobileHeroStats() {
   );
 }
 
-// ─── Mobile Quick Actions ─────────────────────────────────────────────────────
 function MobileQuickActions({
   openAvail,
   openVideo,
@@ -718,7 +731,6 @@ function MobileQuickActions({
       textColor: "rgba(255,255,255,0.7)",
     },
   ];
-
   return (
     <div className="flex gap-2 px-4 mt-4">
       {actions.map((a, i) => (
@@ -748,7 +760,6 @@ function MobileQuickActions({
   );
 }
 
-// ─── Mobile Swipeable Cards (for Experiences) ─────────────────────────────────
 function MobileExpCard({ exp, onTap }: { exp: Experience; onTap: () => void }) {
   return (
     <motion.div
@@ -793,7 +804,6 @@ function MobileExpCard({ exp, onTap }: { exp: Experience; onTap: () => void }) {
   );
 }
 
-// ─── Mobile Pricing Card ──────────────────────────────────────────────────────
 function MobilePricingCard({ rate }: { rate: (typeof CHARTER_RATES)[0] }) {
   return (
     <motion.div
@@ -860,7 +870,6 @@ function MobilePricingCard({ rate }: { rate: (typeof CHARTER_RATES)[0] }) {
   );
 }
 
-// ─── Mobile Destination Card ──────────────────────────────────────────────────
 function MobileDestCard({
   dest,
   onTap,
@@ -910,38 +919,11 @@ function MobileDestCard({
   );
 }
 
-// ─── Floating Availability Pill (mobile) ──────────────────────────────────────
-function MobileAvailPill({ onClick }: { onClick: () => void }) {
-  return (
-    <motion.button
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 1.5 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={onClick}
-      className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-full"
-      style={{
-        background: "rgba(4,13,26,0.8)",
-        backdropFilter: "blur(12px)",
-        border: "1px solid rgba(201,162,39,0.25)",
-      }}
-    >
-      <div className="w-2 h-2 rounded-full bg-green-400 relative flex-shrink-0">
-        <div className="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-60" />
-      </div>
-      <span className="text-[10px] font-bold tracking-[2px] uppercase text-gold">
-        Live Availability
-      </span>
-    </motion.button>
-  );
-}
-
 // --- Calendar Component ---
 function CalendarComponent({ onSelect }: { onSelect: (date: string) => void }) {
   const [currentDate, setCurrentDate] = useState(new Date(2025, 4, 1));
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const bookedDays = [3, 7, 8, 14, 21, 22, 27];
-
   const months = [
     "January",
     "February",
@@ -1049,7 +1031,6 @@ function PhotoGalleryCard({
   onZoom: (src: string) => void;
 }) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <div
       className="relative rounded-2xl overflow-hidden flex-shrink-0"
@@ -1065,13 +1046,11 @@ function PhotoGalleryCard({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      // Use onPointerUp so it fires even after a drag gesture is resolved
       onPointerUp={(e) => {
         e.stopPropagation();
         onZoom(item.src);
       }}
     >
-      {/* glow accent line */}
       <div
         style={{
           position: "absolute",
@@ -1094,11 +1073,9 @@ function PhotoGalleryCard({
           aspectRatio: item.tall ? "3/4" : "16/9",
           transition: "transform 0.7s cubic-bezier(0.19,1,0.22,1)",
           transform: hovered ? "scale(1.08)" : "scale(1)",
-          // prevent the image itself from absorbing pointer events
           pointerEvents: "none",
         }}
       />
-      {/* hover overlay */}
       <div
         style={{
           position: "absolute",
@@ -1134,8 +1111,6 @@ function PhotoGalleryCard({
 }
 
 // ─── Photo Scroll Column ──────────────────────────────────────────────────────
-// FIX: stable onZoomRef so the doubled array never captures a stale callback.
-//      drag detection: only fire zoom when the pointer didn't travel > 6px.
 function PhotoScrollColumn({
   items,
   speed,
@@ -1159,21 +1134,25 @@ function PhotoScrollColumn({
     onZoomRef.current = onZoom;
   }, [onZoom]);
 
-  const doubled = useMemo(() => [...items, ...items], [items]);
+  const tripled = useMemo(() => [...items, ...items, ...items], [items]);
 
-  // RAF loop — pure DOM, no React re-renders
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
+    const oneSetHeight = track.scrollHeight / 3;
+
+    if (offsetRef.current === 0) {
+      offsetRef.current = oneSetHeight;
+      track.style.transform = `translateY(${-offsetRef.current}px)`;
+    }
 
     function loop() {
       if (!pausedRef.current && dragRef.current === null) {
         offsetRef.current += speed * direction;
-        const half = track!.scrollHeight / 2;
-        if (direction === 1 && offsetRef.current > half)
-          offsetRef.current -= half;
-        if (direction === -1 && offsetRef.current < -half)
-          offsetRef.current += half;
+        if (direction === 1 && offsetRef.current >= oneSetHeight * 2)
+          offsetRef.current -= oneSetHeight;
+        if (direction === -1 && offsetRef.current <= 0)
+          offsetRef.current += oneSetHeight;
       }
       track!.style.transform = `translateY(${-offsetRef.current}px)`;
       rafRef.current = requestAnimationFrame(loop);
@@ -1182,7 +1161,6 @@ function PhotoScrollColumn({
     return () => cancelAnimationFrame(rafRef.current);
   }, [speed, direction]);
 
-  // Global mouse-move / mouse-up for drag
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       if (!dragRef.current || !trackRef.current) return;
@@ -1238,22 +1216,20 @@ function PhotoScrollColumn({
         dragRef.current = null;
       }}
     >
-      {/* fade top/bottom */}
       <div
         className="pointer-events-none absolute top-0 left-0 right-0 z-10"
         style={{
-          height: 100,
+          height: 80,
           background: "linear-gradient(to bottom, #040d1a, transparent)",
         }}
       />
       <div
         className="pointer-events-none absolute bottom-0 left-0 right-0 z-10"
         style={{
-          height: 100,
+          height: 80,
           background: "linear-gradient(to top, #040d1a, transparent)",
         }}
       />
-
       <div
         ref={trackRef}
         className="flex flex-col gap-4 select-none"
@@ -1263,7 +1239,7 @@ function PhotoScrollColumn({
           cursor: "grab",
         }}
       >
-        {doubled.map((item, i) => (
+        {tripled.map((item, i) => (
           <PhotoGalleryCard
             key={`${item.src}__${i}`}
             item={item}
@@ -1275,7 +1251,6 @@ function PhotoScrollColumn({
   );
 }
 
-// ─── Mobile Gallery Strip ─────────────────────────────────────────────────────
 function MobileGalleryStrip({ onZoom }: { onZoom: (src: string) => void }) {
   const allImages = [...PHOTO_COL_1, ...PHOTO_COL_2, ...PHOTO_COL_3];
   return (
@@ -1325,193 +1300,490 @@ function MobileGalleryStrip({ onZoom }: { onZoom: (src: string) => void }) {
   );
 }
 
-// ─── Photo Gallery Section ────────────────────────────────────────────────────
-function PhotoGallerySection({
+// ─── Inline Gallery for VesselSection ─────────────────────────────────────────
+function VesselInlineGallery({
   onLightbox,
+  onOpenGallery,
 }: {
   onLightbox: (src: string) => void;
+  onOpenGallery: (tab: "exterior" | "interior") => void;
 }) {
-  // Stable callback ref so column RAF loop never captures a stale closure
   const handleZoom = useCallback(
     (src: string) => {
       onLightbox(src);
     },
     [onLightbox],
   );
-
   return (
-    <section
-      id="gallery"
-      style={{
-        background: "#040d1a",
-        padding: "64px 0 56px",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
+    <div className="relative w-full" style={{ height: 600 }}>
       <div
-        style={{
-          position: "absolute",
-          top: -100,
-          left: "8%",
-          width: 500,
-          height: 500,
-          background:
-            "radial-gradient(circle, rgba(201,162,39,0.05) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: -60,
-          right: "10%",
-          width: 400,
-          height: 400,
-          background:
-            "radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 1,
-          background:
-            "linear-gradient(90deg, transparent, rgba(201,162,39,0.15), transparent)",
-        }}
-      />
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        style={{ textAlign: "center", marginBottom: 40, padding: "0 24px" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 14,
-            marginBottom: 16,
-          }}
-        >
-          <div
-            style={{ width: 40, height: 1, background: "rgba(201,162,39,0.4)" }}
-          />
-          <span
-            style={{
-              fontSize: 10,
-              letterSpacing: "5px",
-              textTransform: "uppercase",
-              color: "rgba(201,162,39,0.7)",
-              fontWeight: 700,
-            }}
-          >
-            Photo Gallery
-          </span>
-          <div
-            style={{ width: 40, height: 1, background: "rgba(201,162,39,0.4)" }}
-          />
-        </div>
-        <h2
-          style={{
-            fontSize: "clamp(28px, 5vw, 54px)",
-            fontFamily: "serif",
-            fontWeight: 300,
-            color: "#fff",
-            lineHeight: 1.1,
-            letterSpacing: "-0.5px",
-            margin: 0,
-          }}
-        >
-          The Moments,{" "}
-          <em style={{ color: "#c9a227", fontStyle: "italic" }}>
-            The Memories.
-          </em>
-        </h2>
-        <p
-          style={{
-            marginTop: 12,
-            fontSize: 12,
-            color: "rgba(255,255,255,0.3)",
-            letterSpacing: "1px",
-          }}
-        >
-          Drag · Swipe · Click to enlarge
-        </p>
-      </motion.div>
-
-      {/* Mobile */}
-      <div className="block lg:hidden px-4">
-        <MobileGalleryStrip onZoom={handleZoom} />
-      </div>
-
-      {/* Desktop 3-column scroll */}
-      <div
-        className="hidden lg:grid"
-        style={{
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gap: 16,
-          padding: "0 24px",
-          maxWidth: 1400,
-          margin: "0 auto",
-        }}
+        className="grid"
+        style={{ gridTemplateColumns: "1fr 1fr 1fr", gap: 10, height: "100%" }}
       >
         <PhotoScrollColumn
           items={PHOTO_COL_1}
-          speed={0.45}
+          speed={0.4}
           direction={1}
           topOffset={0}
           onZoom={handleZoom}
         />
         <PhotoScrollColumn
           items={PHOTO_COL_2}
-          speed={0.35}
+          speed={0.3}
           direction={-1}
-          topOffset={-60}
+          topOffset={-40}
           onZoom={handleZoom}
         />
         <PhotoScrollColumn
           items={PHOTO_COL_3}
-          speed={0.4}
+          speed={0.35}
           direction={1}
-          topOffset={-30}
+          topOffset={-20}
           onZoom={handleZoom}
         />
       </div>
-
       <div
+        className="pointer-events-none absolute top-0 left-0 right-0 z-10"
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 24,
-          marginTop: 40,
-          padding: "0 24px",
-          flexWrap: "wrap",
+          height: 60,
+          background: "linear-gradient(to bottom, #0b1929, transparent)",
         }}
-      >
-        <a
-          href="/book"
-          className="px-8 py-3 border border-gold/40 text-gold font-bold text-[10px] tracking-[4px] uppercase rounded-sm hover:bg-gold hover:text-navy transition-all"
-          style={{ textDecoration: "none" }}
+      />
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10"
+        style={{
+          height: 60,
+          background: "linear-gradient(to top, #0b1929, transparent)",
+        }}
+      />
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3 z-20">
+        <button
+          onClick={() => onOpenGallery("interior")}
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all border border-gold/30 text-gold bg-navy/80 backdrop-blur-md hover:bg-gold hover:text-navy"
         >
-          Book Your Charter
-        </a>
+          <Eye className="w-3.5 h-3.5" /> Interior Photos
+        </button>
+        <button
+          onClick={() => onOpenGallery("exterior")}
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all border border-white/15 text-white/50 bg-navy/80 backdrop-blur-md hover:border-gold/40 hover:text-gold"
+        >
+          <Camera className="w-3.5 h-3.5" /> Exterior Photos
+        </button>
       </div>
-    </section>
+    </div>
   );
 }
 
-// ─── Scroll Video Section (3D Boat) ───────────────────────────────────────────
-// FIX: robust metadata-ready check + scoped ScrollTrigger cleanup + cinematic UI
-function ScrollVideoSection() {
+// ─── Enhanced Specs Modal with Video ─────────────────────────────────────────
+function SpecsModal3D({ onClose }: { onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [activeSpecTab, setActiveSpecTab] = useState<"specs" | "flybridge">(
+    "specs",
+  );
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {});
+
+    const handleTimeUpdate = () => {
+      if (video.duration) {
+        setVideoProgress((video.currentTime / video.duration) * 100);
+      }
+    };
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    return () => video.removeEventListener("timeupdate", handleTimeUpdate);
+  }, []);
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const toggleMute = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setIsMuted(video.muted);
+  };
+
+  const specCategories = [
+    {
+      label: "Dimensions",
+      specs: FULL_SPECS.slice(0, 3),
+    },
+    {
+      label: "History",
+      specs: FULL_SPECS.slice(3, 6),
+    },
+    {
+      label: "Performance",
+      specs: FULL_SPECS.slice(6, 9),
+    },
+    {
+      label: "Accommodations",
+      specs: FULL_SPECS.slice(9, 12),
+    },
+    {
+      label: "Speed & Range",
+      specs: FULL_SPECS.slice(12, 15),
+    },
+    {
+      label: "Systems",
+      specs: FULL_SPECS.slice(15, 18),
+    },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+      className="fixed inset-0 z-[10010] flex items-center justify-center p-3 md:p-6"
+      style={{ background: "rgba(2,5,15,0.97)", backdropFilter: "blur(24px)" }}
+    >
+      <motion.div
+        initial={{ scale: 0.88, y: 40, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.88, y: 40, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 280, damping: 28 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-6xl rounded-3xl overflow-hidden border border-white/10 flex flex-col"
+        style={{
+          background: "linear-gradient(135deg, #060e1e 0%, #0a1628 100%)",
+          maxHeight: "95vh",
+          boxShadow:
+            "0 0 80px rgba(201,162,39,0.08), 0 40px 120px rgba(0,0,0,0.8)",
+        }}
+      >
+        {/* ── Header ── */}
+        <div
+          className="flex items-center justify-between px-5 md:px-8 py-4 border-b border-white/8 flex-shrink-0"
+          style={{ background: "rgba(201,162,39,0.04)" }}
+        >
+          <div className="flex items-center gap-4">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{
+                background: "rgba(201,162,39,0.12)",
+                border: "1px solid rgba(201,162,39,0.2)",
+              }}
+            >
+              <Ship className="w-5 h-5 text-gold" />
+            </div>
+            <div>
+              <p className="text-[9px] font-bold tracking-[3px] uppercase text-gold/60 mb-0.5">
+                Full Vessel Specifications
+              </p>
+              <h2 className="text-base md:text-xl font-serif text-white">
+                SERENDIPITY — 94' Lazzara Motor Yacht
+              </h2>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 text-white/30 hover:text-white transition-colors rounded-xl hover:bg-white/5"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* ── Body: Video left + Specs right ── */}
+        <div className="flex flex-col lg:flex-row overflow-y-auto flex-1 min-h-0">
+          {/* LEFT: Video player */}
+          <div
+            className="relative flex-shrink-0 lg:w-[52%]"
+            style={{ background: "#020201" }}
+          >
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              src="/assets/fast.mp4"
+              muted
+              loop
+              playsInline
+              style={{ maxHeight: 380, minHeight: 220 }}
+            />
+
+            {/* Gold gradient overlay top */}
+            <div
+              className="pointer-events-none absolute top-0 left-0 right-0"
+              style={{
+                height: 60,
+                background:
+                  "linear-gradient(to bottom, rgba(6,14,30,0.9), transparent)",
+              }}
+            />
+            {/* Bottom overlay with controls */}
+            <div
+              className="absolute bottom-0 left-0 right-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(6,14,30,0.98) 0%, rgba(6,14,30,0.4) 60%, transparent 100%)",
+                padding: "20px 20px 16px",
+              }}
+            >
+              {/* Progress bar */}
+              <div
+                className="w-full h-[2px] rounded-full mb-3"
+                style={{ background: "rgba(255,255,255,0.1)" }}
+              >
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{
+                    width: `${videoProgress}%`,
+                    background: "linear-gradient(90deg, #c9a227, #f0c040)",
+                    boxShadow: "0 0 8px rgba(201,162,39,0.6)",
+                  }}
+                />
+              </div>
+              {/* Controls row */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={togglePlay}
+                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                    style={{
+                      background: "rgba(201,162,39,0.15)",
+                      border: "1px solid rgba(201,162,39,0.3)",
+                    }}
+                  >
+                    {isPlaying ? (
+                      <Pause className="w-4 h-4 text-gold" />
+                    ) : (
+                      <Play className="w-4 h-4 text-gold ml-0.5" />
+                    )}
+                  </button>
+                  <button
+                    onClick={toggleMute}
+                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                    style={{
+                      background: "rgba(255,255,255,0.06)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    {isMuted ? (
+                      <VolumeX className="w-4 h-4 text-white/40" />
+                    ) : (
+                      <Volume2 className="w-4 h-4 text-white/70" />
+                    )}
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                  <span className="text-[9px] font-bold tracking-[2px] uppercase text-white/30">
+                    Live Preview
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Vessel badge overlay */}
+            <div
+              className="absolute top-4 left-4 px-3 py-1.5 rounded-full flex items-center gap-2"
+              style={{
+                background: "rgba(6,14,30,0.8)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(201,162,39,0.2)",
+              }}
+            >
+              <Anchor className="w-3 h-3 text-gold" />
+              <span className="text-[9px] font-bold uppercase tracking-widest text-gold">
+                94' Lazzara
+              </span>
+            </div>
+          </div>
+
+          {/* RIGHT: Specs */}
+          <div className="flex-1 overflow-y-auto" style={{ minHeight: 0 }}>
+            {/* Tab switcher */}
+            <div className="flex gap-2 p-4 md:p-6 pb-3 border-b border-white/5">
+              {(["specs", "flybridge"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveSpecTab(tab)}
+                  className="px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all"
+                  style={{
+                    background:
+                      activeSpecTab === tab
+                        ? "rgba(201,162,39,0.15)"
+                        : "rgba(255,255,255,0.04)",
+                    border:
+                      activeSpecTab === tab
+                        ? "1px solid rgba(201,162,39,0.35)"
+                        : "1px solid rgba(255,255,255,0.08)",
+                    color:
+                      activeSpecTab === tab
+                        ? "#c9a227"
+                        : "rgba(255,255,255,0.35)",
+                  }}
+                >
+                  {tab === "specs" ? "All Specs" : "Flybridge"}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 md:p-6 pt-4">
+              {activeSpecTab === "specs" ? (
+                <>
+                  {/* All 18 specs grouped */}
+                  {specCategories.map((cat, ci) => (
+                    <div key={ci} className="mb-5">
+                      <p className="text-[9px] font-bold uppercase tracking-[3px] text-gold/40 mb-2.5 flex items-center gap-2">
+                        <span className="w-4 h-px bg-gold/20" />
+                        {cat.label}
+                      </p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {cat.specs.map((s, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: (ci * 3 + i) * 0.025 }}
+                            className="p-3 rounded-xl border border-white/8 hover:border-gold/30 transition-all group cursor-default"
+                            style={{ background: "rgba(255,255,255,0.03)" }}
+                          >
+                            <s.icon className="w-3.5 h-3.5 text-gold/40 mb-1.5 group-hover:text-gold transition-colors" />
+                            <p className="text-[8px] uppercase tracking-widest text-white/25 mb-0.5 leading-none">
+                              {s.label}
+                            </p>
+                            <p className="text-[11px] font-semibold text-white/80 leading-tight">
+                              {s.value}
+                            </p>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                /* Flybridge features */
+                <div className="space-y-3">
+                  <p className="text-[9px] font-bold uppercase tracking-[3px] text-gold/40 mb-4 flex items-center gap-2">
+                    <span className="w-4 h-px bg-gold/20" />
+                    Flybridge Amenities
+                  </p>
+                  <div
+                    className="p-5 rounded-2xl mb-4"
+                    style={{
+                      background: "rgba(201,162,39,0.06)",
+                      border: "1px solid rgba(201,162,39,0.15)",
+                    }}
+                  >
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        "Hot/Cold Jacuzzi",
+                        "Oversized sun lounges",
+                        "Al fresco dining",
+                        "Professional wet bar",
+                        "Surround sound system",
+                        "LED ambient lighting",
+                        "Water sports gear",
+                        "Jet Ski launch platform",
+                        "Shade bimini cover",
+                        "Helm station with radar",
+                        "360° ocean views",
+                        "Captain's helm seating",
+                      ].map((f, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.04 }}
+                          className="flex items-center gap-2 text-xs text-white/60"
+                        >
+                          <div
+                            className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
+                            style={{ background: "rgba(201,162,39,0.15)" }}
+                          >
+                            <Check className="w-2.5 h-2.5 text-gold" />
+                          </div>
+                          {f}
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Additional vessel highlights */}
+                  <div
+                    className="p-4 rounded-2xl"
+                    style={{
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.07)",
+                    }}
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-[2px] text-white/30 mb-3">
+                      Vessel Highlights
+                    </p>
+                    <div className="space-y-2.5">
+                      {[
+                        {
+                          icon: Anchor,
+                          text: "Bahamas-friendly draft — access secluded anchorages",
+                        },
+                        {
+                          icon: Zap,
+                          text: "Twin high-performance diesel engines — incredibly low hours",
+                        },
+                        {
+                          icon: Wind,
+                          text: "Full vessel air conditioning in all staterooms & salons",
+                        },
+                        {
+                          icon: Activity,
+                          text: "Dual generators — full power at anchor, anywhere",
+                        },
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <item.icon className="w-3.5 h-3.5 text-gold/50 mt-0.5 flex-shrink-0" />
+                          <span className="text-xs text-white/50 leading-relaxed">
+                            {item.text}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* CTA */}
+              <a
+                href="/book"
+                onClick={onClose}
+                className="mt-5 w-full py-3.5 flex items-center justify-center gap-2 rounded-xl font-bold text-sm transition-all hover:translate-y-[-1px] hover:shadow-xl"
+                style={{
+                  background: "linear-gradient(135deg, #c9a227, #f0c040)",
+                  color: "#040d1a",
+                  boxShadow: "0 8px 24px rgba(201,162,39,0.25)",
+                }}
+              >
+                Book Serendipity Now <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Scroll Video Section ─────────────────────────────────────────────────────
+function ScrollVideoSection({
+  openSpecsModal,
+}: {
+  openSpecsModal: () => void;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
@@ -1525,11 +1797,9 @@ function ScrollVideoSection() {
     const video = videoRef.current;
     if (!section || !video) return;
 
-    // Ensure the video is paused and at frame 0
     video.pause();
     video.currentTime = 0;
 
-    // iOS/Safari requires a user-gesture to unlock video seek
     const unlock = () => {
       video
         .play()
@@ -1545,11 +1815,8 @@ function ScrollVideoSection() {
     const setupScrub = () => {
       const dur = video.duration;
       if (!dur || isNaN(dur)) return;
-
-      // Kill previous instances that belong to this section only
       tweenRef.current?.kill();
       stRef.current?.kill();
-
       tweenRef.current = gsap.fromTo(
         video,
         { currentTime: 0 },
@@ -1560,7 +1827,7 @@ function ScrollVideoSection() {
             id: "boat-scrub",
             trigger: section,
             start: "top top",
-            end: "+=300%", // 3× viewport = full video spread over generous scroll
+            end: "+=300%",
             scrub: 0.6,
             pin: true,
             anticipatePin: 1,
@@ -1588,6 +1855,45 @@ function ScrollVideoSection() {
 
   const pct = Math.round(progress * 100);
 
+  const scrollSpecs = [
+    {
+      threshold: 0.1,
+      label: "Lazzara Yachts",
+      sub: "Builder",
+      pos: "top-1/4 left-8",
+    },
+    {
+      threshold: 0.25,
+      label: "94 ft / 28.65 m",
+      sub: "Length Overall",
+      pos: "top-1/3 right-8",
+    },
+    {
+      threshold: 0.45,
+      label: "18–22 knots",
+      sub: "Cruising Speed",
+      pos: "top-1/2 left-8",
+    },
+    {
+      threshold: 0.6,
+      label: "4 Private Suites",
+      sub: "Staterooms",
+      pos: "top-1/2 right-8",
+    },
+    {
+      threshold: 0.75,
+      label: "Up to 12 Guests",
+      sub: "Day Charter",
+      pos: "bottom-1/3 left-8",
+    },
+    {
+      threshold: 0.88,
+      label: "Year 2000 · Refit 2022",
+      sub: "Built · Refitted",
+      pos: "bottom-1/3 right-8",
+    },
+  ];
+
   return (
     <section
       ref={sectionRef}
@@ -1595,43 +1901,30 @@ function ScrollVideoSection() {
       className="relative overflow-hidden h-screen"
       style={{ backgroundColor: "#020201" }}
     >
-      {/* ── Video ── */}
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover md:object-contain"
+        className="absolute inset-0 w-full h-full object-contain"
         muted
         playsInline
         preload="auto"
-        src="/assets/boat-rotate.mp4"
+        src="/assets/fast.mp4"
         style={{ backgroundColor: "#020201" }}
       />
 
-      {/* ── Cinematic scanline ── */}
       <div
-        className="pointer-events-none absolute inset-0 hidden md:block"
-        style={{
-          background:
-            "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px)",
-          mixBlendMode: "overlay",
-        }}
-      />
-
-      {/* ── Vignette top / bottom ── */}
-      <div
-        className="pointer-events-none absolute top-0 left-0 right-0 h-24 md:h-40"
+        className="pointer-events-none absolute top-0 left-0 right-0 h-40"
         style={{
           background:
             "linear-gradient(to bottom, #020201 0%, transparent 100%)",
         }}
       />
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 md:h-40"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40"
         style={{
           background: "linear-gradient(to top, #020201 0%, transparent 100%)",
         }}
       />
 
-      {/* ── Thin gold progress bar ── */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 z-20">
         <div
           style={{
@@ -1644,156 +1937,72 @@ function ScrollVideoSection() {
         />
       </div>
 
-      {/* ── Brand label — top-left ── */}
-      <div className="absolute top-4 left-4 md:top-8 md:left-8 pointer-events-none z-10">
-        <motion.div
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: isActive ? 1 : 0.35, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="block text-[8px] md:text-[9px] font-bold tracking-[4px] uppercase text-gold/60 mb-1">
-            Serendipity
-          </span>
-          <span className="block text-[9px] md:text-[10px] tracking-[2px] text-white/20 uppercase">
-            94′ Lazzara Motor Yacht
-          </span>
-        </motion.div>
-      </div>
-
-      {/* ── Detailed specs panel — bottom-left ── */}
-      <AnimatePresence>
-        {isActive && (
-          <motion.div
-            key="specs-panel"
-            className="absolute bottom-20 left-4 md:bottom-32 md:left-8 pointer-events-none z-10 max-w-[calc(100vw-2rem)] md:max-w-none"
-          >
-            {/* ── Title ── */}
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: 0.05 }}
-              className="text-3xl md:text-6xl font-serif text-white mb-4 md:mb-6 leading-tight"
-            >
-              Full
-              <br />
-              <span className="text-gold">Specifications</span>
-            </motion.h2>
-
-            {/* ── Specs Grid ── */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 16 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="p-4 md:p-6 rounded-2xl max-w-xs md:max-w-sm"
-              style={{
-                background: "rgba(4,13,26,0.72)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                border: "1px solid rgba(201,162,39,0.14)",
-              }}
-            >
-              <div className="grid grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
-                {[
-                  {
-                    label: "Builder",
-                    value: "Lazzara Yachts",
-                    highlight: true,
-                  },
-                  { label: "Year Built", value: "2000" },
-                  { label: "Refit", value: "2022" },
-                  { label: "Beam", value: "22 ft" },
-                  { label: "Draft", value: "Bahamas-friendly" },
-                  { label: "Cruise Speed", value: "18–22 knots" },
-                  { label: "Staterooms", value: "4 Private Suites" },
-                  { label: "Max Guests", value: "Up to 12" },
-                ].map((spec, i) => (
-                  <div key={i} className={spec.highlight ? "col-span-2" : ""}>
-                    <p className="text-white/40 uppercase tracking-widest text-[8px] md:text-[9px] mb-1">
-                      {spec.label}
-                    </p>
-                    <p
-                      className={`font-semibold ${
-                        spec.highlight
-                          ? "text-gold text-base md:text-lg"
-                          : "text-white/80"
-                      }`}
-                    >
-                      {spec.value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Progress counter — top-right ── */}
-      <div className="absolute top-4 right-4 md:top-8 md:right-8 pointer-events-none text-right z-10">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isActive ? 1 : 0.25 }}
-          transition={{ duration: 0.4 }}
-        >
-          <span
-            className="font-serif text-3xl md:text-5xl leading-none"
-            style={{
-              color: "rgba(201,162,39,0.75)",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {String(pct).padStart(2, "0")}
-          </span>
-          <span className="block text-[8px] md:text-[9px] tracking-[2px] uppercase text-white/20 mt-1">
-            Scroll
-          </span>
-        </motion.div>
-      </div>
-
-      {/* ── Floating spec card — bottom-right ── */}
-      <AnimatePresence>
-        {isActive && (
-          <motion.div
-            key="spec-card"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="absolute bottom-10 right-8 pointer-events-none z-10"
-          >
-            <div
-              className="px-5 py-4 rounded-2xl flex gap-6"
-              style={{
-                background: "rgba(4,13,26,0.72)",
-                backdropFilter: "blur(16px)",
-                WebkitBackdropFilter: "blur(16px)",
-                border: "1px solid rgba(201,162,39,0.14)",
-              }}
-            >
-              {[
-                { val: "94′", label: "LOA" },
-                { val: "22 kt", label: "Cruise" },
-                { val: "12", label: "Guests" },
-              ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <p className="font-serif text-lg text-gold leading-none">
-                    {s.val}
+      {scrollSpecs.map((spec, i) => (
+        <AnimatePresence key={i}>
+          {progress >= spec.threshold &&
+            progress < spec.threshold + 0.25 &&
+            isActive && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.4 }}
+                className={`absolute ${spec.pos} z-10 pointer-events-none hidden lg:block`}
+              >
+                <div
+                  className="px-4 py-3 rounded-xl"
+                  style={{
+                    background: "rgba(4,13,26,0.75)",
+                    backdropFilter: "blur(14px)",
+                    border: "1px solid rgba(201,162,39,0.18)",
+                  }}
+                >
+                  <p className="text-[9px] uppercase tracking-[2px] text-gold/50 mb-0.5">
+                    {spec.sub}
                   </p>
-                  <p className="text-[8px] uppercase tracking-[2px] text-white/30 mt-0.5">
-                    {s.label}
+                  <p className="font-serif text-base text-white">
+                    {spec.label}
                   </p>
                 </div>
-              ))}
-            </div>
+              </motion.div>
+            )}
+        </AnimatePresence>
+      ))}
+
+      <AnimatePresence>
+        {isActive && progress > 0.15 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+          >
+            <motion.button
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 0 30px rgba(201,162,39,0.35)",
+              }}
+              whileTap={{ scale: 0.96 }}
+              onClick={openSpecsModal}
+              className="flex items-center gap-3 px-6 py-3.5 rounded-full font-bold text-sm"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(201,162,39,0.15), rgba(201,162,39,0.08))",
+                border: "1px solid rgba(201,162,39,0.35)",
+                color: "#c9a227",
+                backdropFilter: "blur(16px)",
+              }}
+            >
+              <Settings className="w-4 h-4" />
+              View All Specs
+              <ArrowUpRight className="w-4 h-4" />
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Scroll hint (fades out after 10% progress) ── */}
       <AnimatePresence>
-        {progress < 0.1 && (
+        {progress < 0.08 && (
           <motion.div
             key="scroll-hint"
             initial={{ opacity: 0, y: 10 }}
@@ -1803,7 +2012,7 @@ function ScrollVideoSection() {
             className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-10"
           >
             <span className="text-[9px] font-bold tracking-[3px] uppercase text-white/30">
-              Scroll to rotate
+              Scroll to reveal specs
             </span>
             <motion.div
               animate={{ y: [0, 6, 0] }}
@@ -1840,7 +2049,7 @@ export default function App() {
   const [isAvailOpen, setIsAvailOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isRouteOpen, setIsRouteOpen] = useState(false);
-  const [isSpecsOpen, setIsSpecsOpen] = useState(false);
+  const [isSpecsModalOpen, setIsSpecsModalOpen] = useState(false);
   const [showFab, setShowFab] = useState(false);
   const [isStickyRoute, setIsStickyRoute] = useState(false);
   const [toasts, setToasts] = useState<
@@ -1872,10 +2081,10 @@ export default function App() {
       if (boatSection) {
         const rect = boatSection.getBoundingClientRect();
         const approachStart = window.innerHeight * 0.2;
-        const isApproachingOrInside =
+        setIsInBoatSection(
           rect.top <= window.innerHeight - approachStart &&
-          rect.bottom >= approachStart;
-        setIsInBoatSection(isApproachingOrInside);
+            rect.bottom >= approachStart,
+        );
       } else {
         setIsInBoatSection(false);
       }
@@ -1899,19 +2108,17 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const openGalleryInterior = () => {
-    setGalleryTab("interior");
+  const openGalleryWithTab = (tab: "exterior" | "interior") => {
+    setGalleryTab(tab);
     setIsGalleryOpen(true);
   };
 
-  // Stable lightbox opener so PhotoGallerySection never re-renders columns
   const openLightbox = useCallback((src: string) => {
     setLightboxImg(src);
   }, []);
 
   return (
     <div className="min-h-screen selection:bg-gold selection:text-white">
-      {/* Scroll Progress */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gold to-blue-400 z-[10001] origin-left"
         style={{ scaleX, boxShadow: "0 0 8px rgba(201,162,39,0.5)" }}
@@ -1933,7 +2140,6 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Mobile Bottom Nav */}
       <MobileBottomNav openAvail={() => setIsAvailOpen(true)} />
 
       <Hero
@@ -1944,7 +2150,6 @@ export default function App() {
         openRoute={() => setIsRouteOpen(true)}
       />
 
-      {/* Desktop Sticky Route Tab */}
       <AnimatePresence>
         {isStickyRoute && !isRouteOpen && (
           <motion.div
@@ -1978,22 +2183,20 @@ export default function App() {
       <main>
         <VesselSection
           addToast={addToast}
-          openGallery={() => setIsGalleryOpen(true)}
-          openGalleryInterior={openGalleryInterior}
+          openGallery={(tab) => openGalleryWithTab(tab)}
           openAvail={() => setIsAvailOpen(true)}
-          openSpecs={() => setIsSpecsOpen(true)}
+          openLightbox={openLightbox}
         />
         <ExperiencesSection openExp={setSelectedExp} />
-        <ScrollVideoSection />
+        <ScrollVideoSection openSpecsModal={() => setIsSpecsModalOpen(true)} />
         <FleetSection openFleet={setSelectedFleet} />
         <AccommodationsSection
           openRoom={setSelectedRoom}
-          openGalleryInterior={openGalleryInterior}
+          openGalleryInterior={() => openGalleryWithTab("interior")}
         />
         <CulinarySection />
         <DestinationsSection />
         <PricingSection />
-        <PhotoGallerySection onLightbox={openLightbox} />
         <MechanicalSection />
         <ReviewsSection />
         <InquirySection addToast={addToast} />
@@ -2003,6 +2206,10 @@ export default function App() {
 
       {/* --- Modals --- */}
       <AnimatePresence>
+        {isSpecsModalOpen && (
+          <SpecsModal3D onClose={() => setIsSpecsModalOpen(false)} />
+        )}
+
         {selectedExp && (
           <Modal onClose={() => setSelectedExp(null)}>
             <div className="max-w-3xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
@@ -2198,11 +2405,7 @@ export default function App() {
                       <button
                         key={tab}
                         onClick={() => setGalleryTab(tab)}
-                        className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all border ${
-                          galleryTab === tab
-                            ? "bg-gold text-navy border-gold shadow-lg shadow-gold/20"
-                            : "bg-white/5 border-white/15 text-white/50 hover:text-white hover:border-white/30"
-                        }`}
+                        className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all border ${galleryTab === tab ? "bg-gold text-navy border-gold shadow-lg shadow-gold/20" : "bg-white/5 border-white/15 text-white/50 hover:text-white hover:border-white/30"}`}
                       >
                         {tab.charAt(0).toUpperCase() + tab.slice(1)}
                       </button>
@@ -2312,7 +2515,7 @@ export default function App() {
                 <a
                   href="/book"
                   onClick={() => setIsAvailOpen(false)}
-                  className="mt-8 w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2 ripple-btn text-sm"
+                  className="mt-8 w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2 text-sm"
                 >
                   Book Selected Dates <ArrowUpRight className="w-4 h-4" />
                 </a>
@@ -2359,8 +2562,7 @@ export default function App() {
                   The Island Hopper
                 </h2>
                 <p className="text-xs md:text-sm text-white/60 mb-6 leading-relaxed">
-                  Navigate the crown jewels of Florida's coast. From pristine
-                  sandbars of Egmont Key to the bohemian charm of Pass-A-Grille.
+                  Navigate the crown jewels of Florida's coast.
                 </p>
                 <div className="space-y-4">
                   {[
@@ -2416,100 +2618,8 @@ export default function App() {
             </div>
           </Modal>
         )}
-
-        {isSpecsOpen && (
-          <Modal onClose={() => setIsSpecsOpen(false)}>
-            <div className="max-w-2xl w-full bg-navy-light rounded-3xl overflow-hidden border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide">
-              <div className="relative h-44 md:h-52 shrink-0">
-                <img
-                  src="assets/gallerymain.png"
-                  className="w-full h-full object-cover"
-                  alt="Serendipity"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-light to-transparent" />
-                <div className="absolute bottom-4 left-5 md:bottom-6 md:left-6">
-                  <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold mb-1">
-                    Full Specifications
-                  </p>
-                  <h2 className="text-2xl font-serif">SERENDIPITY</h2>
-                </div>
-              </div>
-              <div className="p-5 md:p-10">
-                <p className="text-xs font-bold tracking-[2px] uppercase text-gold/70 mb-2">
-                  Lazzara Single Model Built With The 106' Hardtop
-                </p>
-                <p className="text-sm text-white/60 leading-relaxed mb-5">
-                  SERENDIPITY is the best layout of any Lazzara. With a
-                  Bahamas-friendly draft, the yacht is in turnkey condition.
-                  Boasting incredibly low engine hours, an open flybridge for
-                  socializing and an on-deck jacuzzi.
-                </p>
-                <div className="grid grid-cols-2 gap-2.5 mb-5">
-                  {[
-                    { label: "LOA", value: "94 ft (28.65m)" },
-                    { label: "Beam", value: "22 ft (6.7m)" },
-                    { label: "Draft", value: "Bahamas-friendly" },
-                    { label: "Year Built", value: "2000" },
-                    { label: "Refit", value: "2022" },
-                    { label: "Builder", value: "Lazzara Yachts" },
-                    { label: "Engine Hours", value: "Incredibly Low" },
-                    { label: "Guests Sleeping", value: "Up to 8" },
-                    { label: "Guests Day Charter", value: "Up to 12" },
-                    { label: "Staterooms", value: "4 Private Suites" },
-                    { label: "Crew Cabins", value: "2" },
-                    { label: "Cruising Speed", value: "18–22 knots" },
-                  ].map((s, i) => (
-                    <div
-                      key={i}
-                      className="p-3 md:p-4 bg-white/5 border border-white/10 rounded-xl"
-                    >
-                      <p className="text-[9px] uppercase tracking-widest text-white/30 mb-0.5">
-                        {s.label}
-                      </p>
-                      <p className="text-sm font-semibold text-white/80">
-                        {s.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="p-5 bg-gold/5 border border-gold/20 rounded-2xl mb-5">
-                  <h4 className="font-serif text-base mb-3">
-                    Flybridge Features
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      "Hot/Cold Jacuzzi",
-                      "Oversized sun lounges",
-                      "Al fresco dining",
-                      "Professional wet bar",
-                      "Surround sound",
-                      "LED ambient lighting",
-                      "Water sports gear",
-                      "Jet Ski launch",
-                    ].map((f, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2 text-xs text-white/60"
-                      >
-                        <Check className="w-3 h-3 text-gold shrink-0" /> {f}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <a
-                  href="/book"
-                  onClick={() => setIsSpecsOpen(false)}
-                  className="w-full py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-hover transition-colors flex items-center justify-center gap-2"
-                >
-                  Book Now <ArrowUpRight className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </Modal>
-        )}
       </AnimatePresence>
 
-      {/* FAB — desktop only */}
       <AnimatePresence>
         {showFab && (
           <motion.button
@@ -2524,7 +2634,6 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Toasts */}
       <div className="fixed bottom-20 lg:bottom-8 left-4 flex flex-col gap-3 z-[10001] max-w-[260px] md:max-w-none">
         <AnimatePresence>
           {toasts.map((t) => (
@@ -2584,7 +2693,6 @@ function Navbar({
     "Mechanical",
     "Reviews",
   ];
-
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 px-6 md:px-16 ${isScrolled ? "bg-navy/90 backdrop-blur-2xl py-4 shadow-xl" : "py-8"} ${isHidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}`}
@@ -2610,7 +2718,6 @@ function Navbar({
             </span>
           </button>
         </div>
-
         <div className="hidden lg:flex items-center gap-2 xl:gap-4">
           {mainLinks.map((l) => (
             <a
@@ -2646,7 +2753,6 @@ function Navbar({
             Inquire
           </a>
         </div>
-
         <div className="flex items-center gap-2 md:gap-3">
           <a
             href="/book"
@@ -2691,7 +2797,6 @@ function MobileMenu({
           <X className="w-5 h-5" />
         </button>
       </div>
-
       <div className="flex-1 overflow-y-auto px-6 py-6">
         <div className="flex flex-col gap-1">
           {[
@@ -2731,7 +2836,6 @@ function MobileMenu({
           ))}
         </div>
       </div>
-
       <div className="px-6 py-5 border-t border-white/5 flex flex-col gap-3">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
@@ -2833,7 +2937,7 @@ function Hero({
         </motion.div>
       </AnimatePresence>
 
-      {/* MOBILE */}
+      {/* Mobile */}
       <div className="lg:hidden relative h-full flex flex-col justify-end z-10">
         <div className="px-5 pb-4">
           <motion.div
@@ -2900,7 +3004,7 @@ function Hero({
         </div>
       </div>
 
-      {/* DESKTOP */}
+      {/* Desktop */}
       <div className="hidden lg:flex relative h-full max-w-7xl mx-auto px-16 flex-col justify-end pb-32 z-10">
         <motion.div
           key={heroIdx + "desktop"}
@@ -2946,7 +3050,6 @@ function Hero({
         </motion.div>
       </div>
 
-      {/* Desktop floating card */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -2961,33 +3064,30 @@ function Hero({
             alt=""
           />
           <div className="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors" />
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-gold/90 text-navy px-2 py-1 rounded-full font-bold text-[9px] uppercase tracking-widest flex items-center gap-1">
-              View Route <ArrowUpRight className="w-3 h-3" />
+        </div>
+        <div className="pointer-events-none">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
+              Popular Route
+            </span>
+            <div className="flex items-center gap-1">
+              <Star className="w-3 h-3 fill-gold text-gold" />
+              <span className="text-[10px] font-bold text-white/80">4.9</span>
             </div>
           </div>
-        </div>
-        <div className="flex items-center justify-between mb-1 pointer-events-none">
-          <span className="text-[10px] font-bold text-gold tracking-widest uppercase">
-            Popular Route
-          </span>
-          <div className="flex items-center gap-1">
-            <Star className="w-3 h-3 fill-gold text-gold" />
-            <span className="text-[10px] font-bold text-white/80">4.9</span>
-          </div>
-        </div>
-        <h4 className="font-serif text-lg group-hover:text-gold transition-colors pointer-events-none">
-          Island Hopping
-        </h4>
-        <p className="text-xs text-white/50 mt-1 leading-relaxed pointer-events-none">
-          Egmont Key, Shell Key & hidden sandbars
-        </p>
-        <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between pointer-events-none">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-white/30">
-            From $1,200
-          </span>
-          <div className="flex items-center gap-2 text-gold text-[10px] font-bold uppercase tracking-widest">
-            Itinerary <ArrowUpRight className="w-3 h-3" />
+          <h4 className="font-serif text-lg group-hover:text-gold transition-colors">
+            Island Hopping
+          </h4>
+          <p className="text-xs text-white/50 mt-1 leading-relaxed">
+            Egmont Key, Shell Key & hidden sandbars
+          </p>
+          <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white/30">
+              From $1,200
+            </span>
+            <div className="flex items-center gap-2 text-gold text-[10px] font-bold uppercase tracking-widest">
+              Itinerary <ArrowUpRight className="w-3 h-3" />
+            </div>
           </div>
         </div>
       </motion.div>
@@ -3014,78 +3114,60 @@ function Hero({
 function VesselSection({
   addToast,
   openGallery,
-  openGalleryInterior,
   openAvail,
-  openSpecs,
+  openLightbox,
 }: {
   addToast: (m: string, t: string, tp: string) => void;
-  openGallery: () => void;
-  openGalleryInterior: () => void;
+  openGallery: (tab: "exterior" | "interior") => void;
   openAvail: () => void;
-  openSpecs: () => void;
+  openLightbox: (src: string) => void;
 }) {
   return (
     <section
       id="vessel"
-      className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy-light relative overflow-hidden"
+      className="py-10 md:py-20 px-4 md:px-8 lg:px-16 relative overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, #0b1929 0%, #0d1f35 50%, #091525 100%)",
+      }}
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 items-center">
+      <div
+        className="absolute top-0 right-1/4 w-96 h-96 rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(201,162,39,0.04) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-1/4 w-64 h-64 rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(59,130,246,0.03) 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-start">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="relative group"
+          transition={{ duration: 0.8 }}
+          className="flex flex-col justify-center lg:sticky lg:top-32"
         >
-          <div className="absolute -top-8 -left-8 w-24 h-24 border border-gold/20 rounded-full animate-spin-slow hidden md:block" />
-          <div className="shimmer-wrap rounded-[2rem] overflow-hidden relative">
-            <img
-              src="assets/gallerymain.png"
-              className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
-              alt="Serendipity Yacht"
-              onClick={openGallery}
-            />
-            <div className="absolute bottom-4 right-4 bg-navy/90 backdrop-blur-xl border border-gold/20 p-3 md:p-6 rounded-2xl">
-              <p className="text-2xl md:text-4xl font-serif text-gold font-bold">
-                94'
-              </p>
-              <p className="text-[9px] md:text-xs text-white/40 uppercase tracking-widest mt-1">
-                Lazzara Motor Yacht
-              </p>
-            </div>
-          </div>
-          <div className="mt-2.5 grid grid-cols-2 gap-2">
-            <button
-              onClick={openGalleryInterior}
-              className="flex items-center justify-center py-2.5 rounded-xl border border-gold/20 text-gold hover:border-gold/50 hover:bg-gold/5 transition-all text-[10px] font-bold uppercase tracking-widest bg-gold/5"
-            >
-              Interior Photos
-            </button>
-            <button
-              onClick={openSpecs}
-              className="flex items-center justify-center py-2.5 rounded-xl border border-white/10 text-white/40 hover:border-gold/40 hover:text-gold transition-all text-[10px] font-bold uppercase tracking-widest bg-white/5"
-            >
-              Full Specs
-            </button>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-5">
             <div className="w-10 h-[1.5px] bg-gold" />
             <span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">
               About Serendipity
             </span>
           </div>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif leading-tight mb-6">
+
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif leading-[1.05] mb-6 tracking-tight">
             Experience the Ocean
             <br />
             <em className="text-gold italic font-serif">Like Never Before</em>
           </h2>
-          <div className="space-y-4 text-white/60 leading-relaxed text-base pb-8">
+
+          <div className="space-y-4 text-white/60 leading-relaxed text-base mb-8 max-w-lg">
             <p>
               Welcome aboard to Serendipity, an extraordinary charter
               experience. Based in Saint Petersburg, Florida, Serendipity is an
@@ -3097,71 +3179,84 @@ function VesselSection({
               anchorages that few yachts of this size can reach.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-2.5 md:gap-4">
-            {[
-              {
-                val: "94 ft",
-                label: "Yacht Length",
-                icon: Wind,
-                action: openSpecs,
-              },
-              {
-                val: "12",
-                label: "Max Guests",
-                icon: Users,
-                action: () =>
-                  addToast(
-                    "Up to 12 guests for day charters",
-                    "Max Guests",
-                    "gold",
-                  ),
-              },
-              {
-                val: "20+",
-                label: "Destinations",
-                icon: MapPin,
-                action: openAvail,
-              },
-              {
-                val: "5.0",
-                label: "Guest Rating",
-                icon: Star,
-                action: () => {
-                  const el = document.getElementById("reviews");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                },
-              },
-            ].map((s, i) => (
-              <div
-                key={i}
-                onClick={s.action}
-                className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-gold/30 transition-all cursor-pointer group"
+
+          <div className="flex items-center gap-4 mb-8">
+            <div
+              className="h-px flex-1"
+              style={{
+                background:
+                  "linear-gradient(to right, rgba(201,162,39,0.3), transparent)",
+              }}
+            />
+            <Anchor className="w-4 h-4 text-gold/40" />
+            <div
+              className="h-px flex-1"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(201,162,39,0.3), transparent)",
+              }}
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <motion.a
+              href="/book"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm shadow-lg shadow-gold/20"
+              style={{
+                background: "linear-gradient(135deg, #c9a227, #f0c040)",
+                color: "#040d1a",
+              }}
+            >
+              Book Charter <ArrowUpRight className="w-4 h-4" />
+            </motion.a>
+            <motion.button
+              onClick={openAvail}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm border transition-all"
+              style={{
+                border: "1px solid rgba(201,162,39,0.3)",
+                color: "#c9a227",
+                background: "rgba(201,162,39,0.06)",
+              }}
+            >
+              <Clock className="w-4 h-4" /> Check Dates
+            </motion.button>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative"
+        >
+          <div className="hidden lg:block">
+            <VesselInlineGallery
+              onLightbox={openLightbox}
+              onOpenGallery={openGallery}
+            />
+          </div>
+
+          <div className="lg:hidden">
+            <MobileGalleryStrip onZoom={openLightbox} />
+            <div className="flex gap-3 mt-3">
+              <button
+                onClick={() => openGallery("interior")}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-gold/30 text-gold bg-gold/5 hover:bg-gold hover:text-navy transition-all"
               >
-                <s.icon className="w-5 h-5 text-gold mb-2.5 group-hover:scale-110 transition-transform" />
-                <p className="text-2xl md:text-3xl font-serif text-gold font-bold">
-                  {s.val}
-                </p>
-                {i === 3 ? (
-                  <>
-                    <div className="flex gap-0.5 mt-1.5 mb-1">
-                      {[1, 2, 3, 4, 5].map((j) => (
-                        <Star
-                          key={j}
-                          className="w-2.5 h-2.5 fill-gold text-gold"
-                        />
-                      ))}
-                    </div>
-                    <p className="text-[9px] text-white/40 uppercase tracking-widest">
-                      {s.label}
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-[9px] text-white/40 uppercase tracking-widest mt-1">
-                    {s.label}
-                  </p>
-                )}
-              </div>
-            ))}
+                <Eye className="w-3.5 h-3.5" /> Interior Photos
+              </button>
+              <button
+                onClick={() => openGallery("exterior")}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/10 text-white/40 hover:border-gold/40 hover:text-gold transition-all"
+              >
+                <Camera className="w-3.5 h-3.5" /> Exterior Photos
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -3175,7 +3270,6 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const dragStartX = useRef<number | null>(null);
   const isDragging = useRef(false);
@@ -3184,7 +3278,6 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
     () => [...EXPERIENCES, ...EXPERIENCES, ...EXPERIENCES],
     [],
   );
-
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200,
   );
@@ -3251,7 +3344,6 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
     dragStartX.current = null;
     isDragging.current = false;
   };
-
   const onMouseDown = (e: React.MouseEvent) => {
     dragStartX.current = e.clientX;
     isDragging.current = false;
@@ -3269,15 +3361,10 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
     }
     dragStartX.current = null;
   };
-  const onMouseLeave = () => {
-    dragStartX.current = null;
-    isDragging.current = false;
-  };
 
   const handleCardClick = (e: React.MouseEvent, exp: Experience) => {
     if (!isDragging.current) openExp(exp);
   };
-
   const activeDot =
     ((idx % EXPERIENCES.length) + EXPERIENCES.length) % EXPERIENCES.length;
 
@@ -3322,7 +3409,6 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
 
       <div
         className="relative select-none cursor-grab active:cursor-grabbing"
-        ref={containerRef}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -3330,24 +3416,11 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={() => {
-          onMouseLeave();
+          dragStartX.current = null;
+          isDragging.current = false;
           setHoveredIndex(null);
         }}
       >
-        {/* Dark overlay for hover effect */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileHover={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="absolute inset-0 pointer-events-none z-[5]"
-          style={{
-            background:
-              "radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%)",
-            backdropFilter: "blur(4px)",
-            WebkitBackdropFilter: "blur(4px)",
-          }}
-        />
-
         <motion.div
           animate={{ x: -idx * (itemWidth + gap) + offset }}
           transition={
@@ -3355,7 +3428,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
               ? { type: "spring", stiffness: 180, damping: 25, mass: 1 }
               : { duration: 0 }
           }
-          className="flex pointer-events-auto relative z-10"
+          className="flex pointer-events-auto"
           style={{ width: "max-content", gap: gap }}
         >
           {extendedItems.map((e, i) => (
@@ -3364,7 +3437,7 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
               onClick={(ev) => handleCardClick(ev, e)}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              whileHover={{ scale: 1.35, y: -20, zIndex: 50 }}
+              whileHover={{ scale: 1.09, y: -18, zIndex: 60 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className="relative rounded-3xl overflow-hidden shrink-0 shadow-2xl bg-navy-light"
               style={{
@@ -3373,22 +3446,22 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
                 cursor: isDragging.current ? "grabbing" : "pointer",
                 filter:
                   hoveredIndex !== null && hoveredIndex !== i
-                    ? "blur(8px)"
-                    : "blur(0px)",
+                    ? "blur(8px) brightness(0.65)"
+                    : "brightness(1)",
                 transition: "filter 0.3s ease-out",
+                boxShadow:
+                  hoveredIndex === i
+                    ? "0 28px 90px rgba(0,0,0,0.48)"
+                    : "0 14px 34px rgba(0,0,0,0.26)",
               }}
             >
               <img
                 src={e.img}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 alt=""
                 draggable={false}
               />
-              <motion.div
-                whileHover={{ opacity: 1 }}
-                initial={{ opacity: 0.8 }}
-                className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent pointer-events-none transition-opacity duration-300"
-              />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent pointer-events-none" />
               <div className="absolute top-4 left-4 pointer-events-none">
                 <span
                   className="text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
@@ -3622,7 +3695,6 @@ function FleetSection({ openFleet }: { openFleet: (f: FleetVessel) => void }) {
                   goToReservation(f.imgIndex, f.name);
                 }}
                 className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-gold flex items-center justify-center shadow-lg hover:scale-110 transition-all"
-                aria-label={`Reserve ${f.name}`}
               >
                 <ArrowUpRight className="w-4 h-4 text-navy" />
               </button>
@@ -3661,7 +3733,7 @@ function CulinarySection() {
       titleItalic: "Fine Dining",
       titleLine2: " Meets Home Comfort",
       description:
-        "Looking for a personal chef for a party, work event, family dinner, or yacht excursion? Chef Cheryl brings the dream of fine dining to your charter table, where every dish is a labor of love.",
+        "Looking for a personal chef for a party, work event, family dinner, or yacht excursion? Chef Cheryl brings the dream of fine dining to your charter table.",
       mainImgs: [
         "assets/cheryl_foods.jpeg",
         "assets/cheryl_foods1.jpeg",
@@ -3680,7 +3752,7 @@ function CulinarySection() {
       titleItalic: "Spark Connection",
       titleLine2: "",
       description:
-        "Mixology isn't just about pouring drinks—it's about creating an experience where every sip tells a story. Nelly blends premium spirits and fresh ingredients with a creative flair.",
+        "Mixology isn't just about pouring drinks—it's about creating an experience where every sip tells a story.",
       mainImgs: [
         "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=500",
         "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=500",
@@ -3851,7 +3923,6 @@ function DestinationsSection() {
   const [selected, setSelected] = useState<(typeof DESTINATIONS)[0] | null>(
     null,
   );
-
   return (
     <section
       id="destinations"
@@ -3984,7 +4055,6 @@ function DestinationsSection() {
 // --- PricingSection ---
 function PricingSection() {
   const [showSpecial, setShowSpecial] = useState(false);
-
   return (
     <section
       id="pricing"
@@ -4012,13 +4082,11 @@ function PricingSection() {
           </h2>
           <p className="text-white/40 max-w-lg mx-auto text-sm leading-relaxed">
             Departing Tampa / St Petersburg. All rates include professional
-            captain and crew. Charter rates are not inclusive of food/drink
-            provisions, fuel, gratuity and/or expenses related to dockage or
-            mooring fees at remote locations.
+            captain and crew.
           </p>
         </div>
 
-        <div className="lg:hidden grid grid-cols-1 gap-3 mb-6">
+        <div className="lg:hidden grid grid-cols-1 gap-3 mb-6 max-w-md mx-auto px-4">
           {CHARTER_RATES.map((rate, i) => (
             <MobilePricingCard key={i} rate={rate} />
           ))}
@@ -4177,16 +4245,16 @@ function MechanicalSection() {
 
   const mechanicalSpecs = [
     { label: "Hull Type", value: "Fiberglass / GRP", icon: Ship },
-    { label: "Hull Configuration", value: "Monohull", icon: Anchor },
+    { label: "Hull Config", value: "Monohull", icon: Anchor },
     { label: "Year Built", value: "2000", icon: Clock },
     { label: "Major Refit", value: "2022", icon: Wrench },
     { label: "Builder", value: "Lazzara Yachts (FL)", icon: Settings },
     { label: "Classification", value: "Lazzara 94 Hardtop", icon: Activity },
     { label: "LOA", value: "94 ft / 28.65 m", icon: Ship },
     { label: "Beam", value: "22 ft / 6.7 m", icon: Wind },
-    { label: "Draft", value: "Bahamas-friendly / Shallow", icon: Droplets },
+    { label: "Draft", value: "Bahamas-friendly", icon: Droplets },
     { label: "Displacement", value: "Low — fast cruiser", icon: Gauge },
-    { label: "Cruising Speed", value: "18–22 knots", icon: Zap },
+    { label: "Cruise Speed", value: "18–22 knots", icon: Zap },
     { label: "Max Speed", value: "26+ knots", icon: Zap },
     { label: "Engine Hours", value: "Incredibly Low", icon: Gauge },
     { label: "Fuel Capacity", value: "Large reserve tanks", icon: Fuel },
@@ -4481,7 +4549,7 @@ function ReviewsSection() {
   );
 }
 
-// ─── InquirySection ───────────────────────────────────────────────────────────
+// --- InquirySection ---
 function InquirySection({
   addToast,
 }: {
@@ -4545,15 +4613,14 @@ function InquirySection({
           </h2>
           <p className="text-white/50 text-base mb-8 max-w-sm">
             Have questions about our charter packages, availability, or want to
-            discuss a custom itinerary? Send us a message and we'll get back to
-            you within 24 hours.
+            discuss a custom itinerary?
           </p>
           <div className="p-5 mb-6 rounded-2xl border border-gold/20 bg-gold/5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">
               <p className="text-sm font-bold text-gold mb-1">Ready to Book?</p>
               <p className="text-xs text-white/50">
                 Skip the inquiry and go straight to selecting your charter
-                package and making payment.
+                package.
               </p>
             </div>
             <a
@@ -4587,14 +4654,6 @@ function InquirySection({
           </h3>
           <p className="text-white/40 mb-6 text-sm">
             Tell us about your event and we'll get back to you within 24 hours.
-            To book directly,{" "}
-            <a
-              href="/book"
-              className="text-gold underline-offset-2 hover:underline"
-            >
-              click here
-            </a>
-            .
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
@@ -4686,7 +4745,7 @@ function InquirySection({
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-gold transition-colors resize-none"
-                placeholder="Tell us about your event, preferred dates, guest count, and any special requests..."
+                placeholder="Tell us about your event, preferred dates, guest count..."
               />
             </div>
             <button
@@ -4712,13 +4771,6 @@ function InquirySection({
                 </>
               )}
             </button>
-            <p className="text-center text-[10px] text-white/25">
-              We respond within 24 hours. To book immediately,{" "}
-              <a href="/book" className="text-gold hover:underline">
-                use our booking page
-              </a>
-              .
-            </p>
           </form>
         </div>
       </motion.div>
