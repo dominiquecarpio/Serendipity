@@ -2293,7 +2293,7 @@ function VesselSection({
                 whileHover={{ y: -4 }}
                 className="rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 text-center"
               >
-                <p className="text-2xl md:text-3xl font-serif text-gold">
+                <p className="text-2xl md:text-3xl text-gold">
                   {s.val}
                 </p>
 
