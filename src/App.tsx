@@ -72,6 +72,15 @@ interface Room {
   amenities: string[];
 }
 
+interface HeroSlide {
+  line1: string;
+  line2: string;
+  desc: string;
+  img: string;
+  mobileImg?: string;
+  tag: string;
+}
+
 interface FleetVessel {
   img: string;
   name: string;
@@ -789,9 +798,8 @@ function MobilePricingCard({ rate }: { rate: (typeof CHARTER_RATES)[0] }) {
   return (
     <motion.div
       whileTap={{ scale: 0.98 }}
-      className="flex-shrink-0 rounded-3xl overflow-hidden"
+      className="w-full rounded-3xl overflow-hidden"
       style={{
-        width: 260,
         background: rate.popular
           ? "linear-gradient(145deg, rgba(201,162,39,0.12) 0%, rgba(4,13,26,0.8) 100%)"
           : "rgba(255,255,255,0.04)",
@@ -1590,17 +1598,17 @@ function ScrollVideoSection() {
       {/* ── Video ── */}
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-contain"
+        className="absolute inset-0 w-full h-full object-cover md:object-contain"
         muted
         playsInline
         preload="auto"
-        src="/assets/fast.mp4"
+        src="/assets/boat-rotate.mp4"
         style={{ backgroundColor: "#020201" }}
       />
 
       {/* ── Cinematic scanline ── */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 hidden md:block"
         style={{
           background:
             "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px)",
@@ -1610,14 +1618,14 @@ function ScrollVideoSection() {
 
       {/* ── Vignette top / bottom ── */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 h-40"
+        className="pointer-events-none absolute top-0 left-0 right-0 h-24 md:h-40"
         style={{
           background:
             "linear-gradient(to bottom, #020201 0%, transparent 100%)",
         }}
       />
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 md:h-40"
         style={{
           background: "linear-gradient(to top, #020201 0%, transparent 100%)",
         }}
@@ -1637,16 +1645,16 @@ function ScrollVideoSection() {
       </div>
 
       {/* ── Brand label — top-left ── */}
-      <div className="absolute top-8 left-8 pointer-events-none z-10">
+      <div className="absolute top-4 left-4 md:top-8 md:left-8 pointer-events-none z-10">
         <motion.div
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: isActive ? 1 : 0.35, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="block text-[9px] font-bold tracking-[4px] uppercase text-gold/60 mb-1">
+          <span className="block text-[8px] md:text-[9px] font-bold tracking-[4px] uppercase text-gold/60 mb-1">
             Serendipity
           </span>
-          <span className="block text-[10px] tracking-[2px] text-white/20 uppercase">
+          <span className="block text-[9px] md:text-[10px] tracking-[2px] text-white/20 uppercase">
             94′ Lazzara Motor Yacht
           </span>
         </motion.div>
@@ -1657,7 +1665,7 @@ function ScrollVideoSection() {
         {isActive && (
           <motion.div
             key="specs-panel"
-            className="absolute bottom-32 left-8 pointer-events-none z-10"
+            className="absolute bottom-20 left-4 md:bottom-32 md:left-8 pointer-events-none z-10 max-w-[calc(100vw-2rem)] md:max-w-none"
           >
             {/* ── Title ── */}
             <motion.h2
@@ -1665,7 +1673,7 @@ function ScrollVideoSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: 0.05 }}
-              className="text-5xl md:text-6xl font-serif text-white mb-6 leading-tight"
+              className="text-3xl md:text-6xl font-serif text-white mb-4 md:mb-6 leading-tight"
             >
               Full
               <br />
@@ -1678,15 +1686,15 @@ function ScrollVideoSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 16 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="p-6 rounded-2xl max-w-sm"
+              className="p-4 md:p-6 rounded-2xl max-w-xs md:max-w-sm"
               style={{
                 background: "rgba(4,13,26,0.72)",
-                backdropFilter: "blur(16px)",
-                WebkitBackdropFilter: "blur(16px)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
                 border: "1px solid rgba(201,162,39,0.14)",
               }}
             >
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
                 {[
                   {
                     label: "Builder",
@@ -1702,12 +1710,14 @@ function ScrollVideoSection() {
                   { label: "Max Guests", value: "Up to 12" },
                 ].map((spec, i) => (
                   <div key={i} className={spec.highlight ? "col-span-2" : ""}>
-                    <p className="text-white/40 uppercase tracking-widest text-[9px] mb-1">
+                    <p className="text-white/40 uppercase tracking-widest text-[8px] md:text-[9px] mb-1">
                       {spec.label}
                     </p>
                     <p
                       className={`font-semibold ${
-                        spec.highlight ? "text-gold text-lg" : "text-white/80"
+                        spec.highlight
+                          ? "text-gold text-base md:text-lg"
+                          : "text-white/80"
                       }`}
                     >
                       {spec.value}
@@ -1721,14 +1731,14 @@ function ScrollVideoSection() {
       </AnimatePresence>
 
       {/* ── Progress counter — top-right ── */}
-      <div className="absolute top-8 right-8 pointer-events-none text-right z-10">
+      <div className="absolute top-4 right-4 md:top-8 md:right-8 pointer-events-none text-right z-10">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: isActive ? 1 : 0.25 }}
           transition={{ duration: 0.4 }}
         >
           <span
-            className="font-serif text-5xl leading-none"
+            className="font-serif text-3xl md:text-5xl leading-none"
             style={{
               color: "rgba(201,162,39,0.75)",
               fontVariantNumeric: "tabular-nums",
@@ -1736,7 +1746,7 @@ function ScrollVideoSection() {
           >
             {String(pct).padStart(2, "0")}
           </span>
-          <span className="block text-[9px] tracking-[2px] uppercase text-white/20 mt-1">
+          <span className="block text-[8px] md:text-[9px] tracking-[2px] uppercase text-white/20 mt-1">
             Scroll
           </span>
         </motion.div>
@@ -2767,12 +2777,13 @@ function Hero({
   openVideo: () => void;
   openRoute: () => void;
 }) {
-  const slides = [
+  const slides: HeroSlide[] = [
     {
       line1: "Your Gulf Coast",
       line2: "Escape Awaits",
       desc: "Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.",
       img: "assets/hero1.png",
+      mobileImg: "assets/hero1port.png",
       tag: "Saint Petersburg, FL",
     },
     {
@@ -2780,6 +2791,7 @@ function Hero({
       line2: "Pure Luxury",
       desc: "Discover breathtaking views and world-class comfort on Florida's Gulf Coast.",
       img: "assets/hero2.png",
+      mobileImg: "assets/hero2port.png",
       tag: "Tampa Bay, FL",
     },
     {
@@ -2805,11 +2817,17 @@ function Hero({
           transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
           className="absolute inset-0"
         >
-          <img
-            src={slides[heroIdx].img}
-            className="w-full h-full object-cover object-top"
-            alt=""
-          />
+          <picture>
+            <source
+              media="(max-width: 1023px)"
+              srcSet={slides[heroIdx].mobileImg ?? slides[heroIdx].img}
+            />
+            <img
+              src={slides[heroIdx].img}
+              className="w-full h-full object-cover object-top"
+              alt=""
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-b from-navy/50 via-navy/20 to-navy" />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/80 to-transparent" />
         </motion.div>
@@ -3317,18 +3335,19 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
         }}
       >
         {/* Dark overlay for hover effect */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 pointer-events-none z-[5]"
           style={{
-            background: "radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%)",
+            background:
+              "radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%)",
             backdropFilter: "blur(4px)",
             WebkitBackdropFilter: "blur(4px)",
           }}
         />
-        
+
         <motion.div
           animate={{ x: -idx * (itemWidth + gap) + offset }}
           transition={
@@ -3352,7 +3371,10 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
                 width: itemWidth,
                 height: windowWidth >= 768 ? 420 : 320,
                 cursor: isDragging.current ? "grabbing" : "pointer",
-                filter: hoveredIndex !== null && hoveredIndex !== i ? "blur(8px)" : "blur(0px)",
+                filter:
+                  hoveredIndex !== null && hoveredIndex !== i
+                    ? "blur(8px)"
+                    : "blur(0px)",
                 transition: "filter 0.3s ease-out",
               }}
             >
@@ -3362,10 +3384,10 @@ function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
                 alt=""
                 draggable={false}
               />
-              <motion.div 
+              <motion.div
                 whileHover={{ opacity: 1 }}
                 initial={{ opacity: 0.8 }}
-                className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent pointer-events-none transition-opacity duration-300" 
+                className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent pointer-events-none transition-opacity duration-300"
               />
               <div className="absolute top-4 left-4 pointer-events-none">
                 <span
@@ -3996,10 +4018,7 @@ function PricingSection() {
           </p>
         </div>
 
-        <div
-          className="lg:hidden flex gap-3 overflow-x-auto pb-3 scrollbar-hide mb-6"
-          style={{ scrollSnapType: "x mandatory" }}
-        >
+        <div className="lg:hidden grid grid-cols-1 gap-3 mb-6">
           {CHARTER_RATES.map((rate, i) => (
             <MobilePricingCard key={i} rate={rate} />
           ))}
