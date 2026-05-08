@@ -197,7 +197,7 @@ const EXPERIENCES: Experience[] = [
 
 const ROOMS: Room[] = [
   {
-    img: "assets/gallerymain.png",
+    img: "assets/accomodation1.webp",
     sub: "Master Suite",
     title: "Primary Stateroom",
     desc: "The crown jewel of Serendipity — a sprawling master stateroom with a king-size bed, premium linens, and a full ensuite bathroom featuring a walk-in rain shower and imported stone fixtures. Double-door entry creates a grand hotel feel at sea.",
@@ -221,12 +221,12 @@ const ROOMS: Room[] = [
     ],
     bathDesc: "The full-beam ensuite master bath includes: Oversized frameless shower with dual-controlled showerheads, His & hers walkthrough vanity with quartz countertops, Herringbone travertine mosaic floor, Two large vanity cabinets with ample room for cosmetics.",
     extraImages: [
-      "assets/occasion5.png",
-      "assets/gallerymain.png",
+      "assets/accomodation2.webp",
+      "assets/accomodation3.webp",
     ],
   },
   {
-    img: "assets/occasion5.png",
+    img: "assets/accomodation4.webp",
     sub: "Port VIP",
     title: "Port VIP Stateroom",
     desc: "Located on the port side, the VIP guest suite features a queen-size bed and large stainless porthole windows that spill natural light into the room. Custom-motorized shades with indirect ceiling lighting create a warm, intimate ambiance.",
@@ -245,13 +245,14 @@ const ROOMS: Room[] = [
       "Quartz vanity top with ample counter space",
       "Vanity mirrors and separate storage closet for personal items",
     ],
-    bathDesc: "The port VIP ensuite bath offers: Frameless full-size shower, Herringbone mosaic travertine flooring, Quartz vanity top with ample counter space, Vanity mirrors and separate storage closet for personal items.",
+    bathDesc: "The full-beam ensuite master bath includes: Oversized frameless shower with dual-controlled showerheads, His & hers walkthrough vanity with quartz countertops, Herringbone travertine mosaic floor, Two large vanity cabinets with ample room for cosmetics.",
     extraImages: [
-      "assets/occasion5.png",
+      "assets/accomodation5.webp",
+      "assets/accomodation6.webp",
     ],
   },
   {
-    img: "assets/occasion5.png",
+    img: "assets/accomodation7.webp",
     sub: "Starboard VIP",
     title: "Starboard VIP Stateroom",
     desc: "The mirror image of port-side elegance — the Starboard VIP Stateroom offers the same refined comfort with its own private ensuite and carefully curated décor. Queen-size bed with under-bed storage and stainless porthole windows for natural light.",
@@ -273,11 +274,12 @@ const ROOMS: Room[] = [
     ],
     bathDesc: "The starboard VIP ensuite bath includes: Frameless glass shower with full standing height, Elegant quartz vanity with mosaic tile flooring, Generous vanity storage and personal care cabinet.",
     extraImages: [
-      "assets/occasion5.png",
+      "assets/accomodation8.webp",
+      "assets/accomodation9.webp",
     ],
   },
   {
-    img: "assets/occasion5.png",
+    img: "assets/accomodation10.webp",
     sub: "Midship",
     title: "Midship Stateroom",
     desc: "The Midship Stateroom offers a beautifully-appointed retreat centered around a comfortable double bed, bathed in natural light through a generous stainless steel porthole window. This inviting space includes motorized shades paired with refined ambient lighting.",
@@ -298,7 +300,7 @@ const ROOMS: Room[] = [
     ],
     bathDesc: "The adjoining ensuite bath includes: A full-size, frameless glass shower, Vanity mirrors flanked by generous storage and a dedicated vanity closet, A subtly elegant quartz countertop atop a mosaic herringbone travertine floor.",
     extraImages: [
-      "assets/occasion5.png",
+      "assets/accomodation11.webp",
     ],
   },
 ];
@@ -1247,35 +1249,81 @@ function SpecsModal3D({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ─── Scroll Video Section ─────────────────────────────────────────────────────
 function ScrollVideoSection({ openSpecsModal }: { openSpecsModal: () => void }) {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
   const stRef = useRef<ScrollTrigger | null>(null);
+
   const [progress, setProgress] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [showAllSpecs, setShowAllSpecs] = useState(false);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+
     const section = sectionRef.current;
     const video = videoRef.current;
     if (!section || !video) return;
+
     video.pause();
     video.currentTime = 0;
-    const unlock = () => { video.play().then(() => video.pause()).catch(() => {}); };
+
+    const unlock = () => {
+      video.play().then(() => video.pause()).catch(() => {});
+    };
+
     document.addEventListener("touchstart", unlock, { once: true, passive: true });
     document.addEventListener("mousedown", unlock, { once: true });
+
     const setupScrub = () => {
       const dur = video.duration;
       if (!dur || isNaN(dur)) return;
+
       tweenRef.current?.kill();
       stRef.current?.kill();
-      tweenRef.current = gsap.fromTo(video, { currentTime: 0 }, { currentTime: dur, ease: "none", scrollTrigger: { id: "boat-scrub", trigger: section, start: "top top", end: "+=300%", scrub: 0.6, pin: true, anticipatePin: 1, onUpdate: (self) => setProgress(self.progress), onToggle: (self) => setIsActive(self.isActive) } });
+
+      tweenRef.current = gsap.fromTo(
+        video,
+        { currentTime: 0 },
+        {
+          currentTime: dur,
+          ease: "none",
+          scrollTrigger: {
+            id: "boat-scrub",
+            trigger: section,
+            start: "top top",
+            end: "+=300%",
+            scrub: 0.6,
+            pin: true,
+            anticipatePin: 1,
+
+            onUpdate: (self) => {
+              setProgress(self.progress);
+              setIsActive(self.isActive);
+
+              if (self.progress >= 0.98) setShowAllSpecs(true);
+              else setShowAllSpecs(false);
+            },
+
+            onLeave: () => setShowAllSpecs(true),
+            onEnterBack: () => setShowAllSpecs(false),
+          },
+        }
+      );
+
       stRef.current = ScrollTrigger.getById("boat-scrub") ?? null;
     };
-    if (video.readyState >= 1) { setupScrub(); } else { video.addEventListener("loadedmetadata", setupScrub, { once: true }); }
-    return () => { document.removeEventListener("touchstart", unlock); document.removeEventListener("mousedown", unlock); tweenRef.current?.kill(); stRef.current?.kill(); };
+
+    if (video.readyState >= 1) setupScrub();
+    else video.addEventListener("loadedmetadata", setupScrub, { once: true });
+
+    return () => {
+      document.removeEventListener("touchstart", unlock);
+      document.removeEventListener("mousedown", unlock);
+      tweenRef.current?.kill();
+      stRef.current?.kill();
+    };
   }, []);
 
   const pct = Math.round(progress * 100);
@@ -1290,48 +1338,156 @@ function ScrollVideoSection({ openSpecsModal }: { openSpecsModal: () => void }) 
   ];
 
   return (
-    <section ref={sectionRef} id="boat-rotation" className="relative overflow-hidden h-screen" style={{ backgroundColor: "#020201" }}>
-      <video ref={videoRef} className="absolute inset-0 w-full h-full object-contain" muted playsInline preload="auto" src="/assets/fast.mp4" style={{ backgroundColor: "#020201" }} />
-      <div className="pointer-events-none absolute top-0 left-0 right-0 h-40 z-10" style={{ background: "linear-gradient(to bottom, #020201 0%, transparent 100%)" }} />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 z-10" style={{ background: "linear-gradient(to top, #020201 0%, transparent 100%)" }} />
+    <section ref={sectionRef} id="boat-rotation" className="relative overflow-hidden h-screen bg-[#020201]">
+
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-contain"
+        muted
+        playsInline
+        preload="auto"
+        src="/assets/fast.mp4"
+      />
+
+      {/* overlays */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-40 z-10 bg-gradient-to-b from-[#020201] to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 z-10 bg-gradient-to-t from-[#020201] to-transparent" />
+
+      {/* progress */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 z-20">
-        <div style={{ height: "100%", width: `${pct}%`, background: "linear-gradient(90deg, #c9a227, #f0c040)", boxShadow: "0 0 8px rgba(201,162,39,0.55)", transition: "width 0.05s linear" }} />
+        <div
+          style={{
+            width: `${pct}%`,
+            height: "100%",
+            background: "linear-gradient(90deg,#c9a227,#f0c040)",
+            boxShadow: "0 0 10px rgba(201,162,39,0.5)",
+          }}
+        />
       </div>
+
+      {/* ================= SPEC FLOATING MARKERS ================= */}
       <AnimatePresence>
-        {isActive && scrollSpecs.map((spec, i) => {
+        {isActive &&
+          !showAllSpecs &&
+          scrollSpecs.map((spec, i) => {
+            const visible = progress >= spec.threshold;
+            if (!visible) return null;
+
+            const isLeft = spec.side === "left";
+
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: isLeft ? -30 : 30, scale: 0.85 }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                  y: [0, -6, 0], // ✅ FLOAT EFFECT (desktop + mobile)
+                }}
+                transition={{
+                  duration: 3 + i * 0.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                exit={{ opacity: 0 }}
+                className="absolute z-20 pointer-events-none"
+                style={{
+                  left: spec.anchor.x,
+                  top: spec.anchor.y,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div
+                  className="
+                    px-4 py-3 rounded-2xl
+                    backdrop-blur-xl
+                    border border-white/10
+                    bg-black/40
+                    shadow-lg
+                    w-[160px] sm:w-[180px]
+                  "
+                >
+                  <p className="text-[9px] uppercase tracking-widest text-white/40">
+                    {spec.sub}
+                  </p>
+                  <p className="text-white text-sm sm:text-lg font-serif">
+                    {spec.label}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+      </AnimatePresence>
+
+      {/* ================= MOBILE EXTRA FLOAT LAYER ================= */}
+      <div className="lg:hidden absolute inset-0 pointer-events-none z-10">
+        {scrollSpecs.map((spec, i) => {
           const visible = progress >= spec.threshold;
           if (!visible) return null;
-          const isLeft = spec.side === "left";
+
           return (
-            <motion.div key={i} initial={{ opacity: 0, x: isLeft ? -32 : 32, scale: 0.85 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, x: isLeft ? -24 : 24, scale: 0.9 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className="absolute z-20 pointer-events-none hidden lg:block" style={{ left: spec.anchor.x, top: spec.anchor.y, transform: "translate(-50%, -50%)" }}>
-              <svg className="absolute pointer-events-none" style={{ overflow: "visible", left: isLeft ? "100%" : "auto", right: isLeft ? "auto" : "100%", top: "50%", transform: "translateY(-50%)", width: 1, height: 1 }}>
-                <motion.line x1={0} y1={0} x2={isLeft ? 60 : -60} y2={0} stroke="rgba(201,162,39,0.45)" strokeWidth={1} strokeDasharray="4 3" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 0.5, delay: 0.25 }} />
-                <motion.circle cx={isLeft ? 60 : -60} cy={0} r={3} fill="#c9a227" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.3, delay: 0.55 }} />
-              </svg>
-              <div className="px-5 py-4 rounded-2xl" style={{ background: "rgba(2,8,18,0.82)", backdropFilter: "blur(18px)", border: "1px solid rgba(201,162,39,0.22)", boxShadow: "0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(201,162,39,0.08)", minWidth: 180 }}>
-                <div className="mb-2 h-[1px] w-8" style={{ background: "linear-gradient(90deg, #c9a227, transparent)" }} />
-                <p className="text-[9px] uppercase tracking-[2.5px] mb-1" style={{ color: "rgba(201,162,39,0.55)" }}>{spec.sub}</p>
-                <p className="font-serif text-lg leading-tight text-white" style={{ textShadow: "0 0 20px rgba(201,162,39,0.15)" }}>{spec.label}</p>
+            <motion.div
+              key={`mobile-${i}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: 1,
+                y: [0, -10, 0], // stronger float for mobile
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.2,
+              }}
+              className="absolute left-1/2"
+              style={{
+                top: `${20 + i * 10}%`,
+                transform: "translateX(-50%)",
+              }}
+            >
+              <div className="px-3 py-2 rounded-full bg-black/50 border border-white/10 text-white text-xs backdrop-blur-lg">
+                {spec.label}
               </div>
             </motion.div>
           );
         })}
-      </AnimatePresence>
+      </div>
+
+      {/* FINAL SPEC OVERLAY */}
       <AnimatePresence>
-        {isActive && progress > 0.15 && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20">
-            <motion.button whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(201,162,39,0.35)" }} whileTap={{ scale: 0.96 }} onClick={openSpecsModal} className="flex items-center gap-3 px-6 py-3.5 rounded-full font-bold text-sm pointer-events-auto" style={{ background: "linear-gradient(135deg, rgba(201,162,39,0.15), rgba(201,162,39,0.08))", border: "1px solid rgba(201,162,39,0.35)", color: "#c9a227", backdropFilter: "blur(16px)" }}>
-              <Settings className="w-4 h-4" />View All Specs<ArrowUpRight className="w-4 h-4" />
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {progress < 0.08 && (
-          <motion.div key="scroll-hint" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.4 }} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-10">
-            <span className="text-[9px] font-bold tracking-[3px] uppercase text-white/30">Scroll to reveal specs</span>
-            <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }} className="w-4 h-7 rounded-full border border-white/20 flex items-start justify-center pt-1">
-              <div className="w-1 h-2 rounded-full bg-gold/60" />
+        {showAllSpecs && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xl"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="w-[90%] max-w-xl p-8 rounded-2xl border border-white/10 bg-[#020812]/90"
+            >
+              <h2 className="text-white text-xl mb-6">Full Specifications</h2>
+
+              <div className="space-y-3 text-sm text-white/80">
+                {scrollSpecs.map((s, i) => (
+                  <div key={i} className="flex justify-between border-b border-white/10 pb-2">
+                    <span>{s.sub}</span>
+                    <span className="text-[#c9a227]">{s.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  setShowAllSpecs(false);
+                  openSpecsModal();
+                }}
+                className="mt-6 w-full py-2 rounded-full border border-white/20 text-white"
+              >
+                Open Full Specs
+              </button>
             </motion.div>
           </motion.div>
         )}
@@ -1339,7 +1495,6 @@ function ScrollVideoSection({ openSpecsModal }: { openSpecsModal: () => void }) 
     </section>
   );
 }
-
 // --- Main App ---
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
