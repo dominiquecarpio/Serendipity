@@ -1806,10 +1806,7 @@ function ScrollVideoSection({
         .then(() => video.pause())
         .catch(() => {});
     };
-    document.addEventListener("touchstart", unlock, {
-      once: true,
-      passive: true,
-    });
+    document.addEventListener("touchstart", unlock, { once: true, passive: true });
     document.addEventListener("mousedown", unlock, { once: true });
 
     const setupScrub = () => {
@@ -1855,42 +1852,61 @@ function ScrollVideoSection({
 
   const pct = Math.round(progress * 100);
 
+  // Each spec: threshold when it floats in, and tight positions hugging boat center
   const scrollSpecs = [
     {
-      threshold: 0.1,
+      threshold: 0.08,
       label: "Lazzara Yachts",
       sub: "Builder",
-      pos: "top-1/4 left-8",
+      // left side, upper
+      anchor: { x: "18%", y: "22%" },
+      lineEnd: { x: "42%", y: "38%" },
+      side: "left",
     },
     {
-      threshold: 0.25,
+      threshold: 0.2,
       label: "94 ft / 28.65 m",
       sub: "Length Overall",
-      pos: "top-1/3 right-8",
+      // right side, upper
+      anchor: { x: "72%", y: "20%" },
+      lineEnd: { x: "56%", y: "36%" },
+      side: "right",
     },
     {
-      threshold: 0.45,
+      threshold: 0.35,
       label: "18–22 knots",
       sub: "Cruising Speed",
-      pos: "top-1/2 left-8",
+      // left side, mid
+      anchor: { x: "12%", y: "44%" },
+      lineEnd: { x: "40%", y: "50%" },
+      side: "left",
     },
     {
-      threshold: 0.6,
+      threshold: 0.5,
       label: "4 Private Suites",
       sub: "Staterooms",
-      pos: "top-1/2 right-8",
+      // right side, mid
+      anchor: { x: "76%", y: "46%" },
+      lineEnd: { x: "58%", y: "52%" },
+      side: "right",
     },
     {
-      threshold: 0.75,
+      threshold: 0.65,
       label: "Up to 12 Guests",
       sub: "Day Charter",
-      pos: "bottom-1/3 left-8",
+      // left side, lower
+      anchor: { x: "16%", y: "66%" },
+      lineEnd: { x: "42%", y: "60%" },
+      side: "left",
     },
     {
-      threshold: 0.88,
+      threshold: 0.8,
       label: "Year 2000 · Refit 2022",
       sub: "Built · Refitted",
-      pos: "bottom-1/3 right-8",
+      // right side, lower
+      anchor: { x: "70%", y: "68%" },
+      lineEnd: { x: "57%", y: "62%" },
+      side: "right",
     },
   ];
 
@@ -1911,20 +1927,17 @@ function ScrollVideoSection({
         style={{ backgroundColor: "#020201" }}
       />
 
+      {/* Top/bottom fades */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 h-40"
-        style={{
-          background:
-            "linear-gradient(to bottom, #020201 0%, transparent 100%)",
-        }}
+        className="pointer-events-none absolute top-0 left-0 right-0 h-40 z-10"
+        style={{ background: "linear-gradient(to bottom, #020201 0%, transparent 100%)" }}
       />
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40"
-        style={{
-          background: "linear-gradient(to top, #020201 0%, transparent 100%)",
-        }}
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 z-10"
+        style={{ background: "linear-gradient(to top, #020201 0%, transparent 100%)" }}
       />
 
+      {/* Progress bar */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 z-20">
         <div
           style={{
@@ -1937,38 +1950,103 @@ function ScrollVideoSection({
         />
       </div>
 
-      {scrollSpecs.map((spec, i) => (
-        <AnimatePresence key={i}>
-          {progress >= spec.threshold &&
-            progress < spec.threshold + 0.25 &&
-            isActive && (
+      {/* Spec cards with SVG connector lines */}
+      <AnimatePresence>
+        {isActive &&
+          scrollSpecs.map((spec, i) => {
+            const visible = progress >= spec.threshold;
+            if (!visible) return null;
+
+            // Stagger delay based on order of appearance
+            const delay = 0;
+
+            // Card width for line attachment
+            const cardW = 200;
+            const isLeft = spec.side === "left";
+
+            return (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.4 }}
-                className={`absolute ${spec.pos} z-10 pointer-events-none hidden lg:block`}
+                key={i}
+                initial={{ opacity: 0, x: isLeft ? -32 : 32, scale: 0.85 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: isLeft ? -24 : 24, scale: 0.9 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+                className="absolute z-20 pointer-events-none hidden lg:block"
+                style={{ left: spec.anchor.x, top: spec.anchor.y, transform: "translate(-50%, -50%)" }}
               >
-                <div
-                  className="px-4 py-3 rounded-xl"
+                {/* SVG connector line */}
+                <svg
+                  className="absolute pointer-events-none"
                   style={{
-                    background: "rgba(4,13,26,0.75)",
-                    backdropFilter: "blur(14px)",
-                    border: "1px solid rgba(201,162,39,0.18)",
+                    overflow: "visible",
+                    left: isLeft ? "100%" : "auto",
+                    right: isLeft ? "auto" : "100%",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: 1,
+                    height: 1,
                   }}
                 >
-                  <p className="text-[9px] uppercase tracking-[2px] text-gold/50 mb-0.5">
+                  {/* Animated dashed line from card edge toward boat */}
+                  <motion.line
+                    x1={0}
+                    y1={0}
+                    x2={isLeft ? 60 : -60}
+                    y2={0}
+                    stroke="rgba(201,162,39,0.45)"
+                    strokeWidth={1}
+                    strokeDasharray="4 3"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.25 }}
+                  />
+                  {/* Dot at boat end */}
+                  <motion.circle
+                    cx={isLeft ? 60 : -60}
+                    cy={0}
+                    r={3}
+                    fill="#c9a227"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.55 }}
+                  />
+                </svg>
+
+                {/* Card */}
+                <div
+                  className="px-5 py-4 rounded-2xl"
+                  style={{
+                    background: "rgba(2,8,18,0.82)",
+                    backdropFilter: "blur(18px)",
+                    border: "1px solid rgba(201,162,39,0.22)",
+                    boxShadow: "0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(201,162,39,0.08)",
+                    minWidth: 180,
+                  }}
+                >
+                  {/* Gold accent bar */}
+                  <div
+                    className="mb-2 h-[1px] w-8"
+                    style={{ background: "linear-gradient(90deg, #c9a227, transparent)" }}
+                  />
+                  <p
+                    className="text-[9px] uppercase tracking-[2.5px] mb-1"
+                    style={{ color: "rgba(201,162,39,0.55)" }}
+                  >
                     {spec.sub}
                   </p>
-                  <p className="font-serif text-base text-white">
+                  <p
+                    className="font-serif text-lg leading-tight text-white"
+                    style={{ textShadow: "0 0 20px rgba(201,162,39,0.15)" }}
+                  >
                     {spec.label}
                   </p>
                 </div>
               </motion.div>
-            )}
-        </AnimatePresence>
-      ))}
+            );
+          })}
+      </AnimatePresence>
 
+      {/* View All Specs button */}
       <AnimatePresence>
         {isActive && progress > 0.15 && (
           <motion.div
@@ -1978,16 +2056,12 @@ function ScrollVideoSection({
             className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
           >
             <motion.button
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 0 30px rgba(201,162,39,0.35)",
-              }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(201,162,39,0.35)" }}
               whileTap={{ scale: 0.96 }}
               onClick={openSpecsModal}
-              className="flex items-center gap-3 px-6 py-3.5 rounded-full font-bold text-sm"
+              className="flex items-center gap-3 px-6 py-3.5 rounded-full font-bold text-sm pointer-events-auto"
               style={{
-                background:
-                  "linear-gradient(135deg, rgba(201,162,39,0.15), rgba(201,162,39,0.08))",
+                background: "linear-gradient(135deg, rgba(201,162,39,0.15), rgba(201,162,39,0.08))",
                 border: "1px solid rgba(201,162,39,0.35)",
                 color: "#c9a227",
                 backdropFilter: "blur(16px)",
@@ -2001,6 +2075,7 @@ function ScrollVideoSection({
         )}
       </AnimatePresence>
 
+      {/* Scroll hint */}
       <AnimatePresence>
         {progress < 0.08 && (
           <motion.div
@@ -2016,11 +2091,7 @@ function ScrollVideoSection({
             </span>
             <motion.div
               animate={{ y: [0, 6, 0] }}
-              transition={{
-                duration: 1.4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
               className="w-4 h-7 rounded-full border border-white/20 flex items-start justify-center pt-1"
             >
               <div className="w-1 h-2 rounded-full bg-gold/60" />
@@ -2031,7 +2102,6 @@ function ScrollVideoSection({
     </section>
   );
 }
-
 // --- Main App ---
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
