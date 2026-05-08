@@ -195,115 +195,131 @@ const EXPERIENCES: Experience[] = [
   },
 ];
 
+
 const ROOMS: Room[] = [
   {
     img: "assets/accomodation1.webp",
     sub: "Master Suite",
     title: "Primary Stateroom",
-    desc: "The crown jewel of Serendipity — a sprawling master stateroom with a king-size bed, premium linens, and a full ensuite bathroom featuring a walk-in rain shower and imported stone fixtures. Double-door entry creates a grand hotel feel at sea.",
+    desc:
+      "The full-beam Master Stateroom is a private sanctuary, featuring a plush king-size bed that is framed by oversized stainless porthole windows, overflowing with natural light. This room includes:",
+
     amenities: [
-      "King bed with luxury linens",
-      "Full ensuite rain shower",
-      "Individual climate control",
-      "Private lounge area",
-    ],
-    extraAmenities: [
       "Double-door entry for a grand welcome",
       "Walk-in closet plus two armoires",
       "Makeup vanity (port side) and working desk (starboard) with bookshelves and filing cabinets",
-      "Flat screen 32\" TV with satellite DirecTV and entertainment center",
-      "Motorized blackout shades and custom ambient lighting including coves and wall sconces",
+      'Flat screen 32\" TV with satellite DirecTV and entertainment center',
+      "Motorized blackout shades and custom ambient lighting, including ceiling and wall sconces",
+      "Independent climate control",
+    ],
+
+    extraAmenities: [
+      "Oversized frameless glass shower with dual-controlled showerheads",
       "His & hers walkthrough vanity with quartz countertops",
       "Herringbone travertine mosaic floor",
       "Two large vanity cabinets with ample room for cosmetics, hairdryers, and personal care items",
       "Two full-height linen closets (port and starboard)",
-      "Oversized frameless shower with dual-controlled showerheads",
     ],
-    bathDesc: "The full-beam ensuite master bath includes: Oversized frameless shower with dual-controlled showerheads, His & hers walkthrough vanity with quartz countertops, Herringbone travertine mosaic floor, Two large vanity cabinets with ample room for cosmetics.",
+
+    bathDesc:
+      "Designed with you in mind, the full-beam ensuite master bath includes:",
+
     extraImages: [
       "assets/accomodation2.webp",
       "assets/accomodation3.webp",
     ],
   },
+
   {
     img: "assets/accomodation4.webp",
     sub: "Port VIP",
     title: "Port VIP Stateroom",
-    desc: "Located on the port side, the VIP guest suite features a queen-size bed and large stainless porthole windows that spill natural light into the room. Custom-motorized shades with indirect ceiling lighting create a warm, intimate ambiance.",
+
+    desc:
+      "Located on the port side, this VIP guest suite features a queen-size bed and large stainless porthole windows that spill natural light into the room.",
+
     amenities: [
-      "Queen bed with quality bedding",
-      "Private ensuite bathroom",
-      "Climate-controlled environment",
-      "Porthole ocean views",
-    ],
-    extraAmenities: [
-      "Custom-motorized shades with indirect ceiling lighting",
+      "Custom motorized shades with indirect ceiling lighting",
       "Satellite DirecTV plasma TV and climate-controlled comfort",
       "Generous storage with drawers under the bed and a cedar lined closet",
+    ],
+
+    extraAmenities: [
       "Frameless full-size shower",
       "Herringbone mosaic travertine flooring",
       "Quartz vanity top with ample counter space",
       "Vanity mirrors and separate storage closet for personal items",
     ],
-    bathDesc: "The full-beam ensuite master bath includes: Oversized frameless shower with dual-controlled showerheads, His & hers walkthrough vanity with quartz countertops, Herringbone travertine mosaic floor, Two large vanity cabinets with ample room for cosmetics.",
+
+    bathDesc: "The port VIP ensuite bath offers:",
+
     extraImages: [
       "assets/accomodation5.webp",
       "assets/accomodation6.webp",
     ],
   },
+
   {
     img: "assets/accomodation7.webp",
     sub: "Starboard VIP",
     title: "Starboard VIP Stateroom",
-    desc: "The mirror image of port-side elegance — the Starboard VIP Stateroom offers the same refined comfort with its own private ensuite and carefully curated décor. Queen-size bed with under-bed storage and stainless porthole windows for natural light.",
+
+    desc:
+      "The Starboard VIP Stateroom mirrors its port side counterpart for the same upscale features.",
+
     amenities: [
-      "Queen bed with premium bedding",
-      "Private ensuite bathroom",
-      "Climate-controlled environment",
-      "Starboard ocean views",
-    ],
-    extraAmenities: [
       "Queen-size bed with under-bed storage",
       "Stainless porthole windows for natural light",
-      "Motorized indirect cove and ambient LED accents",
+      "Motorized lighting control and ambient LED accents",
       "Satellite DirecTV and climate-controlled atmosphere",
       "Cedar-lined closet for longer charters or extended stays",
+    ],
+
+    extraAmenities: [
       "Frameless glass shower with full standing height",
       "Elegant quartz vanity with mosaic tile flooring",
       "Generous vanity storage and personal care cabinet",
     ],
-    bathDesc: "The starboard VIP ensuite bath includes: Frameless glass shower with full standing height, Elegant quartz vanity with mosaic tile flooring, Generous vanity storage and personal care cabinet.",
+
+    bathDesc:
+      "The starboard VIP ensuite bath includes:",
+
     extraImages: [
       "assets/accomodation8.webp",
       "assets/accomodation9.webp",
     ],
   },
+
   {
     img: "assets/accomodation10.webp",
     sub: "Midship",
     title: "Midship Stateroom",
-    desc: "The Midship Stateroom offers a beautifully-appointed retreat centered around a comfortable double bed, bathed in natural light through a generous stainless steel porthole window. This inviting space includes motorized shades paired with refined ambient lighting.",
+
+    desc:
+      "The Midship Stateroom offers a beautifully appointed retreat centered around a comfortable double bed, bathed in natural light through a generous stainless steel porthole window. This inviting space includes:",
+
     amenities: [
-      "Double bed with quality bedding",
-      "Private ensuite bathroom",
-      "Climate-controlled environment",
-      "Ample storage space",
-    ],
-    extraAmenities: [
       "Motorized shades paired with refined ambient lighting — indirect cove illumination and soft accent lights — to set the perfect mood",
       "Independently controlled air conditioning for personalized comfort",
       "Satellite DirecTV entertainment system",
       "Abundant storage with spacious drawers beneath the bed and a cedar lined closet",
+    ],
+
+    extraAmenities: [
       "A full-size, frameless glass shower",
       "Vanity mirrors flanked by generous storage and a dedicated vanity closet for grooming essentials",
       "A subtly elegant quartz countertop atop a mosaic herringbone travertine floor",
     ],
-    bathDesc: "The adjoining ensuite bath includes: A full-size, frameless glass shower, Vanity mirrors flanked by generous storage and a dedicated vanity closet, A subtly elegant quartz countertop atop a mosaic herringbone travertine floor.",
+
+    bathDesc:
+      "Thoughtfully designed with your ease in mind, the adjoining ensuite bath includes:",
+
     extraImages: [
       "assets/accomodation11.webp",
     ],
   },
 ];
+
 
 const FLEET: FleetVessel[] = [
   {
