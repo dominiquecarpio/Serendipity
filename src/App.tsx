@@ -18,6 +18,8 @@ import {
   ChevronRight,
   ChevronLeft,
   Play,
+  GlassWater,
+  Speaker,
   Star,
   Sparkles,
   MapPin,
@@ -824,12 +826,12 @@ function InlineSpecsSection() {
     <section
       ref={sectionRef}
       id="specs-section"
-      className="relative overflow-hidden bg-[#050505]"
+      className="relative overflow-hidden bg-[navy-light]"
     >
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px]"
-          style={{ background: "radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(33, 34, 56, 0.08) 0%, transparent 70%)" }}
         />
       </div>
 
@@ -858,7 +860,7 @@ function InlineSpecsSection() {
         />
 
         {/* overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/15 to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-navy-light from-black/65 via-black/15 to-[#050505]" />
 
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -1101,7 +1103,6 @@ function CharterHighlightsModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ─── Flybridge Section ────────────────────────────────────────────────────────
 function FlybridgeSection({ onTourClick }: { onTourClick: () => void }) {
   const [activeImg, setActiveImg] = useState(0);
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
@@ -1114,93 +1115,130 @@ function FlybridgeSection({ onTourClick }: { onTourClick: () => void }) {
     { src: "assets/occasion4.png", label: "Panoramic Views" },
   ];
 
+  // Updated feature list to match the "Flybridge Experience" grid in the image
   const features = [
-    { icon: Droplets, text: "A hot/cold Jacuzzi", color: "#3b82f6" },
-    { icon: Wind, text: "Oversized chaise lounges for sunbathing", color: "#14b8a6" },
-    { icon: Utensils, text: "Al fresco dining with ocean views", color: "#c9a227" },
-    { icon: Sparkles, text: "Wet bar for handcrafted cocktails", color: "#f43f5e" },
+    { icon: Droplets, text: "Jacuzzi" },
+    { icon: Wind, text: "Sun Lounge" },
+    { icon: Utensils, text: "Dining Deck" },
+    { icon: GlassWater, text: "Wet Bar" },
+    { icon: Speaker, text: "Audio System" },
+    { icon: Zap, text: "LED Ambience" },
   ];
 
   useEffect(() => {
-    const t = setInterval(() => setActiveImg(p => (p + 1) % flybridgeImages.length), 4000);
+    const t = setInterval(() => setActiveImg(p => (p + 1) % flybridgeImages.length), 5000);
     return () => clearInterval(t);
-  }, []);
+  }, [flybridgeImages.length]);
 
   return (
-    <section id="flybridge" ref={sectionRef} className="py-16 md:py-28 px-4 md:px-8 lg:px-16 relative overflow-hidden" style={{ background: "#fafaf8" }}>
-      <div className="pointer-events-none absolute inset-0 opacity-[0.025]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")" }} />
-      <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0.5 }} transition={{ duration: 1.2 }} className="pointer-events-none absolute top-0 right-0 w-[500px] h-[500px] rounded-full" style={{ background: "radial-gradient(circle, rgba(201,162,39,0.06) 0%, transparent 70%)", transform: "translate(20%, -20%)" }} />
+    <section 
+      id="flybridge" 
+      ref={sectionRef} 
+      className="py-16 md:py-28 px-4 md:px-8 lg:px-16 relative overflow-hidden" 
+      style={{ background: "linear-gradient(to top, #0b1929, transparent)"}} // Deep midnight blue/black from image
+    >
+      {/* Film Grain Texture Overlay */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")" }} />
+      
+      {/* Gold Ambient Glow */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: isInView ? 1 : 0 }} transition={{ duration: 1.5 }} className="pointer-events-none absolute top-0 right-0 w-[600px] h-[600px] rounded-full" style={{ background: "radial-gradient(circle, rgba(201,162,39,0.07) 0%, transparent 70%)", transform: "translate(20%, -20%)" }} />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-24 items-center">
+          
           <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -40 }} transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}>
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-px" style={{ background: "#0d1b2a" }} />
-              <span className="text-[9px] font-bold uppercase tracking-[3px]" style={{ color: "#0d1b2a80" }}>Open Deck Experience</span>
+              <div className="w-8 h-px" style={{ background: "#c9a227" }} />
+              <span className="text-[10px] font-bold uppercase tracking-[4px]" style={{ color: "#c9a227" }}>Luxury Living</span>
             </div>
-            <h2 className="font-serif text-4xl md:text-6xl text-gray-900 leading-[1.05] mb-8">
+            
+            <h2 className="font-serif text-4xl md:text-6xl text-white leading-[1.1] mb-8">
               Expansive<br />
-              <em className="not-italic" style={{ color: "#0d1b2a" }}>Flybridge</em><br />
-              <span className="text-gray-400 text-3xl md:text-4xl">with Jacuzzi &amp; Lounge</span>
+              <em className="italic" style={{ color: "#c9a227" }}>Flybridge</em><br />
+              <span className="text-white/40 text-3xl md:text-4xl block mt-2 font-light">for up to 12 guests</span>
             </h2>
-            <p className="text-[9px] font-bold uppercase tracking-[3px] text-gray-400 mb-5">Enjoy:</p>
-            <div className="space-y-3 mb-8">
-              {features.map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -20 }} transition={{ delay: 0.3 + i * 0.1, duration: 0.6 }} onMouseEnter={() => setHoveredFeature(i)} onMouseLeave={() => setHoveredFeature(null)} className="flex items-center gap-4 p-3 rounded-xl cursor-default transition-all" style={{ background: hoveredFeature === i ? `${item.color}08` : "transparent", border: `1px solid ${hoveredFeature === i ? item.color + "20" : "transparent"}` }}>
-                  <motion.div animate={{ scale: hoveredFeature === i ? 1.15 : 1 }} className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: hoveredFeature === i ? `${item.color}15` : "#f0ede8" }}>
-                    <item.icon className="w-3.5 h-3.5 transition-colors" style={{ color: hoveredFeature === i ? item.color : "#6b6b6b" }} />
-                  </motion.div>
-                  <span className="font-medium transition-colors" style={{ color: hoveredFeature === i ? "#0d1b2a" : "#555", fontSize: 14 }}>{item.text}</span>
-                </motion.div>
-              ))}
-            </div>
-            <p className="text-sm leading-relaxed mb-8 max-w-md" style={{ color: "#888" }}>
-              This elevated space offers 360° sightlines for exploring the waters between Saint Petersburg, Tampa, and Sarasota.
-            </p>
-            <motion.button onClick={onTourClick} whileHover={{ y: -3, boxShadow: "0 16px 40px rgba(13,27,42,0.25)" }} whileTap={{ scale: 0.96 }} className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold transition-all" style={{ background: "#0d1b2a", color: "#fff" }}>
-              Tour Serendipity
-              <motion.span animate={{ x: [0, 3, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                <ArrowUpRight className="w-4 h-4" />
-              </motion.span>
-            </motion.button>
-          </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 40 }} transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}>
-            <p className="text-xs text-gray-400 font-medium mb-3">Soak up the Florida sunshine from the yacht's massive hardtop deck.</p>
-            <div className="relative rounded-3xl overflow-hidden mb-3 shadow-2xl" style={{ aspectRatio: "16/10" }}>
-              <AnimatePresence mode="wait">
-                <motion.img key={activeImg} src={flybridgeImages[activeImg].src} alt={flybridgeImages[activeImg].label} initial={{ opacity: 0, scale: 1.06 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }} className="w-full h-full object-cover" />
-              </AnimatePresence>
-              <div className="absolute bottom-4 left-4 px-3 py-1.5 rounded-full" style={{ background: "rgba(13,27,42,0.75)", backdropFilter: "blur(10px)" }}>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-white/80">{flybridgeImages[activeImg].label}</span>
-              </div>
-              <button onClick={() => setActiveImg(p => (p - 1 + flybridgeImages.length) % flybridgeImages.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(13,27,42,0.6)", backdropFilter: "blur(8px)" }}>
-                <ChevronLeft className="w-4 h-4 text-white" />
-              </button>
-              <button onClick={() => setActiveImg(p => (p + 1) % flybridgeImages.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(13,27,42,0.6)", backdropFilter: "blur(8px)" }}>
-                <ChevronRight className="w-4 h-4 text-white" />
-              </button>
-              <div className="absolute top-4 right-4 flex gap-1.5">
-                {flybridgeImages.map((_, i) => (
-                  <motion.button key={i} onClick={() => setActiveImg(i)} animate={{ width: activeImg === i ? 24 : 6, background: activeImg === i ? "#c9a227" : "rgba(255,255,255,0.5)" }} className="h-1.5 rounded-full" />
+            {/* Feature Card - Styled like the image boxes */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 mb-8 backdrop-blur-md">
+              <p className="text-[10px] font-bold uppercase tracking-[3px] text-[#c9a227] mb-6">Flybridge Experience</p>
+              <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                {features.map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 group">
+                    <Check className="w-3.5 h-3.5" style={{ color: "#c9a227" }} />
+                    <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">{item.text}</span>
+                  </div>
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-2">
+
+            <p className="text-sm leading-relaxed mb-8 max-w-md text-white/50">
+              Four private suites designed for absolute comfort, privacy, and quiet ocean living with 360° sightlines.
+            </p>
+
+            <motion.button 
+              onClick={onTourClick} 
+              whileHover={{ y: -3, backgroundColor: "#dcb641" }} 
+              whileTap={{ scale: 0.96 }} 
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold transition-all shadow-xl shadow-black/40" 
+              style={{ background: "#c9a227", color: "#050a10" }}
+            >
+              Tour Serendipity
+              <ArrowUpRight className="w-4 h-4" />
+            </motion.button>
+          </motion.div>
+
+          {/* Right Side Image Gallery */}
+          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 40 }} transition={{ duration: 0.8, delay: 0.1 }}>
+            <div className="relative rounded-3xl overflow-hidden mb-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5" style={{ aspectRatio: "16/10" }}>
+              <AnimatePresence mode="wait">
+                <motion.img 
+                  key={activeImg} 
+                  src={flybridgeImages[activeImg].src} 
+                  alt={flybridgeImages[activeImg].label} 
+                  className="w-full h-full object-cover" 
+                  initial={{ opacity: 0, scale: 1.05 }} 
+                  animate={{ opacity: 1, scale: 1 }} 
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                />
+              </AnimatePresence>
+              
+              <div className="absolute bottom-4 left-4 px-4 py-2 rounded-xl" style={{ background: "rgba(5,10,16,0.7)", backdropFilter: "blur(12px)" }}>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">{flybridgeImages[activeImg].label}</span>
+              </div>
+
+              {/* Progress Indicators */}
+              <div className="absolute top-4 right-4 flex gap-2">
+                {flybridgeImages.map((_, i) => (
+                  <motion.div 
+                    key={i} 
+                    animate={{ width: activeImg === i ? 30 : 8, background: activeImg === i ? "#c9a227" : "rgba(255,255,255,0.3)" }} 
+                    className="h-1 rounded-full" 
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Thumbnail Nav */}
+            <div className="grid grid-cols-3 gap-3">
               {flybridgeImages.map((img, i) => (
-                <motion.button key={i} onClick={() => setActiveImg(i)} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="relative rounded-2xl overflow-hidden transition-all" style={{ aspectRatio: "16/10", outline: activeImg === i ? "2px solid #0d1b2a" : "2px solid transparent", outlineOffset: 2, opacity: activeImg === i ? 1 : 0.55 }}>
+                <button 
+                  key={i} 
+                  onClick={() => setActiveImg(i)} 
+                  className={`relative rounded-xl overflow-hidden transition-all duration-300 border-2 ${activeImg === i ? 'border-[#c9a227] opacity-100' : 'border-transparent opacity-40'}`}
+                  style={{ aspectRatio: "16/10" }}
+                >
                   <img src={img.src} alt={img.label} className="w-full h-full object-cover" />
-                </motion.button>
+                </button>
               ))}
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>
   );
 }
-
-// ─── Water Toys Section ───────────────────────────────────────────────────────
 function WaterToysSection() {
   const [activeImg, setActiveImg] = useState(0);
   const [hoveredToy, setHoveredToy] = useState<number | null>(null);
@@ -1215,83 +1253,118 @@ function WaterToysSection() {
 
   const toys = [
     { icon: Zap, label: "2 SeaDoo Spark Jet Skis", desc: "Twin high-performance personal watercraft", color: "#c9a227" },
-    { icon: Anchor, label: "16' Novurania Jet Drive RIB", desc: "Rigid inflatable tender for island exploration", color: "#3b82f6" },
-    { icon: Waves, label: "Waterskiing, Tubing & Wakeboarding", desc: "Full gear set for aquatic adventure", color: "#14b8a6" },
-    { icon: Compass, label: "Snorkel Sets & Paddle Boards", desc: "Explore beneath and above the surface", color: "#f43f5e" },
+    { icon: Anchor, label: "16' Novurania Jet Drive RIB", desc: "Rigid inflatable tender for island exploration", color: "#c9a227" },
+    { icon: Waves, label: "Waterskiing & Wakeboarding", desc: "Full gear set for aquatic adventure", color: "#c9a227" },
+    { icon: Compass, label: "Snorkel Sets & Paddle Boards", desc: "Explore beneath and above the surface", color: "#c9a227" },
   ];
 
   useEffect(() => {
     const t = setInterval(() => setActiveImg(p => (p + 1) % toyImages.length), 4200);
     return () => clearInterval(t);
-  }, []);
+  }, [toyImages.length]);
 
   return (
-    <section id="water-toys" ref={sectionRef} className="py-16 md:py-28 px-4 md:px-8 lg:px-16 relative overflow-hidden" style={{ background: "#fafaf8" }}>
-      <div className="pointer-events-none absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-60" style={{ background: "radial-gradient(circle, rgba(59,130,246,0.04) 0%, transparent 70%)", transform: "translate(-30%, 30%)" }} />
-      <div className="max-w-7xl mx-auto">
+    <section 
+      id="water-toys" 
+      ref={sectionRef} 
+      className="py-16 md:py-28 px-4 md:px-8 lg:px-16 relative overflow-hidden" 
+      style={{ background: "#051126" }} // Matches the image dark background
+    >
+      {/* Background Texture Overlay */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")" }} />
+      
+      {/* Subtle Blue/Gold Glow */}
+      <div className="pointer-events-none absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-40" style={{ background: "radial-gradient(circle, rgba(201,162,39,0.05) 0%, transparent 70%)", transform: "translate(-30%, 30%)" }} />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-24 items-center">
+          
+          {/* Image Gallery Side */}
           <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -40 }} transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }} className="relative">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: "16/10" }}>
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5" style={{ aspectRatio: "16/10" }}>
               <AnimatePresence mode="wait">
-                <motion.img key={activeImg} src={toyImages[activeImg].src} alt={toyImages[activeImg].label} initial={{ opacity: 0, scale: 1.06 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.6 }} className="w-full h-full object-cover" />
+                <motion.img key={activeImg} src={toyImages[activeImg].src} alt={toyImages[activeImg].label} initial={{ opacity: 0, scale: 1.06 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="w-full h-full object-cover" />
               </AnimatePresence>
-              <div className="absolute bottom-4 left-4 px-3 py-1.5 rounded-full" style={{ background: "rgba(13,27,42,0.75)", backdropFilter: "blur(10px)" }}>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-white/80">{toyImages[activeImg].label}</span>
+              
+              <div className="absolute bottom-4 left-4 px-4 py-2 rounded-xl" style={{ background: "rgba(5, 10, 16, 0.75)", backdropFilter: "blur(12px)" }}>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">{toyImages[activeImg].label}</span>
               </div>
-              <button onClick={() => setActiveImg(p => (p - 1 + toyImages.length) % toyImages.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center hover:scale-110 transition-all" style={{ background: "rgba(13,27,42,0.6)", backdropFilter: "blur(8px)" }}>
-                <ChevronLeft className="w-4 h-4 text-white" />
-              </button>
-              <button onClick={() => setActiveImg(p => (p + 1) % toyImages.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center hover:scale-110 transition-all" style={{ background: "rgba(13,27,42,0.6)", backdropFilter: "blur(8px)" }}>
-                <ChevronRight className="w-4 h-4 text-white" />
-              </button>
-              <div className="absolute top-4 right-4 flex gap-1.5">
+              
+              <div className="absolute top-4 right-4 flex gap-2">
                 {toyImages.map((_, i) => (
-                  <motion.button key={i} onClick={() => setActiveImg(i)} animate={{ width: activeImg === i ? 24 : 6, background: activeImg === i ? "#c9a227" : "rgba(255,255,255,0.5)" }} className="h-1.5 rounded-full" />
+                  <motion.button key={i} onClick={() => setActiveImg(i)} animate={{ width: activeImg === i ? 24 : 8, background: activeImg === i ? "#c9a227" : "rgba(255,255,255,0.3)" }} className="h-1 rounded-full" />
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-2 mt-3">
+
+            <div className="grid grid-cols-3 gap-3 mt-4">
               {toyImages.map((img, i) => (
-                <motion.button key={i} onClick={() => setActiveImg(i)} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: "16/10", outline: activeImg === i ? "2px solid #0d1b2a" : "2px solid transparent", outlineOffset: 2, opacity: activeImg === i ? 1 : 0.55 }}>
+                <motion.button 
+                  key={i} 
+                  onClick={() => setActiveImg(i)} 
+                  whileHover={{ scale: 1.03 }} 
+                  className="relative rounded-xl overflow-hidden transition-all" 
+                  style={{ 
+                    aspectRatio: "16/10", 
+                    border: activeImg === i ? "2px solid #c9a227" : "2px solid transparent",
+                    opacity: activeImg === i ? 1 : 0.4 
+                  }}
+                >
                   <img src={img.src} alt={img.label} className="w-full h-full object-cover" />
                 </motion.button>
               ))}
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 40 }} transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}>
+          {/* Text Content Side */}
+          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 40 }} transition={{ duration: 0.8, delay: 0.1 }}>
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-px" style={{ background: "#0d1b2a" }} />
-              <span className="text-[9px] font-bold uppercase tracking-[3px]" style={{ color: "#0d1b2a80" }}>Adventure Meets Luxury</span>
+              <div className="w-8 h-px" style={{ background: "#c9a227" }} />
+              <span className="text-[10px] font-bold uppercase tracking-[4px]" style={{ color: "#c9a227" }}>Onboard Amenities</span>
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl text-gray-900 leading-[1.05] mb-8">
+            
+            <h2 className="font-serif text-4xl md:text-5xl text-white leading-[1.1] mb-8">
               Water Toys<br />
-              <span className="text-gray-500">Included for Your</span><br />
-              <em className="not-italic text-gray-900">Enjoyment</em>
+              <span className="text-white/40 font-light">Included for Your</span><br />
+              <em className="italic" style={{ color: "#c9a227" }}>Enjoyment</em>
             </h2>
-            <div className="space-y-3 mb-8">
+
+            <div className="space-y-3 mb-10">
               {toys.map((toy, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 16 }} transition={{ delay: 0.3 + i * 0.1 }} onMouseEnter={() => setHoveredToy(i)} onMouseLeave={() => setHoveredToy(null)} className="flex items-center gap-4 p-4 rounded-2xl transition-all cursor-default" style={{ background: hoveredToy === i ? `${toy.color}08` : "rgba(0,0,0,0.02)", border: `1px solid ${hoveredToy === i ? toy.color + "25" : "rgba(0,0,0,0.06)"}` }}>
-                  <motion.div animate={{ scale: hoveredToy === i ? 1.15 : 1, rotate: hoveredToy === i ? 5 : 0 }} className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: hoveredToy === i ? `${toy.color}15` : "#f0ede8" }}>
-                    <toy.icon className="w-4 h-4 transition-colors" style={{ color: hoveredToy === i ? toy.color : "#888" }} />
-                  </motion.div>
-                  <div>
-                    <div className="font-semibold text-sm transition-colors" style={{ color: hoveredToy === i ? "#0d1b2a" : "#333" }}>{toy.label}</div>
-                    <div className="text-xs text-gray-400 mt-0.5">{toy.desc}</div>
+                <motion.div 
+                  key={i} 
+                  onMouseEnter={() => setHoveredToy(i)} 
+                  onMouseLeave={() => setHoveredToy(null)} 
+                  className="flex items-center gap-5 p-4 rounded-2xl transition-all border" 
+                  style={{ 
+                    background: hoveredToy === i ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)", 
+                    borderColor: hoveredToy === i ? "rgba(201,162,39,0.3)" : "rgba(255,255,255,0.05)" 
+                  }}
+                >
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: hoveredToy === i ? "rgba(201,162,39,0.15)" : "rgba(255,255,255,0.05)" }}>
+                    <toy.icon className="w-5 h-5 transition-colors" style={{ color: hoveredToy === i ? "#c9a227" : "#666" }} />
                   </div>
-                  <motion.div animate={{ opacity: hoveredToy === i ? 1 : 0, x: hoveredToy === i ? 0 : -6 }} className="ml-auto">
-                    <ArrowUpRight className="w-4 h-4" style={{ color: toy.color }} />
-                  </motion.div>
+                  <div>
+                    <div className="font-bold text-sm text-white">{toy.label}</div>
+                    <div className="text-xs text-white/40 mt-0.5">{toy.desc}</div>
+                  </div>
+                  <ArrowUpRight className="ml-auto w-4 h-4 transition-all opacity-20" style={{ color: "#c9a227", opacity: hoveredToy === i ? 1 : 0.2 }} />
                 </motion.div>
               ))}
             </div>
-            <motion.a href="/book" whileHover={{ y: -3, boxShadow: "0 16px 40px rgba(13,27,42,0.25)" }} whileTap={{ scale: 0.96 }} className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold transition-all" style={{ background: "#0d1b2a", color: "#fff" }}>
+
+            <motion.a 
+              href="/book" 
+              whileHover={{ y: -3, backgroundColor: "#dcb641" }} 
+              whileTap={{ scale: 0.96 }} 
+              className="inline-flex items-center gap-3 px-10 py-4 rounded-full text-sm font-bold transition-all shadow-xl shadow-black/40" 
+              style={{ background: "#c9a227", color: "#050a10" }}
+            >
               Plan Your Experience
-              <motion.span animate={{ x: [0, 3, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                <ArrowUpRight className="w-4 h-4" />
-              </motion.span>
+              <ArrowUpRight className="w-4 h-4" />
             </motion.a>
           </motion.div>
+
         </div>
       </div>
     </section>
@@ -1342,37 +1415,163 @@ function RoomDetailModal({ room, onClose }: { room: Room; onClose: () => void })
     </div>
   );
 }
-
-// --- Navbar ---
-function Navbar({ isScrolled, setMobileMenuOpen, openAvail }: { isScrolled: boolean; setMobileMenuOpen: (o: boolean) => void; openAvail: () => void }) {
+function Navbar({
+  isScrolled,
+  isHidden,
+  setMobileMenuOpen,
+  openAvail,
+}: {
+  isScrolled: boolean;
+  isHidden: boolean;
+  setMobileMenuOpen: (o: boolean) => void;
+  openAvail: () => void;
+}) {
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 px-6 md:px-16 ${isScrolled ? "bg-navy/90 backdrop-blur-2xl py-4 shadow-xl" : "py-8"}`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 px-6 md:px-16 overflow-visible ${
+        isScrolled
+          ? "bg-navy/90 backdrop-blur-2xl py-4 shadow-xl"
+          : "py-8"
+      } ${
+        isHidden
+          ? "-translate-y-full opacity-0 pointer-events-none"
+          : "translate-y-0 opacity-100"
+      }`}
+    >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <a href="#" className="flex items-center gap-3 group">
-            <img src="assets/logo.png" alt="Serendipity Logo" className="h-14 md:h-20 w-auto group-hover:scale-105 transition-transform" />
+
+        {/* LEFT (LOGO ONLY NOW) */}
+        <div className="flex items-center flex-shrink-0">
+          <a href="#" className="group">
+            <img
+              src="assets/logo.png"
+              alt="Logo"
+              className="h-10 md:h-16 lg:h-20 w-auto group-hover:scale-105 transition-transform"
+            />
           </a>
-          <button onClick={openAvail} className="hidden xl:flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-gold/30 hover:bg-white/10 transition-all cursor-pointer group/avail">
-            <div className="w-2 h-2 rounded-full bg-green-500 relative">
-              <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse opacity-70" />
+        </div>
+
+        {/* CENTER NAV */}
+        <div className="hidden lg:flex items-center gap-6 xl:gap-10 flex-nowrap overflow-visible">
+
+          <a
+            href="#vessel-specifications"
+            className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
+          >
+            Vessel Specifications
+          </a>
+
+          <a
+            href="#accommodations"
+            className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
+          >
+            Accommodations
+          </a>
+
+          <a
+            href="#private-experiences"
+            className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
+          >
+            Private Experiences
+          </a>
+
+          <a
+            href="#corporate-experiences"
+            className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
+          >
+            Corporate Experiences
+          </a>
+
+          <a
+            href="#destinations"
+            className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
+          >
+            Destinations
+          </a>
+
+          {/* EXPLORE DROPDOWN */}
+          <div className="relative group z-50">
+
+            <button className="flex items-center gap-1 whitespace-nowrap text-white/70 hover:text-white transition">
+              Explore
+              <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform" />
+            </button>
+
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-navy-light/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden py-2">
+
+              {/* NEW: Live Availability moved here */}
+              <button
+                onClick={openAvail}
+                className="w-full text-left px-5 py-3 whitespace-nowrap text-green-400 hover:bg-white/5 hover:text-green-300 transition"
+              >
+                ● Live Availability
+              </button>
+
+              <a href="#fleet" className="block px-5 py-3 whitespace-nowrap text-white/70 hover:text-gold hover:bg-white/5">
+                Fleet
+              </a>
+
+              <a href="#culinary" className="block px-5 py-3 whitespace-nowrap text-white/70 hover:text-gold hover:bg-white/5">
+                Culinary
+              </a>
+
+              <a href="#mechanical" className="block px-5 py-3 whitespace-nowrap text-white/70 hover:text-gold hover:bg-white/5">
+                Mechanical
+              </a>
+
+              <a href="#reviews" className="block px-5 py-3 whitespace-nowrap text-white/70 hover:text-gold hover:bg-white/5">
+                Reviews
+              </a>
+
             </div>
-            <span className="text-[10px] font-bold text-white/40 tracking-[2px] uppercase group-hover/avail:text-gold transition-colors">Live Availability</span>
-          </button>
+          </div>
+
         </div>
-        <div className="hidden lg:flex items-center gap-1">
-          {["Vessel","Experiences","Accommodations","Fleet","Culinary","Reviews"].map((l) => (
-            <a key={l} href={`#${l.toLowerCase()}`} className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors relative group">
-              {l}
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-gold transition-all duration-300 group-hover:w-1/2" />
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+
+          {/* BOOK NOW */}
+          <div className="relative group z-50">
+
+            <a
+              href="/book"
+              className="flex items-center gap-2 whitespace-nowrap bg-gold px-5 py-2.5 rounded-full text-navy font-bold text-sm hover:translate-y-[-2px] transition shadow-lg shadow-gold/20"
+            >
+              Book Now
+              <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform" />
             </a>
-          ))}
-        </div>
-        <div className="flex items-center gap-4">
-          <a href="#booking" className="hidden md:flex bg-gold px-8 py-3 rounded-full text-navy font-bold text-sm hover:translate-y-[-2px] transition-all shadow-lg shadow-gold/20 hover:shadow-gold/30">Book Now</a>
-          <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden p-2 text-white hover:bg-white/5 rounded-lg transition-colors">
-            <Menu className="w-6 h-6" />
+
+            <div className="absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-black/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+
+              <a
+                href="/reservation"
+                className="block px-4 py-3 whitespace-nowrap text-sm text-gray-800 hover:bg-gray-100"
+              >
+                Reserve
+              </a>
+
+              <a
+                href="#contact"
+                className="block px-4 py-3 whitespace-nowrap text-sm text-gray-800 hover:bg-gray-100"
+              >
+                Inquire
+              </a>
+
+            </div>
+
+          </div>
+
+          {/* MOBILE */}
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="lg:hidden p-2 text-white border border-white/10 rounded-xl hover:bg-white/5"
+          >
+            <Menu className="w-5 h-5" />
           </button>
+
         </div>
+
       </div>
     </nav>
   );
@@ -2114,8 +2313,12 @@ export default function App() {
     <div className="min-h-screen selection:bg-gold selection:text-white">
       <motion.div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gold to-blue-400 z-[10001] origin-left" style={{ scaleX, boxShadow: "0 0 8px rgba(201,162,39,0.5)" }} />
 
-      <Navbar isScrolled={isScrolled} setMobileMenuOpen={setMobileMenuOpen} openAvail={() => setIsAvailOpen(true)} />
-
+      <Navbar
+  isHidden={false}
+  isScrolled={isScrolled}
+  setMobileMenuOpen={setMobileMenuOpen}
+  openAvail={() => setIsAvailOpen(true)}
+/>
       <AnimatePresence>
         {mobileMenuOpen && <MobileMenu setMobileMenuOpen={setMobileMenuOpen} openAvail={() => setIsAvailOpen(true)} />}
       </AnimatePresence>
