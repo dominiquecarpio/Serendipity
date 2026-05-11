@@ -1566,7 +1566,7 @@ function Navbar({
         <div className="hidden lg:flex items-center gap-6 xl:gap-10 flex-nowrap overflow-visible">
 
           <a
-            href="#vessel-specifications"
+            href="#vessel"
             className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
           >
             Vessel Specifications
@@ -1580,14 +1580,14 @@ function Navbar({
           </a>
 
           <a
-            href="#private-experiences"
+            href="#experiences"
             className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
           >
             Private Experiences
           </a>
 
           <a
-            href="#corporate-experiences"
+            href="#experiences"
             className="whitespace-nowrap flex-shrink-0 text-white/70 hover:text-white transition"
           >
             Corporate Experiences
@@ -1617,11 +1617,7 @@ function Navbar({
               >
                 ● Live Availability
               </button>
-
-              <a href="#fleet" className="block px-5 py-3 whitespace-nowrap text-white/70 hover:text-gold hover:bg-white/5">
-                Fleet
-              </a>
-
+              
               <a href="#culinary" className="block px-5 py-3 whitespace-nowrap text-white/70 hover:text-gold hover:bg-white/5">
                 Culinary
               </a>
