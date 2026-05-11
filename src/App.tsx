@@ -921,88 +921,201 @@ function InlineSpecsSection() {
         </div>
       </div>
 
-      {/* CONTENT */}
-      <div className="relative z-10 px-5 md:px-10 py-14">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-[10px] uppercase tracking-[5px] text-[#d4af37]/70 font-bold mb-4">Vessel Specifications</p>
-            <h2 className="text-4xl md:text-6xl font-serif text-white">SERENDIPITY</h2>
-            <p className="text-white/45 mt-5 max-w-2xl mx-auto leading-relaxed">
-              A refined luxury experience designed with timeless elegance, advanced marine engineering, and exceptional onboard comfort.
-            </p>
-          </div>
+     {/* CONTENT */}
+<div className="relative z-10 px-4 sm:px-6 md:px-10 py-10 md:py-14">
+  <div className="max-w-6xl mx-auto">
 
-          {/* TABS */}
-          <div className="flex items-center justify-center gap-3 mb-14">
-            {[{ key: "all", label: "All Specs" }, { key: "flybridge", label: "Flybridge" }].map((tab) => {
-              const active = activeTab === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key as "all" | "flybridge")}
-                  className="rounded-full px-6 py-3 text-[10px] uppercase tracking-[3px] font-bold transition-all duration-300"
+    {/* HEADER */}
+    <div className="text-center mb-10 md:mb-14">
+      <p className="text-[9px] md:text-[10px] uppercase tracking-[4px] md:tracking-[5px] text-[#d4af37]/70 font-bold mb-3 md:mb-4">
+        Vessel Specifications
+      </p>
+
+      <h2 className="text-3xl md:text-6xl font-serif text-white">
+        SERENDIPITY
+      </h2>
+
+      <p className="text-white/45 mt-4 md:mt-5 max-w-2xl mx-auto leading-relaxed text-xs md:text-base px-2">
+        A refined luxury experience designed with timeless elegance, advanced marine engineering, and exceptional onboard comfort.
+      </p>
+    </div>
+
+    {/* TABS (mobile scrollable) */}
+    <div className="flex items-center justify-start md:justify-center gap-2 md:gap-3 mb-10 md:mb-14 overflow-x-auto no-scrollbar px-1">
+      {[
+        { key: "all", label: "All Specs" },
+        { key: "flybridge", label: "Flybridge" },
+      ].map((tab) => {
+        const active = activeTab === tab.key;
+
+        return (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key as "all" | "flybridge")}
+            className="flex-shrink-0 rounded-full px-4 md:px-6 py-2 md:py-3 text-[9px] md:text-[10px] uppercase tracking-[2px] md:tracking-[3px] font-bold transition-all duration-300"
+            style={{
+              background: active
+                ? "rgba(212,175,55,0.14)"
+                : "rgba(255,255,255,0.04)",
+              border: active
+                ? "1px solid rgba(212,175,55,0.55)"
+                : "1px solid rgba(255,255,255,0.08)",
+              color: active ? "#d4af37" : "rgba(255,255,255,0.45)",
+              boxShadow: active
+                ? "0 0 18px rgba(212,175,55,0.18)"
+                : "none",
+            }}
+          >
+            {tab.label}
+          </button>
+        );
+      })}
+    </div>
+
+    <AnimatePresence mode="wait">
+
+      {/* ALL SPECS */}
+      {activeTab === "all" && (
+        <motion.div
+          key="all-specs"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="space-y-10 md:space-y-14"
+        >
+          {specCategories.map((cat, ci) => (
+            <div key={ci}>
+
+              {/* CATEGORY HEADER */}
+              <div className="flex items-center gap-3 md:gap-4 mb-5 md:mb-6">
+                <div
+                  className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full flex-shrink-0"
                   style={{
-                    background: active ? "rgba(212,175,55,0.14)" : "rgba(255,255,255,0.04)",
-                    border: active ? "1px solid rgba(212,175,55,0.55)" : "1px solid rgba(255,255,255,0.08)",
-                    color: active ? "#d4af37" : "rgba(255,255,255,0.45)",
-                    boxShadow: active ? "0 0 24px rgba(212,175,55,0.18)" : "none",
+                    background: cat.color,
+                    boxShadow: `0 0 12px ${cat.color}`,
                   }}
+                />
+                <h3
+                  className="text-[9px] md:text-[11px] uppercase tracking-[3px] md:tracking-[5px] font-bold"
+                  style={{ color: cat.color }}
                 >
-                  {tab.label}
-                </button>
-              );
-            })}
+                  {cat.label}
+                </h3>
+                <div
+                  className="flex-1 h-px"
+                  style={{
+                    background: `linear-gradient(to right, ${cat.color}40, transparent)`,
+                  }}
+                />
+              </div>
+
+              {/* CARDS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+                {cat.specs.map((s, i) => (
+                  <motion.div
+                    key={i}
+                    whileHover={{ y: -3, scale: 1.01 }}
+                    className="group relative overflow-hidden rounded-2xl md:rounded-3xl border border-white/10 p-4 md:p-6"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+                      backdropFilter: "blur(16px)",
+                    }}
+                  >
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background: `radial-gradient(circle at top left, ${cat.color}12 0%, transparent 65%)`,
+                      }}
+                    />
+
+                    <div
+                      className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-5"
+                      style={{
+                        background: `${cat.color}15`,
+                        border: `1px solid ${cat.color}35`,
+                      }}
+                    >
+                      <s.icon
+                        className="w-4 h-4 md:w-5 md:h-5"
+                        style={{ color: cat.color }}
+                      />
+                    </div>
+
+                    <p className="text-[9px] md:text-[10px] uppercase tracking-[2px] md:tracking-[3px] text-white/35 font-bold mb-1 md:mb-2">
+                      {s.label}
+                    </p>
+
+                    <h4 className="text-white text-sm md:text-lg font-semibold leading-snug">
+                      {s.value}
+                    </h4>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      )}
+
+      {/* FLYBRIDGE */}
+      {activeTab === "flybridge" && (
+        <motion.div
+          key="flybridge"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+            <div
+              className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#d4af37] flex-shrink-0"
+              style={{ boxShadow: "0 0 12px rgba(212,175,55,0.8)" }}
+            />
+            <h3 className="text-[9px] md:text-[11px] uppercase tracking-[3px] md:tracking-[5px] font-bold text-[#d4af37]">
+              Flybridge Amenities
+            </h3>
+            <div className="flex-1 h-px bg-gradient-to-r from-[#d4af37]/40 to-transparent" />
           </div>
 
-          <AnimatePresence mode="wait">
-            {activeTab === "all" && (
-              <motion.div key="all-specs" initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -25 }} transition={{ duration: 0.35 }} className="space-y-14">
-                {specCategories.map((cat, ci) => (
-                  <div key={ci}>
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-3 h-3 rounded-full" style={{ background: cat.color, boxShadow: `0 0 18px ${cat.color}` }} />
-                      <h3 className="text-[11px] uppercase tracking-[5px] font-bold" style={{ color: cat.color }}>{cat.label}</h3>
-                      <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${cat.color}40, transparent)` }} />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                      {cat.specs.map((s, i) => (
-                        <motion.div key={i} whileHover={{ y: -4, scale: 1.015 }} className="group relative overflow-hidden rounded-3xl border border-white/10 p-6" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))", backdropFilter: "blur(16px)" }}>
-                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `radial-gradient(circle at top left, ${cat.color}12 0%, transparent 65%)` }} />
-                          <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style={{ background: `${cat.color}15`, border: `1px solid ${cat.color}35` }}>
-                            <s.icon className="w-5 h-5" style={{ color: cat.color }} />
-                          </div>
-                          <p className="text-[10px] uppercase tracking-[3px] text-white/35 font-bold mb-2">{s.label}</p>
-                          <h4 className="text-white text-lg font-semibold leading-snug">{s.value}</h4>
-                        </motion.div>
-                      ))}
-                    </div>
+          <div
+            className="rounded-2xl md:rounded-[32px] border border-[#d4af3720] p-5 md:p-8"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+              backdropFilter: "blur(18px)",
+            }}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 md:gap-y-5 gap-x-6 md:gap-x-10">
+              {flybridgeAmenities.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.02 }}
+                  className="flex items-center gap-3"
+                >
+                  <div
+                    className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center flex-shrink-0"
+                    style={{
+                      background: "rgba(212,175,55,0.12)",
+                      border: "1px solid rgba(212,175,55,0.2)",
+                    }}
+                  >
+                    <Check className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#d4af37]" />
                   </div>
-                ))}
-              </motion.div>
-            )}
 
-            {activeTab === "flybridge" && (
-              <motion.div key="flybridge" initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -25 }} transition={{ duration: 0.35 }}>
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-3 h-3 rounded-full bg-[#d4af37]" style={{ boxShadow: "0 0 18px rgba(212,175,55,0.8)" }} />
-                  <h3 className="text-[11px] uppercase tracking-[5px] font-bold text-[#d4af37]">Flybridge Amenities</h3>
-                  <div className="flex-1 h-px bg-gradient-to-r from-[#d4af37]/40 to-transparent" />
-                </div>
-                <div className="rounded-[32px] border border-[#d4af3720] p-8" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))", backdropFilter: "blur(18px)" }}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
-                    {flybridgeAmenities.map((item, i) => (
-                      <motion.div key={i} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }} className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.2)" }}>
-                          <Check className="w-3.5 h-3.5 text-[#d4af37]" />
-                        </div>
-                        <p className="text-sm text-white/75 font-medium">{item}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <p className="text-xs md:text-sm text-white/75 font-medium">
+                    {item}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+    </AnimatePresence>
 
           {/* CTA */}
           <div className="mt-16 flex justify-center">
