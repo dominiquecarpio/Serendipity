@@ -384,41 +384,64 @@ function CinematicVideoSection() {
     <section
       ref={sectionRef}
       id="vessel"
-      className="relative w-full overflow-hidden bg-black"
-      style={{ height: "100vh" }}
+      className="
+        relative w-full overflow-hidden bg-black
+        flex items-center justify-center
+        py-[15%] md:py-0
+        md:block md:h-screen
+      "
     >
-      <video
-        ref={videoRef}
-        src="/assets/attract_video.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover object-center"
-        style={{
-          ...HD_VIDEO_STYLE,
-          filter: "brightness(1) contrast(1.05) saturate(1.1)",
-        }}
-      />
-      {/* Subtle cinematic gradient */}
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.5) 100%)",
-        }}
-      />
-      {/* Vignette */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.18) 100%)",
-        }}
-      />
-      {/* Bottom label */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
-        <span className="text-[10px] font-bold tracking-[4px] uppercase text-white">Serendipity</span>
-        <div className="w-px h-8 bg-white/40" />
+        className="
+          relative overflow-hidden
+          md:absolute md:inset-0 md:rounded-none md:w-full md:h-full md:aspect-auto
+          w-[92vw] aspect-video rounded-2xl
+        "
+      >
+        <video
+          ref={videoRef}
+          src="/assets/attract_video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="
+            absolute inset-0 w-full h-full
+            md:object-cover
+            object-contain
+          "
+          style={{
+            ...HD_VIDEO_STYLE,
+            filter: "brightness(1) contrast(1.05) saturate(1.1)",
+          }}
+        />
+
+        {/* Subtle cinematic gradient */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.5) 100%)",
+          }}
+        />
+
+        {/* Vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.18) 100%)",
+          }}
+        />
+
+        {/* Bottom label */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
+          <span className="text-[10px] font-bold tracking-[4px] uppercase text-white">
+            Serendipity
+          </span>
+          <div className="w-px h-6 bg-white/40" />
+        </div>
       </div>
     </section>
   );
