@@ -73,8 +73,6 @@ interface HeroSlide {
   line1: string;
   line2: string;
   desc: string;
-  img: string;
-  mobileImg?: string;
   tag: string;
 }
 
@@ -364,89 +362,7 @@ const HD_VIDEO_STYLE: React.CSSProperties = {
   willChange: "transform",
 };
 
-// ─── Section 1: Cinematic Video (attract_video.mp4) ───────────────────────────
-function CinematicVideoSection() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: false, margin: "-10%" });
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (isInView) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [isInView]);
-
-  return (
-    <section
-      ref={sectionRef}
-      id="vessel"
-      className="
-        relative w-full overflow-hidden bg-black
-        flex items-center justify-center
-        py-[15%] md:py-0
-        md:block md:h-screen
-      "
-    >
-      <div
-        className="
-          relative overflow-hidden
-          md:absolute md:inset-0 md:rounded-none md:w-full md:h-full md:aspect-auto
-          w-[92vw] aspect-video rounded-2xl
-        "
-      >
-        <video
-          ref={videoRef}
-          src="/assets/attract_video.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          className="
-            absolute inset-0 w-full h-full
-            md:object-cover
-            object-contain
-          "
-          style={{
-            ...HD_VIDEO_STYLE,
-            filter: "brightness(1) contrast(1.05) saturate(1.1)",
-          }}
-        />
-
-        {/* Subtle cinematic gradient */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.5) 100%)",
-          }}
-        />
-
-        {/* Vignette */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.18) 100%)",
-          }}
-        />
-
-        {/* Bottom label */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
-          <span className="text-[10px] font-bold tracking-[4px] uppercase text-white">
-            Serendipity
-          </span>
-          <div className="w-px h-6 bg-white/40" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
+// ─── Inline Specs Video Section (fast.mp4) ────────────────────────────────────
 function InlineSpecsVideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -455,7 +371,6 @@ function InlineSpecsVideoSection() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
     if (isInView) {
       video.play().catch(() => {});
     } else {
@@ -484,32 +399,17 @@ function InlineSpecsVideoSection() {
             filter: "brightness(1) contrast(1.05) saturate(1.08)",
           }}
         />
-
-        {/* Top fade */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none"
-          style={{
-            height: "120px",
-            background: "linear-gradient(to bottom, #040d1a, transparent)",
-          }}
+          style={{ height: "120px", background: "linear-gradient(to bottom, #040d1a, transparent)" }}
         />
-
-        {/* Bottom fade */}
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{
-            height: "120px",
-            background: "linear-gradient(to top, #040d1a, transparent)",
-          }}
+          style={{ height: "120px", background: "linear-gradient(to top, #040d1a, transparent)" }}
         />
-
-        {/* Vignette */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.15) 100%)",
-          }}
+          style={{ background: "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.15) 100%)" }}
         />
       </div>
     </section>
@@ -854,96 +754,6 @@ function PhotoGalleryCard({ item, onZoom }: { item: PhotoGalleryItem; onZoom: (s
   );
 }
 
-function PhotoScrollColumn({
-  items,
-  speed,
-  direction,
-  topOffset = 0,
-  onZoom,
-}: {
-  items: PhotoGalleryItem[];
-  speed: number;
-  direction: 1 | -1;
-  topOffset?: number;
-  onZoom: (src: string) => void;
-}) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const offsetRef = useRef(0);
-  const rafRef = useRef<number>(0);
-  const pausedRef = useRef(false);
-  const dragRef = useRef<{ startY: number; startOffset: number } | null>(null);
-  const onZoomRef = useRef(onZoom);
-  useEffect(() => { onZoomRef.current = onZoom; }, [onZoom]);
-  const tripled = useMemo(() => [...items, ...items, ...items], [items]);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const oneSetHeight = track.scrollHeight / 3;
-    if (offsetRef.current === 0) { offsetRef.current = oneSetHeight; track.style.transform = `translateY(${-offsetRef.current}px)`; }
-    function loop() {
-      if (!pausedRef.current && dragRef.current === null) {
-        offsetRef.current += speed * direction;
-        if (direction === 1 && offsetRef.current >= oneSetHeight * 2) offsetRef.current -= oneSetHeight;
-        if (direction === -1 && offsetRef.current <= 0) offsetRef.current += oneSetHeight;
-      }
-      track!.style.transform = `translateY(${-offsetRef.current}px)`;
-      rafRef.current = requestAnimationFrame(loop);
-    }
-    rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, direction]);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      if (!dragRef.current || !trackRef.current) return;
-      const delta = dragRef.current.startY - e.clientY;
-      const half = trackRef.current.scrollHeight / 2;
-      let next = dragRef.current.startOffset + delta;
-      if (next > half) next -= half;
-      if (next < 0) next += half;
-      offsetRef.current = next;
-    };
-    const onUp = () => { dragRef.current = null; };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
-  }, []);
-
-  return (
-    <div
-      className="relative overflow-hidden"
-      style={{ height: 680 }}
-      onMouseEnter={() => { pausedRef.current = true; }}
-      onMouseLeave={() => { pausedRef.current = false; dragRef.current = null; }}
-      onMouseDown={(e) => { e.preventDefault(); dragRef.current = { startY: e.clientY, startOffset: offsetRef.current }; }}
-      onTouchStart={(e) => { dragRef.current = { startY: e.touches[0].clientY, startOffset: offsetRef.current }; }}
-      onTouchMove={(e) => {
-        if (!dragRef.current || !trackRef.current) return;
-        const delta = dragRef.current.startY - e.touches[0].clientY;
-        const half = trackRef.current.scrollHeight / 2;
-        let next = dragRef.current.startOffset + delta;
-        if (next > half) next -= half;
-        if (next < 0) next += half;
-        offsetRef.current = next;
-      }}
-      onTouchEnd={() => { dragRef.current = null; }}
-    >
-      <div className="pointer-events-none absolute top-0 left-0 right-0 z-10" style={{ height: 80, background: "linear-gradient(to bottom, #040d1a, transparent)" }} />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10" style={{ height: 80, background: "linear-gradient(to top, #040d1a, transparent)" }} />
-      <div
-        ref={trackRef}
-        className="flex flex-col gap-4 select-none"
-        style={{ marginTop: topOffset, willChange: "transform", cursor: "grab" }}
-      >
-        {tripled.map((item, i) => (
-          <PhotoGalleryCard key={`${item.src}__${i}`} item={item} onZoom={(src) => onZoomRef.current(src)} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function MobileGalleryStrip({ onZoom }: { onZoom: (src: string) => void }) {
   const allImages = [...PHOTO_COL_1, ...PHOTO_COL_2, ...PHOTO_COL_3];
   return (
@@ -1069,7 +879,6 @@ function CharterHighlightsModal({ onClose }: { onClose: () => void }) {
 // ─── Flybridge Section ────────────────────────────────────────────────────────
 function FlybridgeSection({ onTourClick }: { onTourClick: () => void }) {
   const [activeImg, setActiveImg] = useState(0);
-  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
 
@@ -1080,12 +889,10 @@ function FlybridgeSection({ onTourClick }: { onTourClick: () => void }) {
   ];
 
   const features = [
-    { icon: Droplets, text: "Jacuzzi" },
-    { icon: Wind, text: "Sun Lounge" },
-    { icon: Utensils, text: "Dining Deck" },
-    { icon: GlassWater, text: "Wet Bar" },
-    { icon: Speaker, text: "Audio System" },
-    { icon: Zap, text: "LED Ambience" },
+    { icon: Droplets, text: "A hot/cold Jacuzzi" },
+    { icon: Wind, text: "Oversized chaise lounges for sunbathing" },
+    { icon: Utensils, text: "Al fresco dining with ocean views" },
+    { icon: GlassWater, text: "Wet bar for handcrafted cocktails" },
   ];
 
   useEffect(() => {
@@ -1128,7 +935,7 @@ function FlybridgeSection({ onTourClick }: { onTourClick: () => void }) {
               </div>
             </div>
             <p className="text-sm leading-relaxed mb-8 max-w-md text-white/50">
-              Four private suites designed for absolute comfort, privacy, and quiet ocean living with 360° sightlines.
+              This elevated space offers 360° sightlines for exploring the waters between Saint Petersburg, Tampa, and Sarasota. Enjoy breathtaking sunsets and endless views that guarantee lasting memories.
             </p>
             <motion.button
               onClick={onTourClick}
@@ -1196,24 +1003,61 @@ function FlybridgeSection({ onTourClick }: { onTourClick: () => void }) {
 function WaterToysSection() {
   const [activeImg, setActiveImg] = useState(0);
   const [hoveredToy, setHoveredToy] = useState<number | null>(null);
+
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+
+  const isInView = useInView(sectionRef, {
+    once: true,
+    margin: "-80px",
+  });
 
   const toyImages = [
-    { src: "assets/occasion3.png", label: "Jet Ski Launch" },
-    { src: "assets/occasion2.png", label: "Al Fresco on the Water" },
-    { src: "assets/occasion1.png", label: "Full Vessel" },
+    {
+      src: "assets/occasion3.png",
+      label: "Jet Ski Launch",
+    },
+    {
+      src: "assets/occasion2.png",
+      label: "Al Fresco on the Water",
+    },
+    {
+      src: "assets/occasion1.png",
+      label: "Full Vessel",
+    },
   ];
 
   const toys = [
-    { icon: Zap, label: "2 SeaDoo Spark Jet Skis", desc: "Twin high-performance personal watercraft", color: "#c9a227" },
-    { icon: Anchor, label: "16' Novurania Jet Drive RIB", desc: "Rigid inflatable tender for island exploration", color: "#c9a227" },
-    { icon: Waves, label: "Waterskiing & Wakeboarding", desc: "Full gear set for aquatic adventure", color: "#c9a227" },
-    { icon: Compass, label: "Snorkel Sets & Paddle Boards", desc: "Explore beneath and above the surface", color: "#c9a227" },
+    {
+      icon: Zap,
+      label: "2 SeaDoo Spark jet skis",
+      desc: "Twin high-performance personal watercraft",
+      color: "#c9a227",
+    },
+    {
+      icon: Anchor,
+      label: "16’ Novurania Jet Drive RIB",
+      desc: "Rigid inflatable tender for island exploration",
+      color: "#c9a227",
+    },
+    {
+      icon: Waves,
+      label: "Waterskiing, tubing & wakeboarding gear",
+      desc: "Full gear set for aquatic adventure",
+      color: "#c9a227",
+    },
+    {
+      icon: Compass,
+      label: "Snorkel sets & paddle boards",
+      desc: "Explore beneath and above the surface",
+      color: "#c9a227",
+    },
   ];
 
   useEffect(() => {
-    const t = setInterval(() => setActiveImg((p) => (p + 1) % toyImages.length), 4200);
+    const t = setInterval(() => {
+      setActiveImg((p) => (p + 1) % toyImages.length);
+    }, 4200);
+
     return () => clearInterval(t);
   }, [toyImages.length]);
 
@@ -1224,10 +1068,81 @@ function WaterToysSection() {
       className="py-16 md:py-28 px-4 md:px-8 lg:px-16 relative overflow-hidden"
       style={{ background: "#051126" }}
     >
+      {/* background glow */}
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          background:
+            "radial-gradient(circle at top right, rgba(201,162,39,0.25), transparent 35%)",
+        }}
+      />
+
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* ───────────────── HEADER ───────────────── */}
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{
+              opacity: isInView ? 1 : 0,
+              y: isInView ? 0 : 30,
+            }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="font-serif text-4xl md:text-5xl text-white leading-[1.05]">
+              Water Toys
+              <br />
+
+              <span className="text-white/40 font-light">
+                Included for Your
+              </span>
+
+              <br />
+
+              <em
+                className="italic"
+                style={{ color: "#c9a227" }}
+              >
+                Enjoyment
+              </em>
+            </h2>
+          </motion.div>
+
+          {/* right text */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{
+              opacity: isInView ? 1 : 0,
+              y: isInView ? 0 : 20,
+            }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="lg:max-w-[320px] lg:pt-2"
+          >
+            <p className="text-white/45 text-sm md:text-[15px] leading-relaxed lg:text-right">
+              Adventure meets luxury with a full suite of
+              water sports gear:
+            </p>
+          </motion.div>
+        </div>
+
+        {/* ───────────────── MAIN CONTENT ───────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-24 items-center">
-          <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -40 }} transition={{ duration: 0.8 }} className="relative">
-            <div className="relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5" style={{ aspectRatio: "16/10" }}>
+          {/* ───────────────── LEFT IMAGE AREA ───────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{
+              opacity: isInView ? 1 : 0,
+              x: isInView ? 0 : -40,
+            }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            {/* MAIN IMAGE */}
+            <div
+              className="relative rounded-3xl overflow-hidden
+              shadow-[0_25px_60px_rgba(0,0,0,0.55)]
+              border border-white/5"
+              style={{ aspectRatio: "16/10" }}
+            >
               <AnimatePresence mode="wait">
                 <motion.img
                   key={activeImg}
@@ -1240,76 +1155,195 @@ function WaterToysSection() {
                   className="w-full h-full object-cover"
                 />
               </AnimatePresence>
-              <div className="absolute bottom-4 left-4 px-4 py-2 rounded-xl" style={{ background: "rgba(5, 10, 16, 0.75)", backdropFilter: "blur(12px)" }}>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">{toyImages[activeImg].label}</span>
+
+              {/* overlay */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(0,0,0,0.45), transparent 45%)",
+                }}
+              />
+
+              {/* label */}
+              <div
+                className="absolute bottom-5 left-5 px-4 py-2 rounded-xl"
+                style={{
+                  background: "rgba(5, 10, 16, 0.75)",
+                  backdropFilter: "blur(12px)",
+                }}
+              >
+                <span className="text-[10px] font-bold uppercase tracking-[3px] text-white/90">
+                  {toyImages[activeImg].label}
+                </span>
               </div>
-              <div className="absolute top-4 right-4 flex gap-2">
+
+              {/* indicators */}
+              <div className="absolute top-5 right-5 flex gap-2">
                 {toyImages.map((_, i) => (
                   <motion.button
                     key={i}
                     onClick={() => setActiveImg(i)}
-                    animate={{ width: activeImg === i ? 24 : 8, background: activeImg === i ? "#c9a227" : "rgba(255,255,255,0.3)" }}
-                    className="h-1 rounded-full"
+                    animate={{
+                      width: activeImg === i ? 24 : 8,
+                      background:
+                        activeImg === i
+                          ? "#c9a227"
+                          : "rgba(255,255,255,0.35)",
+                    }}
+                    className="h-1 rounded-full transition-all"
                   />
                 ))}
               </div>
             </div>
+
+            {/* THUMBNAILS */}
             <div className="grid grid-cols-3 gap-3 mt-4">
               {toyImages.map((img, i) => (
                 <motion.button
                   key={i}
                   onClick={() => setActiveImg(i)}
                   whileHover={{ scale: 1.03 }}
-                  className="relative rounded-xl overflow-hidden transition-all"
-                  style={{ aspectRatio: "16/10", border: activeImg === i ? "2px solid #c9a227" : "2px solid transparent", opacity: activeImg === i ? 1 : 0.4 }}
+                  className="relative rounded-2xl overflow-hidden transition-all"
+                  style={{
+                    aspectRatio: "16/10",
+                    border:
+                      activeImg === i
+                        ? "2px solid #c9a227"
+                        : "2px solid transparent",
+                    opacity: activeImg === i ? 1 : 0.45,
+                  }}
                 >
-                  <img src={img.src} alt={img.label} className="w-full h-full object-cover" />
+                  <img
+                    src={img.src}
+                    alt={img.label}
+                    className="w-full h-full object-cover"
+                  />
+
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        activeImg === i
+                          ? "transparent"
+                          : "rgba(0,0,0,0.25)",
+                    }}
+                  />
                 </motion.button>
               ))}
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 40 }} transition={{ duration: 0.8, delay: 0.1 }}>
+          {/* ───────────────── RIGHT CONTENT ───────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{
+              opacity: isInView ? 1 : 0,
+              x: isInView ? 0 : 40,
+            }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            {/* amenities label */}
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-px" style={{ background: "#c9a227" }} />
-              <span className="text-[10px] font-bold uppercase tracking-[4px]" style={{ color: "#c9a227" }}>Onboard Amenities</span>
+              <div
+                className="w-8 h-px"
+                style={{ background: "#c9a227" }}
+              />
+
+              <span
+                className="text-[10px] font-bold uppercase tracking-[4px]"
+                style={{ color: "#c9a227" }}
+              >
+                Onboard Amenities
+              </span>
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl text-white leading-[1.1] mb-8">
-              Water Toys<br />
-              <span className="text-white/40 font-light">Included for Your</span><br />
-              <em className="italic" style={{ color: "#c9a227" }}>Enjoyment</em>
-            </h2>
+
+            {/* list */}
             <div className="space-y-3 mb-10">
               {toys.map((toy, i) => (
                 <motion.div
                   key={i}
                   onMouseEnter={() => setHoveredToy(i)}
                   onMouseLeave={() => setHoveredToy(null)}
+                  whileHover={{ x: 5 }}
                   className="flex items-center gap-5 p-4 rounded-2xl transition-all border"
                   style={{
-                    background: hoveredToy === i ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)",
-                    borderColor: hoveredToy === i ? "rgba(201,162,39,0.3)" : "rgba(255,255,255,0.05)",
+                    background:
+                      hoveredToy === i
+                        ? "rgba(255,255,255,0.05)"
+                        : "rgba(255,255,255,0.02)",
+
+                    borderColor:
+                      hoveredToy === i
+                        ? "rgba(201,162,39,0.3)"
+                        : "rgba(255,255,255,0.05)",
                   }}
                 >
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: hoveredToy === i ? "rgba(201,162,39,0.15)" : "rgba(255,255,255,0.05)" }}>
-                    <toy.icon className="w-5 h-5 transition-colors" style={{ color: hoveredToy === i ? "#c9a227" : "#666" }} />
+                  {/* icon */}
+                  <div
+                    className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
+                    style={{
+                      background:
+                        hoveredToy === i
+                          ? "rgba(201,162,39,0.15)"
+                          : "rgba(255,255,255,0.05)",
+                    }}
+                  >
+                    <toy.icon
+                      className="w-5 h-5 transition-colors"
+                      style={{
+                        color:
+                          hoveredToy === i
+                            ? "#c9a227"
+                            : "#666",
+                      }}
+                    />
                   </div>
-                  <div>
-                    <div className="font-bold text-sm text-white">{toy.label}</div>
-                    <div className="text-xs text-white/40 mt-0.5">{toy.desc}</div>
+
+                  {/* text */}
+                  <div className="flex-1">
+                    <div className="font-bold text-sm text-white">
+                      {toy.label}
+                    </div>
+
+                    <div className="text-xs text-white/40 mt-0.5">
+                      {toy.desc}
+                    </div>
                   </div>
-                  <ArrowUpRight className="ml-auto w-4 h-4 transition-all" style={{ color: "#c9a227", opacity: hoveredToy === i ? 1 : 0.2 }} />
+
+                  {/* arrow */}
+                  <ArrowUpRight
+                    className="ml-auto w-4 h-4 transition-all"
+                    style={{
+                      color: "#c9a227",
+                      opacity: hoveredToy === i ? 1 : 0.2,
+                    }}
+                  />
                 </motion.div>
               ))}
             </div>
+
+            {/* description */}
+            <p className="text-white/45 text-sm md:text-[15px] leading-relaxed mb-8 max-w-lg">
+              Whether anchored at Egmont Key, cruising near Longboat
+              Pass, or playing off the shores of St. Pete Beach, the
+              Serendipity experience ensures you’re always ready for
+              adventure.
+            </p>
+
+            {/* CTA */}
             <motion.a
               href="/book"
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.96 }}
               className="inline-flex items-center gap-3 px-10 py-4 rounded-full text-sm font-bold transition-all shadow-xl shadow-black/40"
-              style={{ background: "#c9a227", color: "#050a10" }}
+              style={{
+                background: "#c9a227",
+                color: "#050a10",
+              }}
             >
               Plan Your Experience
+
               <ArrowUpRight className="w-4 h-4" />
             </motion.a>
           </motion.div>
@@ -1521,7 +1555,8 @@ function MobileMenu({ setMobileMenuOpen, openAvail }: { setMobileMenuOpen: (o: b
   );
 }
 
-// ─── Hero Section ─────────────────────────────────────────────────────────────
+// ─── Hero Section — Video background with slide text overlay ──────────────────
+// The video plays continuously. Only the text/content animates between slides.
 function Hero({
   heroIdx,
   setHeroIdx,
@@ -1535,96 +1570,219 @@ function Hero({
   openVideo: () => void;
   openRoute: () => void;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {});
+  }, []);
+
   const slides: HeroSlide[] = [
-    { line1: "Your Gulf Coast", line2: "Escape Awaits", desc: "Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.", img: "assets/hero1.png", mobileImg: "assets/hero1port.png", tag: "Saint Petersburg, FL" },
-    { line1: "Experience", line2: "Pure Luxury", desc: "Discover breathtaking views and world-class comfort on Florida's Gulf Coast.", img: "assets/hero2.png", mobileImg: "assets/hero2port.png", tag: "Tampa Bay, FL" },
-    { line1: "Make Memories", line2: "at Sea", desc: "Unforgettable moments aboard our expertly remodeled luxury yacht.", img: "assets/hero3.png", tag: "Gulf Coast, FL" },
+    {
+      line1: "Your Gulf Coast",
+      line2: "Escape Awaits",
+      desc: "Reserve our luxury 94' Lazzara yacht for charter in St Pete / Tampa Bay.",
+      tag: "Saint Petersburg, FL",
+    },
+    {
+      line1: "Experience",
+      line2: "Pure Luxury",
+      desc: "Discover breathtaking views and world-class comfort on Florida's Gulf Coast.",
+      tag: "Tampa Bay, FL",
+    },
+    {
+      line1: "Make Memories",
+      line2: "at Sea",
+      desc: "Unforgettable moments aboard our expertly remodeled luxury yacht.",
+      tag: "Gulf Coast, FL",
+    },
   ];
 
   return (
-    <section id="home" className="relative h-[100svh] min-h-[600px] overflow-hidden">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={heroIdx}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute inset-0"
-        >
-          <picture>
-            <source media="(max-width: 1023px)" srcSet={slides[heroIdx].mobileImg ?? slides[heroIdx].img} />
-            <img src={slides[heroIdx].img} className="w-full h-full object-cover object-top" alt="" />
-          </picture>
-          <div className="absolute inset-0 bg-gradient-to-b from-navy/50 via-navy/20 to-navy" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/80 to-transparent" />
-        </motion.div>
-      </AnimatePresence>
+    <section
+      id="home"
+      className="relative h-[68svh] md:h-[100svh] min-h-[420px] overflow-hidden"
+    >
+      {/* ── VIDEO BACKGROUND ── */}
+      <div className="absolute inset-0 z-0">
+        <video
+          ref={videoRef}
+          src="/assets/attract_video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover scale-[1.18] md:scale-100"
+          style={{
+            ...HD_VIDEO_STYLE,
+            filter: "brightness(0.72) contrast(1.05) saturate(1.1)",
+          }}
+        />
+      </div>
 
-      {/* Mobile hero content */}
+      {/* ───────────────────────── MOBILE ───────────────────────── */}
       <div className="lg:hidden relative h-full flex flex-col justify-end z-10">
-        <div className="px-5 pb-4">
-          <motion.div key={heroIdx + "mobile"} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <div className="flex items-center gap-2 mb-4"><MapPin className="w-3 h-3 text-gold" /><span className="text-[10px] font-bold tracking-[2px] uppercase text-gold">{slides[heroIdx].tag}</span></div>
-            <h1 className="text-[32px] font-serif leading-[1.08] tracking-tight mb-3">
-              {slides[heroIdx].line1}<br />
-              <em className="text-gold italic font-serif">{slides[heroIdx].line2}</em>
+        <div className="px-2 pb-0.5">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={heroIdx + "mobile"}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25 }}
+            >
+              {/* TAG */}
+              <div className="flex items-center gap-1.5 mb-1">
+                <MapPin className="w-2 h-2 text-gold" />
+                <span className="text-[8px] font-bold tracking-[2px] uppercase text-gold">
+                  {slides[heroIdx].tag}
+                </span>
+              </div>
+
+              {/* TITLE */}
+              <h1 className="text-[20px] font-serif leading-[1.02] tracking-tight mb-1">
+                {slides[heroIdx].line1}
+                <br />
+                <em className="text-gold italic font-serif">
+                  {slides[heroIdx].line2}
+                </em>
+              </h1>
+
+              {/* DESC */}
+              <p className="text-[10px] text-white/65 mb-1.5 leading-snug max-w-[220px]">
+                {slides[heroIdx].desc}
+              </p>
+
+              {/* BUTTONS */}
+              <div className="flex gap-1.5 mb-1.5">
+                <a
+                  href="/book"
+                  className="flex-1 flex items-center justify-center gap-1 py-2 rounded-md bg-gold text-navy font-bold text-[10px] shadow-sm shadow-gold/20"
+                >
+                  Book <ArrowUpRight className="w-3 h-3" />
+                </a>
+
+                <button
+                  onClick={openVideo}
+                  className="w-8 h-8 rounded-md border border-white/20 flex items-center justify-center bg-white/10 backdrop-blur-md"
+                >
+                  <Play className="w-3 h-3 fill-current text-white" />
+                </button>
+              </div>
+
+              {/* STATS */}
+              <div
+                className="rounded-md overflow-hidden mb-0.5"
+                style={{
+                  background: "rgba(4,13,26,0.72)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                <MobileHeroStats />
+              </div>
+
+              <MobileQuickActions
+                openAvail={openAvail}
+                openVideo={openVideo}
+                openRoute={openRoute}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* MOBILE DOTS */}
+        <div className="flex justify-center gap-1.5 pb-7 pt-1">
+          {[0, 1, 2].map((i) => (
+            <button
+              key={i}
+              onClick={() => setHeroIdx(i)}
+              className={`h-1 rounded-full transition-all duration-300 ${
+                heroIdx === i ? "w-4 bg-gold" : "w-1.5 bg-white/20"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ───────────────────────── DESKTOP ───────────────────────── */}
+      <div className="hidden lg:flex relative h-full max-w-7xl mx-auto px-16 flex-col justify-end pb-32 z-10">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={heroIdx + "desktop"}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+            className="max-w-4xl"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">
+                {slides[heroIdx].tag}
+              </span>
+            </div>
+
+            <h1 className="text-[62px] font-serif leading-[1.08] tracking-tight mb-6">
+              {slides[heroIdx].line1}
+              <br />
+              <em className="text-gold italic font-serif">
+                {slides[heroIdx].line2}
+              </em>
             </h1>
-            <p className="text-sm text-white/65 mb-5 leading-relaxed max-w-xs">{slides[heroIdx].desc}</p>
-            <div className="flex gap-3 mb-5">
-              <a href="/book" className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gold text-navy font-bold text-sm shadow-lg shadow-gold/25">Book Now <ArrowUpRight className="w-4 h-4" /></a>
-              <button onClick={openVideo} className="w-12 h-12 rounded-2xl border border-white/20 flex items-center justify-center bg-white/10 backdrop-blur-md flex-shrink-0">
-                <Play className="w-4 h-4 fill-current text-white ml-0.5" />
+
+            <p className="text-xl text-white/70 mb-10 leading-relaxed max-w-lg">
+              {slides[heroIdx].desc}
+            </p>
+
+            <div className="flex gap-6 items-center">
+              <a
+                href="/book"
+                className="bg-gold px-10 py-5 rounded-full text-navy font-bold text-base hover:translate-y-[-3px] transition-all flex items-center gap-2 shadow-xl shadow-gold/20"
+              >
+                Book Now <ArrowUpRight className="w-5 h-5" />
+              </a>
+
+              <button
+                onClick={openVideo}
+                className="flex items-center gap-4 text-white hover:text-gold transition-all group"
+              >
+                <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold group-hover:bg-gold transition-all">
+                  <Play className="w-5 h-5 fill-current ml-1" />
+                </div>
+                <span className="font-bold tracking-widest text-sm uppercase">
+                  Watch Experience
+                </span>
               </button>
             </div>
-            <div className="rounded-2xl overflow-hidden mb-4" style={{ background: "rgba(4,13,26,0.7)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <MobileHeroStats />
-            </div>
-            <MobileQuickActions openAvail={openAvail} openVideo={openVideo} openRoute={openRoute} />
           </motion.div>
-        </div>
-        <div className="flex justify-center gap-2 pb-24 pt-3">
-          {[0, 1, 2].map((i) => (<button key={i} onClick={() => setHeroIdx(i)} className={`h-1.5 rounded-full transition-all duration-500 ${heroIdx === i ? "w-8 bg-gold" : "w-2.5 bg-white/20"}`} />))}
-        </div>
+        </AnimatePresence>
       </div>
 
-      {/* Desktop hero content */}
-      <div className="hidden lg:flex relative h-full max-w-7xl mx-auto px-16 flex-col justify-end pb-32 z-10">
-        <motion.div key={heroIdx + "desktop"} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="max-w-4xl">
-          <div className="flex items-center gap-3 mb-6"><span className="text-xs font-bold tracking-[2.5px] uppercase text-gold">{slides[heroIdx].tag}</span></div>
-          <h1 className="text-[62px] font-serif leading-[1.08] tracking-tight mb-6">
-            {slides[heroIdx].line1}<br />
-            <em className="text-gold italic font-serif">{slides[heroIdx].line2}</em>
-          </h1>
-          <p className="text-xl text-white/70 mb-10 leading-relaxed max-w-lg">{slides[heroIdx].desc}</p>
-          <div className="flex gap-6 items-center">
-            <a href="/book" className="bg-gold px-10 py-5 rounded-full text-navy font-bold text-base hover:translate-y-[-3px] transition-all flex items-center gap-2 shadow-xl shadow-gold/20">Book Now <ArrowUpRight className="w-5 h-5" /></a>
-            <button onClick={openVideo} className="flex items-center gap-4 text-white hover:text-gold transition-all group">
-              <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold group-hover:bg-gold transition-all">
-                <Play className="w-5 h-5 fill-current ml-1" />
-              </div>
-              <span className="font-bold tracking-widest text-sm uppercase">Watch Experience</span>
-            </button>
-          </div>
-        </motion.div>
+      {/* ── DESKTOP RIGHT SIDE NAV (RESTORED) ── */}
+      <div className="hidden lg:flex absolute right-16 bottom-40 flex-col gap-3 z-10">
+        {[0, 1, 2].map((i) => (
+          <button
+            key={i}
+            onClick={() => setHeroIdx(i)}
+            className={`w-2.5 transition-all duration-500 ${
+              heroIdx === i
+                ? "h-10 bg-gold rounded-md"
+                : "h-2.5 bg-white/20 rounded-full hover:bg-white/40"
+            }`}
+          />
+        ))}
       </div>
 
-      {/* Scroll indicator */}
-      <div className="hidden lg:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 opacity-40 animate-bounce">
+      {/* ── SCROLL INDICATOR (RESTORED) ── */}
+      <div className="hidden lg:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 opacity-40 animate-bounce z-10">
         <span className="text-[10px] tracking-[2px] uppercase">Scroll</span>
         <ChevronLeft className="w-5 h-5 -rotate-90" />
-      </div>
-
-      {/* Desktop slide dots */}
-      <div className="hidden lg:flex absolute right-16 bottom-40 flex-col gap-3">
-        {[0, 1, 2].map((i) => (
-          <button key={i} onClick={() => setHeroIdx(i)} className={`w-2.5 transition-all duration-500 ${heroIdx === i ? "h-10 bg-gold rounded-md" : "h-2.5 bg-white/20 rounded-full hover:bg-white/40"}`} />
-        ))}
       </div>
     </section>
   );
 }
-
 // ─── Experiences Section ──────────────────────────────────────────────────────
 function ExperiencesSection({ openExp }: { openExp: (e: Experience) => void }) {
   const [idx, setIdx] = useState(EXPERIENCES.length);
@@ -2500,44 +2658,47 @@ export default function App() {
 
       <MobileBottomNav openAvail={() => setIsAvailOpen(true)} />
 
-      {/* ── HERO ── */}
-      <Hero heroIdx={heroIdx} setHeroIdx={setHeroIdx} openAvail={() => setIsAvailOpen(true)} openVideo={() => setIsVideoOpen(true)} openRoute={() => setIsRouteOpen(true)} />
+      {/* ── HERO — video plays as the background, text slides over it ── */}
+      <Hero
+        heroIdx={heroIdx}
+        setHeroIdx={setHeroIdx}
+        openAvail={() => setIsAvailOpen(true)}
+        openVideo={() => setIsVideoOpen(true)}
+        openRoute={() => setIsRouteOpen(true)}
+      />
 
       <main>
-        {/* 1. Video — attract_video.mp4 (full viewport, HD) */}
-        <CinematicVideoSection />
-
-        {/* 2. Accommodations */}
+        {/* 1. Accommodations */}
         <AccommodationsSection openRoom={setSelectedRoom} openGalleryInterior={() => openGalleryWithTab("interior")} />
 
-        {/* 3. 3D Video — fast.mp4 (full viewport, HD) */}
+        {/* 2. Specs Video — fast.mp4 */}
         <InlineSpecsVideoSection />
 
-        {/* 4. A Floating Resort — 3D Carousel Experiences */}
+        {/* 3. A Floating Resort — 3D Carousel Experiences */}
         <ExperiencesSection openExp={setSelectedExp} />
 
-        {/* 5. Flybridge */}
+        {/* 4. Flybridge */}
         <FlybridgeSection onTourClick={() => setIsCharterHighlightsOpen(true)} />
 
-        {/* 6. Water Toys */}
+        {/* 5. Water Toys */}
         <WaterToysSection />
 
-        {/* 7. Culinary */}
+        {/* 6. Culinary */}
         <CulinarySection />
 
-        {/* 8. Choose Great Day Destinations */}
+        {/* 7. Choose Great Day Destinations */}
         <DestinationsSection />
 
-        {/* 9. Specs / Pricing */}
+        {/* 8. Specs / Pricing */}
         <PricingSection />
 
-        {/* 10. Mechanical */}
+        {/* 9. Mechanical */}
         <MechanicalSection />
 
-        {/* 11. Reviews */}
+        {/* 10. Reviews */}
         <ReviewsSection />
 
-        {/* 12. Inquiry / Contact */}
+        {/* 11. Inquiry / Contact */}
         <InquirySection addToast={addToast} />
       </main>
 
