@@ -494,18 +494,18 @@ function MobileHeroStats() {
     { val: "20+", label: "Spots" },
   ];
   return (
-    <div className="flex items-center overflow-x-auto gap-0 scrollbar-hide" style={{ scrollSnapType: "x mandatory" }}>
-      {stats.map((s, i) => (
-        <div
-          key={i}
-          className="flex-shrink-0 flex flex-col items-center px-5 py-3"
+ <div className="flex items-center justify-between scrollbar-hide">
+  {stats.map((s, i) => (
+    <div
+      key={i}
+      className="flex-1 flex flex-col items-center px-1 py-2"
           style={{
             scrollSnapAlign: "start",
             borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
           }}
         >
-          <span className="text-lg text-gold font-bold leading-none">{s.val}</span>
-          <span className="text-[9px] uppercase tracking-[1.5px] text-white/40 mt-1">{s.label}</span>
+          <span className="text-sm text-gold font-bold leading-none">{s.val}</span>
+          <span className="text-[8px] uppercase tracking-[1px] text-white/40 mt-0.5">{s.label}</span>
         </div>
       ))}
     </div>
@@ -527,19 +527,19 @@ function MobileQuickActions({
     { label: "View Route", icon: Compass, action: openRoute, color: "rgba(255,255,255,0.06)", textColor: "rgba(255,255,255,0.7)" },
   ];
   return (
-    <div className="flex gap-2 px-4 mt-4">
+    <div className="flex gap-1.5 px-0 mt-2">
       {actions.map((a, i) => (
         <motion.button
           key={i}
           whileTap={{ scale: 0.94 }}
           onClick={a.action}
-          className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-2xl border"
+          className="flex-1 flex flex-col items-center gap-1 py-2 rounded-xl border"
           style={{
             background: a.color,
             borderColor: a.textColor === "#c9a227" ? "rgba(201,162,39,0.3)" : "rgba(255,255,255,0.08)",
           }}
         >
-          <a.icon className="w-4 h-4" style={{ color: a.textColor }} />
+          <a.icon className="w-3 h-3" style={{ color: a.textColor }} />
           <span className="text-[10px] font-bold tracking-wide" style={{ color: a.textColor }}>
             {a.label}
           </span>
@@ -1602,7 +1602,7 @@ function Hero({
   return (
     <section
       id="home"
-      className="relative h-[68svh] md:h-[100svh] min-h-[420px] overflow-hidden"
+      className="relative h-[51svh] md:h-[100svh] min-h-[320px] overflow-hidden"
     >
       {/* ── VIDEO BACKGROUND ── */}
       <div className="absolute inset-0 z-0">
@@ -1659,7 +1659,7 @@ function Hero({
               <div className="flex gap-1.5 mb-1.5">
                 <a
                   href="/book"
-                  className="flex-1 flex items-center justify-center gap-1 py-2 rounded-md bg-gold text-navy font-bold text-[10px] shadow-sm shadow-gold/20"
+                  className="w-24 flex items-center justify-center gap-1 py-1.5 rounded-md bg-gold text-navy font-bold text-[10px] shadow-sm shadow-gold/20"
                 >
                   Book <ArrowUpRight className="w-3 h-3" />
                 </a>
