@@ -62,6 +62,8 @@ const CHARTER_POLICIES = [
   "Special events (NYE, July 4th, etc.) may require higher minimum",
 ];
 
+const HERO_VIDEO = "assets/attract_video.mp4";
+
 const VESSEL_IMAGES = [
   "assets/occasion1.png",
   "assets/occasion2.png",
@@ -116,7 +118,7 @@ export default function ReservationPage() {
   const vesselName = getInitialVesselName();
 
   // Sync active image when URL changes (e.g. back-forward)
-  useEffect(() => {
+  useEffect(() => {   
     setActiveImg(getInitialImageIndex());
   }, []);
 
@@ -160,20 +162,19 @@ export default function ReservationPage() {
       {/* Hero Banner */}
       <div className="relative z-10 overflow-hidden">
         <div className="relative h-[340px] md:h-[420px]">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={activeImg}
-              src={VESSEL_IMAGES[activeImg]}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0 w-full h-full object-cover"
-              alt="Serendipity Yacht"
-            />
-          </AnimatePresence>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#040d1a]/60 via-[#040d1a]/30 to-[#040d1a]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#040d1a]/80 to-transparent" />
+         <video
+  className="absolute inset-0 w-full h-full object-cover object-center"
+  src="assets/attract_video.mp4"
+  autoPlay
+  muted
+  loop
+  playsInline
+/>
+
+          <div className="absolute inset-0 bg-black/25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#040d1a]/60 via-[#040d1a]/20 to-[#040d1a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#040d1a]/10 to-[#040d1a]/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#040d1a]/40 to-transparent" />
 
           {/* Hero Content */}
           <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-16 pb-16">
@@ -200,9 +201,8 @@ export default function ReservationPage() {
               <button
                 key={i}
                 onClick={() => setActiveImg(i)}
-                className={`w-14 h-10 md:w-20 md:h-14 rounded-lg overflow-hidden border-2 transition-all ${
-                  activeImg === i ? "border-[#c9a227]" : "border-white/10 opacity-60 hover:opacity-80"
-                }`}
+                className={`w-14 h-10 md:w-20 md:h-14 rounded-lg overflow-hidden border-2 transition-all ${activeImg === i ? "border-[#c9a227]" : "border-white/10 opacity-60 hover:opacity-80"
+                  }`}
               >
                 <img src={img} className="w-full h-full object-cover" alt="" />
               </button>
@@ -362,11 +362,10 @@ export default function ReservationPage() {
                 <button
                   key={tab.id}
                   onClick={() => { setActiveTab(tab.id); setDuration(""); }}
-                  className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-all ${
-                    activeTab === tab.id
+                  className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-all ${activeTab === tab.id
                       ? "text-[#c9a227] border-b-2 border-[#c9a227] bg-[#c9a227]/5"
                       : "text-white/35 hover:text-white/60"
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>

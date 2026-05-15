@@ -133,11 +133,7 @@ const VESSEL_STATS = [
   { val: "5.0★", label: "Rating" },
 ];
 
-const HERO_IMAGES = [
-  "assets/hero1.png",
-  "assets/hero2.png",
-  "assets/hero3.png",
-];
+
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function navigateToPayment(data: {
@@ -344,7 +340,7 @@ export default function BookPage() {
   const [step, setStep] = useState(0);
   const [selectedRateId, setSelectedRateId] = useState<string | null>(null);
   const [showSpecial, setShowSpecial] = useState(false);
-  const [heroIdx, setHeroIdx] = useState(0);
+
 
   // Step 2 fields
   const [firstName, setFirstName] = useState("");
@@ -356,11 +352,7 @@ export default function BookPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Auto-cycle hero
-  useEffect(() => {
-    const t = setInterval(() => setHeroIdx((p) => (p + 1) % HERO_IMAGES.length), 6000);
-    return () => clearInterval(t);
-  }, []);
+
 
   const allRates = [
     ...CHARTER_RATES.map((r) => ({ ...r, isSpecial: false })),
@@ -373,7 +365,7 @@ export default function BookPage() {
       highlights: [],
     })),
   ];
-
+const HERO_VIDEO = "assets/attract_video.mp4";
   const selected =
     allRates.find((r) => r.id === selectedRateId) ?? null;
 
@@ -447,18 +439,16 @@ export default function BookPage() {
       {/* Hero */}
       <div className="relative z-10 overflow-hidden">
         <div className="relative h-[280px] md:h-[360px]">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={heroIdx}
-              src={HERO_IMAGES[heroIdx]}
-              initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-              className="absolute inset-0 w-full h-full object-cover object-top"
-              alt="Serendipity"
-            />
-          </AnimatePresence>
+          <video
+  className="absolute inset-0 w-full h-full object-cover object-center"
+  src="assets/attract_video.mp4"
+  autoPlay
+  muted
+  loop
+  playsInline
+/>
+
+<div className="absolute inset-0 bg-black/20" />
           <div
             className="absolute inset-0"
             style={{

@@ -904,7 +904,7 @@ function FlybridgeSection({ onTourClick }: { onTourClick: () => void }) {
     <section
       id="flybridge"
       ref={sectionRef}
-      className="py-16 md:py-28 px-4 md:px-8 lg:px-16 relative overflow-hidden"
+     className="py-2 md:py-5 px-4 md:px-8 lg:px-16 relative overflow-hidden"
       style={{ background: "linear-gradient(to top, #0b1929, transparent)" }}
     >
       <div className="max-w-7xl mx-auto relative z-10">
@@ -1065,7 +1065,7 @@ function WaterToysSection() {
     <section
       id="water-toys"
       ref={sectionRef}
-      className="py-16 md:py-28 px-4 md:px-8 lg:px-16 relative overflow-hidden"
+     className="py-2 md:py-5 px-4 md:px-8 lg:px-16 relative overflow-hidden"
       style={{ background: "#051126" }}
     >
       {/* background glow */}
@@ -1483,10 +1483,23 @@ function Navbar({
               Book Now
               <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform" />
             </a>
-            <div className="absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-black/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-              <a href="/reservation" className="block px-4 py-3 whitespace-nowrap text-sm text-gray-800 hover:bg-gray-100">Reserve</a>
-              <a href="#contact" className="block px-4 py-3 whitespace-nowrap text-sm text-gray-800 hover:bg-gray-100">Inquire</a>
-            </div>
+            <div className="absolute right-0 mt-2 w-44 bg-black/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+  
+  <a
+    href="/reservation"
+    className="block px-4 py-3 whitespace-nowrap text-sm text-white transition-colors duration-300 hover:text-yellow-400 hover:bg-black/80"
+  >
+    Reserve
+  </a>
+
+  <a
+    href="#contact"
+    className="block px-4 py-3 whitespace-nowrap text-sm text-white transition-colors duration-300 hover:text-yellow-400 hover:bg-black/80"
+  >
+    Inquire
+  </a>
+
+</div>
           </div>
           <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden p-2 text-white border border-white/10 rounded-xl hover:bg-white/5">
             <Menu className="w-5 h-5" />
@@ -1708,7 +1721,7 @@ function Hero({
       </div>
 
       {/* ───────────────────────── DESKTOP ───────────────────────── */}
-      <div className="hidden lg:flex relative h-full max-w-7xl mx-auto px-16 flex-col justify-end pb-32 z-10">
+      <div className="hidden lg:flex relative h-full w-[70%] mx-[15%] flex-col justify-end pb-32 z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={heroIdx + "desktop"}
@@ -1926,7 +1939,7 @@ function AccommodationsSection({ openRoom, openGalleryInterior }: { openRoom: (r
   const visibleRooms = showAllRooms ? ROOMS : ROOMS.slice(0, 2);
 
   return (
-    <section id="accommodations" className="relative py-10 md:py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-[#061226] via-[#081a33] to-[#050b18]">
+    <section id="accommodations" className="relative py-5 md:py-10 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-[#061226] via-[#081a33] to-[#050b18]">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-gold/10 blur-[150px]" />
       </div>
@@ -2072,9 +2085,9 @@ function CulinarySection() {
   };
 
   return (
-    <section id="culinary" className="py-8 md:py-14 bg-navy-light overflow-hidden relative border-t border-white/10">
+    <section id="culinary" className="py-1.5 md:py-5 bg-navy-light overflow-hidden relative border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 relative">
-        <div className="flex items-center justify-between mb-8 md:mb-12">
+        <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 mb-3"><div className="w-10 h-[1.5px] bg-gold" /><span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Culinary & Mixology</span></div>
             <h2 className="text-3xl md:text-5xl font-serif">Epicurean <em className="text-gold italic font-serif">Journey</em></h2>
@@ -2096,7 +2109,7 @@ function CulinarySection() {
               transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.4 } }}
               className="lg:absolute inset-0"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center h-full">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-8 items-center h-full">
                 <div className="order-2 lg:order-1">
                   <div className="bg-navy/40 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-6 md:p-12 shadow-2xl">
                     <div className="flex items-center gap-3 mb-5"><div className="w-8 h-[1px] bg-gold/50" /><span className="text-[10px] font-bold tracking-[2px] uppercase text-gold/60">{slides[activeSlide].tag}</span></div>
@@ -2127,7 +2140,7 @@ function CulinarySection() {
             </motion.div>
           </AnimatePresence>
         </div>
-        <div className="flex justify-center gap-3 mt-8 md:mt-20">
+        <div className="flex justify-center gap-3">
           {slides.map((_, i) => (<button key={i} onClick={() => { setDirection(i > activeSlide ? 1 : -1); setActiveSlide(i); }} className={`h-1.5 transition-all duration-500 rounded-full ${activeSlide === i ? "w-8 bg-gold" : "w-4 bg-white/20"}`} />))}
         </div>
       </div>
@@ -2139,7 +2152,7 @@ function CulinarySection() {
 function DestinationsSection() {
   const [selected, setSelected] = useState<(typeof DESTINATIONS)[0] | null>(null);
   return (
-    <section id="destinations" className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy">
+    <section id="destinations" className="py-2 md:py-5 px-4 md:px-8 lg:px-16 bg-navy">
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 md:mb-16">
           <div>
@@ -2207,7 +2220,7 @@ function DestinationsSection() {
 function PricingSection() {
   const [showSpecial, setShowSpecial] = useState(false);
   return (
-    <section id="pricing" className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy-light">
+    <section id="pricing" className="py-4 md:py-5 px-4 md:px-8 lg:px-16 bg-navy-light">
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
         <div className="text-center mb-8 md:mb-16">
           <div className="flex items-center justify-center gap-3 mb-3"><div className="w-10 h-[1.5px] bg-gold" /><span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Charter Rates</span><div className="w-10 h-[1.5px] bg-gold" /></div>
@@ -2329,7 +2342,7 @@ function MechanicalSection() {
   const visibleSpecs = showAllSpecs ? mechanicalSpecs : mechanicalSpecs.slice(0, 6);
 
   return (
-    <section id="mechanical" className="py-12 md:py-24 px-4 md:px-6 lg:px-20 bg-navy relative overflow-hidden">
+    <section id="mechanical" className="py-2 md:py-5 px-4 md:px-6 lg:px-20 bg-navy relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-gold/5 blur-[120px]" />
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-6xl mx-auto relative z-10">
         <div className="mb-10 text-center">
@@ -2397,7 +2410,7 @@ function ReviewsSection() {
   const infiniteReviews = [...reviewsList, ...reviewsList];
 
   return (
-    <section id="reviews" className="py-10 md:py-20 bg-navy-light relative overflow-hidden">
+    <section id="reviews" className="py-2 md:py-5 bg-navy-light relative overflow-hidden">
       <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px]" />
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 mb-8 md:mb-16">
         <div className="flex items-center gap-3 mb-3"><div className="w-10 h-[1.5px] bg-gold" /><span className="text-[10px] font-bold tracking-[2.5px] uppercase text-gold">Guest Reviews</span></div>
@@ -2454,7 +2467,7 @@ function InquirySection({ addToast }: { addToast: (m: string, t: string, tp: str
   };
 
   return (
-    <section id="contact" className="py-10 md:py-20 px-4 md:px-8 lg:px-16 bg-navy relative overflow-hidden">
+    <section id="contact" className="py-10 md:py-5 px-4 md:px-8 lg:px-16 bg-navy relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
         <img src="assets/hero1.png" className="w-full h-full object-cover" alt="" />
       </div>
@@ -2516,7 +2529,7 @@ function InquirySection({ addToast }: { addToast: (m: string, t: string, tp: str
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer className="bg-[#040810] py-12 md:py-20 px-4 md:px-8 lg:px-16 border-t border-white/5 pb-24 lg:pb-12">
+    <footer className="bg-[#040810] py-12 md:py-5 px-4 md:px-8 lg:px-16 border-t border-white/5 pb-24 lg:pb-12">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
           <div className="col-span-2 lg:col-span-1">
